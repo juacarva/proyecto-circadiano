@@ -1,0 +1,28 @@
+# Archivos y directorios generados por Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+env/
+venv/
+.env
+
+# Archivos de base de datos
+*.sqlite3
+
+# Archivos de configuración sensibles (ej. claves secretas de Django)
+*.log
+*.pot
+*.mo
+local_settings.py
+
+# Directorios de medios y estáticos generados
+/media/
+/static/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*~
