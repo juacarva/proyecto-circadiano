@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
+{% load static %} {# Mantener por si hay algún static específico que añadas luego #}
+
+{% block title %}Registrarse - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <h2>Crear Cuenta</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <p class="helptext">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <p class="errorlist">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit">Registrarse</button>
+        </form>
+        <p style="margin-top: 20px;">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
+    </div>
+{% endblock content %}

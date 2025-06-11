@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
+{% load static %} {# Mantenerlo por si hay algún static específico que añadas luego #}
+
+{% block title %}{{ articulo.titulo }} - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <h1 class="articulo-titulo">{{ articulo.titulo }}</h1>
+    <div class="meta">
+        Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
+    </div>
+
+    {% if articulo.imagen_destacada %}
+        <img src="{{ articulo.imagen_destacada.url }}" alt="{{ articulo.titulo }}" class="articulo-imagen">
+    {% endif %}
+
+    <div class="contenido-articulo">
+        {{ articulo.contenido|linebreaksbr }}
+    </div>
+
+    <div class="back-link">
+        <a href="{% url 'blog_circadiano:lista_articulos' %}">Volver a la lista de artículos</a>
+    </div>
+
+    <div class="comments-section">
+        <h2>Comentarios ({{ articulo.comentarios.count }})</h2>
+
+        <div class="comment-form-container">
+            {% if user.is_authenticated %}
+                <h3>Deja un Comentario</h3>
+                <form action="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Publicar Comentario</button>
+                </form>
+            {% else %}
+                <p class="login-prompt">Por favor, <a href="{% url 'usuarios:login' %}?next={{ request.path }}">inicia sesión</a> para dejar un comentario.</p>
+            {% endif %}
+        </div>
+
+        <ul class="comment-list">
+            {% for comentario in comentarios %}
+                {% if comentario.activo %}
+                    {% include "blog_circadiano/_comment_tree.html" with comment=comentario form=form user=user %}
+                {% endif %}
+            {% empty %}
+                <p>Sé el primero en comentar este artículo.</p>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
+
+{# No necesitas {% block extra_js %} aquí porque script.js ya está en base.html #}

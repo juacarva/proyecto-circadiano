@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Blog Circadiano{% endblock %}</title>
+    {% load static %}
+
+    {# Script para prevenir el "flash" del modo día #}
+    <script>
+        (function() {
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme === 'dark-mode' || (!currentTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark-mode'); // Aplica a <html> o <body>
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+            }
+        })();
+    </script>
+    {# Fin del script para prevenir el "flash" #}
+
+    <link rel="stylesheet" href="{% static 'blog_circadiano/css/style.css' %}">
+    {% block extra_css %}{% endblock %} {# Bloque para CSS adicional por página #}
+</head>
+<body>
+    <header class="main-header"> {# Ahora con clase CSS #}
+        <h1 class="site-title"><a href="{% url 'blog_circadiano:lista_articulos' %}">Circadiano</a></h1> {# Ahora con clases CSS #}
+        
+        <nav class="main-nav"> {# Elemento nav para la navegación principal #}
+            {% if user.is_authenticated %}
+                <span class="welcome-message">Hola, {{ user.username }}!</span>
+                <a href="{% url 'usuarios:logout' %}" class="nav-link">Cerrar Sesión</a>
+            {% else %}
+                <a href="{% url 'usuarios:login' %}" class="nav-link">Iniciar Sesión</a>
+                <a href="{% url 'usuarios:register' %}" class="nav-link">Registrarse</a>
+            {% endif %}
+            <button id="theme-toggle" class="theme-toggle-btn"> {# Ahora con clase CSS #}
+                Modo Noche
+            </button>
+        </nav>
+    </header>
+    
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block extra_js %}{% endblock %}
+    <script src="{% static 'blog_circadiano/js/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+/* blog_circadiano/static/blog_circadiano/css/style.css */
+
+/* Transiciones suaves para los cambios de color */
+body,
+.container,
+.articulo-resumen,
+.comment-form-container,
+.comment-item,
+.reply-item,
+input, textarea,
+.main-header,
+.site-title a,
+.main-nav span,
+.nav-link,
+.theme-toggle-btn {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0; /* CAMBIO CLAVE: Elimina los márgenes del body */
+    padding: 0 20px; /* Añade un padding horizontal al body para el contenido general */
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* --- Estilos para el Encabezado Global (base.html) --- */
+.main-header {
+    padding: 10px 20px; /* Padding interno para el contenido del header */
+    margin: 0 -20px; /* CAMBIO CLAVE: Margen negativo para extenderse de borde a borde */
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.site-title {
+    margin: 0; /* Elimina margen por defecto del h1 */
+}
+
+.site-title a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.8em; /* Tamaño del título del sitio */
+    font-weight: bold;
+}
+
+.main-nav {
+    display: flex; /* Para alinear los elementos de navegación */
+    align-items: center;
+}
+
+.main-nav span {
+    margin-right: 15px; /* Espacio entre el mensaje de bienvenida y el enlace */
+    color: #555;
+    font-size: 0.95em;
+}
+
+.nav-link {
+    margin-left: 15px; /* Espacio entre enlaces de navegación */
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    color: #0056b3;
+}
+
+.theme-toggle-btn {
+    margin-left: 15px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* --- Adaptaciones del encabezado para el Modo Noche --- */
+html.dark-mode .main-header { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #222222; /* Fondo oscuro del encabezado */
+    border-bottom-color: #3a3a3a; /* Borde oscuro */
+}
+
+html.dark-mode .site-title a { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #e0e0e0; /* Título del sitio claro */
+}
+
+html.dark-mode .main-nav span.welcome-message { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #cccccc; /* Mensaje de bienvenida claro */
+}
+
+html.dark-mode .nav-link { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #8bb4e8; /* Enlaces de navegación claros */
+}
+
+html.dark-mode .nav-link:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #6a9bd8;
+}
+
+html.dark-mode .theme-toggle-btn { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #333333; /* Botón oscuro */
+    color: #e0e0e0;
+    border-color: #555555;
+}
+
+html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #444444;
+}
+
+/* Estilos para lista_articulos.html */
+.articulo-resumen {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.articulo-resumen:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.articulo-resumen h2 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.articulo-resumen h2 a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.articulo-resumen p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.meta {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Estilos para detalle_articulo.html y comentarios */
+.articulo-titulo {
+    margin-top: 0;
+}
+
+.contenido-articulo {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.contenido-articulo p {
+    text-align: justify;
+    margin-bottom: 1em;
+}
+
+.back-link {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.back-link a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.articulo-imagen {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 5px;
+}
+
+/* Estilos para Comentarios */
+.comments-section {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.comment-form-container {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #e9f5ff;
+    border-radius: 5px;
+}
+
+.comment-form-container textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+.comment-form-container button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-form-container button:hover {
+    background-color: #218838;
+}
+
+.comment-form-container p.login-prompt {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.comment-form-container p.login-prompt a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comment-item { /* Base para comentarios de nivel superior */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.comment-item .author {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.comment-item .date {
+    font-size: 0.8em;
+    color: #999;
+    margin-left: 10px;
+}
+
+.comment-item .content {
+    margin-top: 10px;
+}
+
+.comment-item .reply-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.comment-item .reply-form {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #ccc;
+}
+
+/* Estilos para las respuestas */
+.replies { /* Contenedor de las respuestas */
+    list-style: none;
+    padding: 0;
+    margin-left: 30px; /* Indentación para las respuestas */
+    margin-top: 15px;
+    border-left: 3px solid #eee; /* Línea visual para los hilos */
+    padding-left: 15px;
+}
+
+.reply-item { /* Cada elemento de respuesta (dentro de .replies) */
+    background-color: #f0f8ff; /* Fondo ligeramente diferente para respuestas */
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px; /* Separación entre respuestas anidadas */
+}
+
+.reply-item .author {
+    color: #28a745;
+} /* Color de autor diferente para respuestas */
+
+/* Estilos para usuarios/login.html y usuarios/register.html */
+.form-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.form-container h2 {
+    color: #0056b3;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"] { /* Agregado si usas email en registro */
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-container button {
+    background-color: #007bff; /* Ajusta este color si prefieres el verde para registro */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+.form-container button:hover {
+    background-color: #0056b3; /* Ajusta este color si prefieres el verde para registro */
+}
+
+.errorlist {
+    color: red;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.helptext {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+}
+
+
+/* --- Estilos para el Modo Noche (Dark Mode) --- */
+
+/* Contenedor principal: html (en lugar de body) */
+html.dark-mode { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #1a1a1a; /* Fondo oscuro */
+    color: #e0e0e0; /* Texto claro */
+}
+
+/* **AGREGA O ASEGÚRATE DE ESTA REGLA** */
+html.dark-mode body {
+    background-color: #1a1a1a; /* Asegura que el fondo del body también sea oscuro */
+    color: #e0e0e0; /* Asegura que el texto del body también sea claro */
+}
+
+/* Encabezados y enlaces */
+html.dark-mode h1, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode h2, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode h2 a, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .back-link a { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #8bb4e8; /* Colores de encabezado/enlace adaptados */
+}
+
+/* Contenedor principal de contenido */
+html.dark-mode .container { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background: #2a2a2a; /* Fondo del contenedor más oscuro */
+    box-shadow: 0 0 10px rgba(255,255,255,0.1); /* Sombra clara */
+}
+
+/* Resúmenes de artículos (lista) */
+html.dark-mode .articulo-resumen { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    border-bottom: 1px solid #3a3a3a; /* Borde más oscuro */
+}
+html.dark-mode .articulo-resumen p, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .articulo-resumen .meta { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #cccccc; /* Texto secundario más claro */
+}
+
+/* Sección de comentarios y formularios */
+html.dark-mode .comments-section { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    border-top: 1px solid #3a3a3a;
+}
+
+html.dark-mode .comment-form-container { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #333333; /* Fondo de formulario oscuro */
+}
+
+html.dark-mode .comment-form-container textarea, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .form-group input { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #444444;
+    color: #e0e0e0;
+    border: 1px solid #555555;
+}
+
+html.dark-mode .comment-form-container textarea::placeholder, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .form-group input::placeholder { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #aaaaaa;
+}
+
+html.dark-mode .comment-form-container button { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #4a7a58;
+}
+html.dark-mode .comment-form-container button:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #3d664a;
+}
+
+html.dark-mode .comment-form-container p.login-prompt { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #cccccc;
+}
+html.dark-mode .comment-form-container p.login-prompt a { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #8bb4e8;
+}
+
+/* Lista de comentarios */
+html.dark-mode .comment-item { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #333333; /* Fondo de comentario oscuro */
+    border: 1px solid #4a4a4a;
+}
+html.dark-mode .comment-item .author { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #8bb4e8; /* Autor de comentario principal */
+}
+html.dark-mode .comment-item .date, /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-item .content { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #e0e0e0;
+}
+html.dark-mode .comment-item .reply-link { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #8bb4e8;
+}
+html.dark-mode .comment-item .reply-form { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    border-left: 2px solid #555555;
+}
+
+/* Respuestas anidadas */
+html.dark-mode .replies { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    border-left: 3px solid #4a4a4a; /* Línea de hilo oscura */
+}
+html.dark-mode .reply-item { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #3d3d3d; /* Fondo de respuesta más oscuro */
+    border: 1px solid #5a5a5a;
+}
+html.dark-mode .reply-item .author { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #6fb07b; /* Autor de respuesta */
+}
+
+/* Estilos de formulario de login/registro */
+html.dark-mode .form-container { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background: #2a2a2a;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+html.dark-mode .form-container h2 { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #8bb4e8;
+}
+html.dark-mode .form-container button { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #4a7a58;
+}
+html.dark-mode .form-container button:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    background-color: #3d664a;
+}
+html.dark-mode .errorlist { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #ff9999;
+}
+html.dark-mode .helptext { /* CAMBIO: de body.dark-mode a html.dark-mode */
+    color: #bbbbbb;
+}

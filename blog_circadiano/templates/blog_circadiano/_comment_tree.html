@@ -1,0 +1,38 @@
+{% load static %} {# Carga las etiquetas estáticas #}
+
+<li class="comment-item {% if comment.parent %}reply-item{% endif %}" id="comentario-{{ comment.pk }}">
+    <div class="comment-content-wrapper">
+        <p class="author">
+            {{ comment.autor.username }}
+            <span class="date">{{ comment.fecha_creacion|date:"d M Y H:i" }}</span>
+        </p>
+        <div class="content">{{ comment.contenido|linebreaksbr }}</div>
+        
+        {% if user.is_authenticated %}
+            <a href="#" class="reply-link" data-comment-id="{{ comment.pk }}" data-comment-author="{{ comment.autor.username }}">Responder</a>
+        {% endif %}
+
+        {# Formulario de respuesta (inicialmente oculto) #}
+        <div class="reply-form" id="reply-form-{{ comment.pk }}" style="display: none;">
+            <h4>Respondiendo a {{ comment.autor.username }}</h4>
+            <form action="{% url 'blog_circadiano:detalle_articulo' pk=comment.articulo.pk %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+                <button type="submit">Enviar Respuesta</button>
+            </form>
+        </div>
+    </div>
+
+    {% with replies=comment.replies.all %}
+        {% if replies %}
+            <ul class="replies">
+                {% for reply in replies %}
+                    {% if reply.activo %}
+                        {% include "blog_circadiano/_comment_tree.html" with comment=reply form=form user=user %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</li>

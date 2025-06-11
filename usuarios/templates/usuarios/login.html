@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
+{% load static %} {# Mantener por si hay algún static específico que añadas luego #}
+
+{% block title %}Iniciar Sesión - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <h2>Iniciar Sesión</h2>
+        {% if form.errors %}
+            <p class="errorlist">Tu nombre de usuario y contraseña no coinciden. Por favor, inténtalo de nuevo.</p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Nombre de usuario:</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="id_password">Contraseña:</label>
+                {{ form.password }}
+            </div>
+            <button type="submit">Iniciar Sesión</button>
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+        <p style="margin-top: 20px;">¿No tienes una cuenta? <a href="{% url 'usuarios:register' %}">Regístrate aquí</a></p>
+    </div>
+{% endblock content %}

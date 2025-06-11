@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog_circadiano',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -55,10 +56,11 @@ ROOT_URLCONF = 'portal_circadiano.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], # <--- Asegúrate que sea BASE_DIR / 'templates'
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -121,7 +123,29 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Opcional: Directorios adicionales donde Django buscará archivos estáticos.
+# Útil para archivos estáticos a nivel de proyecto.
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'staticfiles', # Ejemplo de una carpeta 'staticfiles' en la raíz del proyecto
+# ]
+
+# Directorio donde Django recolectará todos los archivos estáticos para producción
+STATIC_ROOT = BASE_DIR / 'staticfiles_collected' # Donde se copiarán los archivos estáticos para despliegue
+
+# Configuración para archivos de medios (imágenes subidas por usuarios)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media' # Esto creará una carpeta 'media' en la raíz de tu proyecto
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# URL a la que se redirige después de un inicio de sesión exitoso (si no se especifica 'next')
+LOGIN_REDIRECT_URL = '/' # Redirige a la página principal del blog
+
+# URL donde se encuentra la vista de login (usada por @login_required)
+LOGIN_URL = 'usuarios:login' # Nombre de la URL de tu aplicación 'usuarios'
+
+# URL a la que se redirige después de un cierre de sesión exitoso
+LOGOUT_REDIRECT_URL = '/' # Redirige a la página principal del blog

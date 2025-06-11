@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
+{% load static %} {# Mantenerlo por si hay algún static específico que añadas luego #}
+
+{% block title %}Últimos Artículos - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <h1>Últimos Artículos de Circadiano</h1>
+
+    {% if articulos %}
+        {% for articulo in articulos %}
+            <div class="articulo-resumen">
+                <h2><a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">{{ articulo.titulo }}</a></h2>
+                <p>{{ articulo.contenido|truncatechars:200 }}</p>
+                <div class="meta">
+                    Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay artículos disponibles todavía.</p>
+    {% endif %}
+{% endblock content %}
