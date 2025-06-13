@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog_circadiano',
     'usuarios',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

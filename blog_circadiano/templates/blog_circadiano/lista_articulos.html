@@ -1,22 +1,94 @@
-{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
-{% load static %} {# Mantenerlo por si hay algún static específico que añadas luego #}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Últimos Artículos - Blog Circadiano{% endblock %}
-
-{% block content %}
-    <h1>Últimos Artículos de Circadiano</h1>
-
-    {% if articulos %}
-        {% for articulo in articulos %}
-            <div class="articulo-resumen">
-                <h2><a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">{{ articulo.titulo }}</a></h2>
-                <p>{{ articulo.contenido|truncatechars:200 }}</p>
-                <div class="meta">
-                    Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
-                </div>
-            </div>
-        {% endfor %}
+{% block title %}
+    {% if categoria_actual %}
+        {{ categoria_actual.nombre }} - Artículos de Circadiano
+    {% elif etiqueta_actual %}
+        {{ etiqueta_actual.nombre }} - Artículos de Circadiano
     {% else %}
-        <p>No hay artículos disponibles todavía.</p>
+        Últimos Artículos - Blog Circadiano
     {% endif %}
+{% endblock %}
+
+{% block sidebar_filters %} {# ¡Este es el bloque para los filtros! #}
+    <div class="filters-section">
+        {# --- CAMBIO CLAVE AQUÍ: Mover el enlace "Ver todos los artículos" a la barra lateral --- #}
+        <div class="filter-group">
+            <a href="{% url 'blog_circadiano:lista_articulos' %}" class="filter-pill">Ver todos los artículos</a>
+        </div>
+        {# --- FIN CAMBIO CLAVE --- #}
+        <div class="filter-group">
+            <h3>Categorías</h3>
+            <ul class="filter-list categories-filter">
+                {% for categoria in todas_categorias %}
+                    <li><a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=categoria.slug %}"
+                           class="filter-pill {% if categoria_actual.slug == categoria.slug %}active{% endif %}">
+                           {{ categoria.nombre }}
+                    </a></li>
+                {% empty %}
+                    <li>No hay categorías.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="filter-group">
+            <h3>Etiquetas</h3>
+            <ul class="filter-list tags-filter">
+                {% for etiqueta in todas_etiquetas %}
+                    <li><a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}"
+                           class="filter-pill {% if etiqueta_actual.slug == etiqueta.slug %}active{% endif %}">
+                           {{ etiqueta.nombre }}
+                    </a></li>
+                {% empty %}
+                    <li>No hay etiquetas.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        
+    </div>
+{% endblock sidebar_filters %}
+
+{% block content %} {# El contenido principal de la lista de artículos #}
+    <div class="articles-header">
+        <h1>
+            {% if categoria_actual %}
+                Artículos en la categoría: "{{ categoria_actual.nombre }}"
+            {% elif etiqueta_actual %}
+                Artículos con la etiqueta: "{{ etiqueta_actual.nombre }}"
+            {% else %}
+                Últimos Artículos de Circadiano
+            {% endif %}
+        </h1>
+        {# --- CAMBIO CLAVE AQUÍ: ¡ELIMINAR el enlace de aquí! --- #}
+        {# <a href="{% url 'blog_circadiano:lista_articulos' %}" class="clear-filters">Ver todos los artículos</a> #}
+        {# --- FIN CAMBIO CLAVE --- #}
+    </div>
+
+    <div class="articles-list-container">
+        {% if articulos %}
+            {% for articulo in articulos %}
+                <div class="articulo-resumen">
+                    <h2><a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">{{ articulo.titulo }}</a></h2>
+                    <p>{{ articulo.contenido|truncatechars:200 }}</p>
+                    <div class="meta">
+                        Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
+                        {% if articulo.categoria %}
+                            <span class="category-tag">Categoría: <a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=articulo.categoria.slug %}">{{ articulo.categoria.nombre }}</a></span>
+                        {% endif %}
+                        {% if articulo.etiquetas.all %}
+                            <span class="tags-list">Etiquetas: 
+                                {% for etiqueta in articulo.etiquetas.all %}
+                                    <a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}">{{ etiqueta.nombre }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay artículos disponibles todavía.</p>
+        {% endif %}
+    </div>
 {% endblock content %}

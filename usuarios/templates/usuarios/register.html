@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
-{% load static %} {# Mantener por si hay algún static específico que añadas luego #}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Registrarse - Blog Circadiano{% endblock %}
 
@@ -11,16 +11,20 @@
             {% for field in form %}
                 <div class="form-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                    {{ field }}
+                    {% load widget_tweaks %} {# ¡Añade esta línea al principio del archivo! #}
+                    {# ... #}
+                    {{ field|add_class:"form-input" }} {# <-- ¡CAMBIO CLAVE AQUÍ! #}
                     {% if field.help_text %}
                         <p class="helptext">{{ field.help_text }}</p>
                     {% endif %}
-                    {% for error in field.errors %}
-                        <p class="errorlist">{{ error }}</p>
-                    {% endfor %}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="errorlist">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             {% endfor %}
-            <button type="submit">Registrarse</button>
+            <button type="submit" class="submit-button">Registrarse</button> {# Añadimos clase #}
         </form>
         <p style="margin-top: 20px;">¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}">Inicia sesión aquí</a></p>
     </div>

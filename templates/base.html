@@ -11,7 +11,7 @@
         (function() {
             const currentTheme = localStorage.getItem('theme');
             if (currentTheme === 'dark-mode' || (!currentTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark-mode'); // Aplica a <html> o <body>
+                document.documentElement.classList.add('dark-mode');
             } else {
                 document.documentElement.classList.remove('dark-mode');
             }
@@ -20,29 +20,53 @@
     {# Fin del script para prevenir el "flash" #}
 
     <link rel="stylesheet" href="{% static 'blog_circadiano/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     {% block extra_css %}{% endblock %} {# Bloque para CSS adicional por página #}
 </head>
 <body>
-    <header class="main-header"> {# Ahora con clase CSS #}
-        <h1 class="site-title"><a href="{% url 'blog_circadiano:lista_articulos' %}">Circadiano</a></h1> {# Ahora con clases CSS #}
+    <header class="main-header">
+        <h1 class="site-title"><a href="{% url 'blog_circadiano:lista_articulos' %}">Circadiano</a></h1>
         
-        <nav class="main-nav"> {# Elemento nav para la navegación principal #}
+        <nav class="main-nav">
+            {# --- CAMBIO CLAVE: Formulario de Búsqueda --- #}
+            <form action="{% url 'blog_circadiano:lista_articulos' %}" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Buscar artículos..." value="{{ query|default_if_none:'' }}" class="search-input">
+                <button type="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+            {# --- FIN CAMBIO CLAVE --- #}
+
             {% if user.is_authenticated %}
                 <span class="welcome-message">Hola, {{ user.username }}!</span>
-                <a href="{% url 'usuarios:logout' %}" class="nav-link">Cerrar Sesión</a>
+                <a href="{% url 'usuarios:logout' %}" class="nav-link" title="Cerrar Sesión">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
             {% else %}
-                <a href="{% url 'usuarios:login' %}" class="nav-link">Iniciar Sesión</a>
-                <a href="{% url 'usuarios:register' %}" class="nav-link">Registrarse</a>
+                <a href="{% url 'usuarios:login' %}" class="nav-link" title="Iniciar Sesión">Iniciar Sesión</a>
+                <a href="{% url 'usuarios:register' %}" class="nav-link" title="Registrarse">Regístrate</a>
             {% endif %}
-            <button id="theme-toggle" class="theme-toggle-btn"> {# Ahora con clase CSS #}
-                Modo Noche
+            <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Modo">
+                <i class="fa-solid fa-moon"></i><span class="sr-only">Modo Noche</span> 
             </button>
         </nav>
     </header>
     
-    <div class="container">
-        {% block content %}
-        {% endblock %}
+    {# Clase condicional en page-wrapper para controlar el layout #}
+    <div class="page-wrapper {% if not show_sidebar %}no-sidebar{% endif %}">
+        {% if show_sidebar %} {# Renderizar sidebar solo si show_sidebar es True #}
+            <aside class="sidebar-left">
+                {% block sidebar_filters %}
+                {# Este bloque será rellenado por lista_articulos.html con los filtros #}
+                {% endblock %}
+            </aside>
+        {% endif %}
+
+        <main class="main-content">
+            <div class="container">
+                {% block content %}
+                {# Este bloque será rellenado por las plantillas hijas #}
+                {% endblock %}
+            </div>
+        </main>
     </div>
 
     {% block extra_js %}{% endblock %}

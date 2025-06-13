@@ -1,12 +1,22 @@
-{% extends 'base.html' %} {# ¡Importante! Hereda de base.html #}
-{% load static %} {# Mantenerlo por si hay algún static específico que añadas luego #}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ articulo.titulo }} - Blog Circadiano{% endblock %}
 
 {% block content %}
-    <h1 class="articulo-titulo">{{ articulo.titulo }}</h1>
+    <h1 class="articulo-titulo" data-pk="{{ articulo.pk }}">{{ articulo.titulo }}</h1>
     <div class="meta">
         Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
+        {% if articulo.categoria %}
+            <span class="category-tag">Categoría: <a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=articulo.categoria.slug %}">{{ articulo.categoria.nombre }}</a></span>
+        {% endif %}
+        {% if articulo.etiquetas.all %}
+            <span class="tags-list">Etiquetas: 
+                {% for etiqueta in articulo.etiquetas.all %}
+                    <a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}">{{ etiqueta.nombre }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
     </div>
 
     {% if articulo.imagen_destacada %}
@@ -21,16 +31,55 @@
         <a href="{% url 'blog_circadiano:lista_articulos' %}">Volver a la lista de artículos</a>
     </div>
 
-    <div class="comments-section">
-        <h2>Comentarios ({{ articulo.comentarios.count }})</h2>
+    {# ... Resto del contenido de detalle_articulo.html (acciones de likes, comentarios) ... #}
+    <div class="post-actions">
+        <div class="action-bar">
+            <button class="like-button {% if user_liked_article %}liked{% endif %}" data-item-type="articulo" data-item-id="{{ articulo.pk }}">
+                {% if user_liked_article %}
+                    <span class="icon">&#x2764;</span> Ya no me gusta
+                {% else %}
+                    <span class="icon">&#x2764;</span> Me gusta
+                {% endif %}
+            </button>
+            <span class="likes-count" id="article-likes-count-{{ articulo.pk }}">{{ articulo.total_likes }}</span> Likes
+            
+            <button class="comment-toggle-button" id="comment-toggle-btn-{{ articulo.pk }}">
+                <span class="icon">&#x1F4AC;</span> Comentarios ({{ articulo.comentarios.count }})
+            </button>
+            <button class="reply-to-article-button" id="reply-to-article-btn-{{ articulo.pk }}">
+                <span class="icon">&#x270D;</span> Comentar
+            </button>
+        </div>
+    </div>
 
-        <div class="comment-form-container">
+    <div class="comments-container" id="comments-section-{{ articulo.pk }}" style="display: none;">
+        <h2>Comentarios</h2>
+        
+        {# Formulario para comentarios de nivel superior (responder al artículo) #}
+        <div class="comment-form-container" id="article-comment-form">
             {% if user.is_authenticated %}
                 <h3>Deja un Comentario</h3>
                 <form action="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}" method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">Publicar Comentario</button>
+                    {# --- CAMBIO CLAVE AQUÍ: Renderizado granular del formulario de comentarios --- #}
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}" {% if field.label == 'Contenido' %}class="sr-only"{% endif %}>{{ field.label }}:</label> {# Oculta label de contenido si solo quieres placeholder #}
+                            {% load widget_tweaks %} {# ¡Añade esta línea al principio del archivo! #}
+                            {# ... #}
+                            {{ field|add_class:"form-input" }} {# <-- ¡CAMBIO CLAVE AQUÍ! #}
+                            {% if field.help_text %}
+                                <p class="helptext">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <p class="errorlist">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="submit-button">Publicar Comentario</button>
+                    {# --- FIN CAMBIO CLAVE --- #}
                 </form>
             {% else %}
                 <p class="login-prompt">Por favor, <a href="{% url 'usuarios:login' %}?next={{ request.path }}">inicia sesión</a> para dejar un comentario.</p>
@@ -48,5 +97,3 @@
         </ul>
     </div>
 {% endblock content %}
-
-{# No necesitas {% block extra_js %} aquí porque script.js ya está en base.html #}

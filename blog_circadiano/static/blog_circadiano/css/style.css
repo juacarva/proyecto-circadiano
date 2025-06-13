@@ -1,6 +1,7 @@
 /* blog_circadiano/static/blog_circadiano/css/style.css */
 
 /* Transiciones suaves para los cambios de color */
+html, /* Aseguramos que la transición también se aplique al elemento html para el modo noche */
 body,
 .container,
 .articulo-resumen,
@@ -12,22 +13,43 @@ input, textarea,
 .site-title a,
 .main-nav span,
 .nav-link,
-.theme-toggle-btn {
+.theme-toggle-btn,
+.like-button,
+.comment-toggle-button,
+.reply-to-article-button,
+.articles-header h1,
+.articles-header .clear-filters,
+.filters-section,
+.filter-group h3,
+.filter-pill,
+.category-tag a,
+.tags-list a,
+.form-container,
+.form-group label,
+.form-group input,
+.form-group .form-input,
+.submit-button,
+.errorlist,
+.helptext,
+.search-form,
+.search-input,
+.search-button {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 0; /* CAMBIO CLAVE: Elimina los márgenes del body */
+    margin: 0;
     padding: 0 20px; /* Añade un padding horizontal al body para el contenido general */
+    padding-top: 110px; /* Espacio para el header fijo. Ajusta este valor si tu header tiene otra altura */
     background-color: #f4f4f4;
     color: #333;
 }
 
 .container {
     max-width: 800px;
-    margin: auto;
+    margin: auto; /* Se usará solo cuando .page-wrapper.no-sidebar lo permita */
     background: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -42,14 +64,20 @@ h1 {
 
 /* --- Estilos para el Encabezado Global (base.html) --- */
 .main-header {
-    padding: 10px 20px; /* Padding interno para el contenido del header */
-    margin: 0 -20px; /* CAMBIO CLAVE: Margen negativo para extenderse de borde a borde */
+    padding: 10px 0px; /* Eliminamos el padding lateral aquí, ya que el contenido tiene su propio */
+    margin: 0; /* Eliminamos el margen negativo, el width: 100% lo cubrirá */
     background-color: #f8f8f8;
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+
+    position: fixed; /* Lo fija en la ventana */
+    top: 0; /* Lo pega arriba */
+    left: 0; /* Lo pega a la izquierda */
+    width: 100%; /* Ocupa todo el ancho */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Opcional: una sombra para que se vea elevado */
 }
 
 .site-title {
@@ -57,6 +85,7 @@ h1 {
 }
 
 .site-title a {
+    padding: 0px 20px; /* Tus ajustes */
     text-decoration: none;
     color: #333;
     font-size: 1.8em; /* Tamaño del título del sitio */
@@ -66,6 +95,56 @@ h1 {
 .main-nav {
     display: flex; /* Para alinear los elementos de navegación */
     align-items: center;
+    padding: 0px 20px; /* Tus ajustes */
+    gap: 15px; /* Añadido espacio entre los elementos de navegación */
+}
+
+/* Estilos para el formulario de búsqueda */
+.search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Bordes redondeados para un look moderno */
+    overflow: hidden; /* Asegura que el contenido interno respete el border-radius */
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+    flex-grow: 1; /* Permite que el formulario de búsqueda crezca para ocupar espacio */
+    max-width: 300px; /* Ancho máximo para el campo de búsqueda */
+}
+
+.search-form:focus-within { /* Estilos cuando el input dentro del formulario está enfocado */
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+.search-input {
+    border: none; /* Elimina el borde del input individual */
+    padding: 8px 15px;
+    font-size: 0.95em;
+    outline: none; /* Elimina el contorno de enfoque por defecto */
+    flex-grow: 1; /* Permite que el input ocupe el espacio disponible dentro del formulario */
+    background-color: transparent; /* Fondo transparente para el input */
+    color: #333;
+    width: 100%; /* Ocupa el 100% del espacio flexible */
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+.search-button {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #d0d0d0;
+    color: #007bff;
 }
 
 .main-nav span {
@@ -78,60 +157,90 @@ h1 {
     margin-left: 15px; /* Espacio entre enlaces de navegación */
     text-decoration: none;
     color: #007bff;
-    font-weight: bold;
-    transition: color 0.2s ease-in-out;
+    font-weight: 600; /* Semi-negrita */
+    font-size: 1.05em; /* Ligeramente más grande */
+    padding: 8px 12px; /* Añade padding para que parezcan botones suaves */
+    border-radius: 5px; /* Bordes ligeramente redondeados */
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .nav-link:hover {
+    background-color: #e0f2f7; /* Un fondo suave al pasar el ratón */
     color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra suave al pasar el ratón */
 }
 
 .theme-toggle-btn {
     margin-left: 15px;
-    padding: 8px 12px;
+    padding: 10px 15px; /* Padding más generoso */
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 25px; /* Forma de píldora para el botón */
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     color: #333;
-    font-size: 0.9em;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    font-size: 0.95em; /* Un poco más grande */
+    font-weight: 600; /* Semi-negrita */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra para que se vea elevado */
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .theme-toggle-btn:hover {
     background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Sombra más fuerte al pasar el ratón */
 }
 
-/* --- Adaptaciones del encabezado para el Modo Noche --- */
-html.dark-mode .main-header { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    background-color: #222222; /* Fondo oscuro del encabezado */
-    border-bottom-color: #3a3a3a; /* Borde oscuro */
+/* --- Estilos para el Layout de Página (page-wrapper, sidebar-left, main-content) --- */
+.page-wrapper {
+    display: flex; /* Habilitar Flexbox */
+    gap: 30px; /* Espacio entre la barra lateral y el contenido principal */
+    max-width: 1200px; /* Ancho máximo para el layout completo */
+    margin: 20px auto; /* Centrar el layout en la pantalla, con margen arriba/abajo */
+    padding: 0 20px; /* Padding interno para evitar que el contenido toque los bordes del navegador */
 }
 
-html.dark-mode .site-title a { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    color: #e0e0e0; /* Título del sitio claro */
+.sidebar-left {
+    flex: 0 0 250px; /* No crece, no encoge, tiene un ancho base de 250px */
+    padding-right: 20px; /* Espacio entre el contenido de la barra lateral y su borde */
+    box-sizing: border-box; /* Asegura que padding y border no aumenten el ancho total */
+    
+    position: sticky; /* Hace que el elemento se pegue al scroll */
+    top: 130px; /* Distancia desde la parte superior de la ventana donde se pegará. Ajusta según la altura de tu header y el espacio deseado. */
+    height: fit-content; /* Asegura que la altura del sticky container se ajuste a su contenido */
+    align-self: flex-start; /* Para que la barra lateral se alinee al inicio del cross-axis en flexbox */
 }
 
-html.dark-mode .main-nav span.welcome-message { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    color: #cccccc; /* Mensaje de bienvenida claro */
+.main-content {
+    flex: 1; /* Permite que el contenido principal ocupe el resto del espacio disponible */
+    min-width: 0; /* Necesario para que el contenido se ajuste correctamente en flexbox */
 }
 
-html.dark-mode .nav-link { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    color: #8bb4e8; /* Enlaces de navegación claros */
+/* Ajuste al contenedor existente para que se adapte dentro del main-content */
+.container {
+    max-width: none; /* Eliminar el max-width fijo del container para que se adapte al main-content */
+    margin: 0; /* Eliminar el margin: auto; para que el container se adapte a su padre */
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-html.dark-mode .nav-link:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    color: #6a9bd8;
+/* --- Estilos para cuando NO hay barra lateral (ej. en detalle de artículo) --- */
+.page-wrapper.no-sidebar {
+    justify-content: center; /* Centrar el contenido cuando no hay sidebar */
+    max-width: 800px; /* Vuelve al ancho original del contenedor para centrar */
+    padding: 0; /* Eliminar padding para que el container haga su propio padding */
+    margin: 20px auto; /* Centrar de nuevo en la página cuando no hay sidebar */
 }
 
-html.dark-mode .theme-toggle-btn { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    background-color: #333333; /* Botón oscuro */
-    color: #e0e0e0;
-    border-color: #555555;
+.page-wrapper.no-sidebar .main-content {
+    flex: none; /* Elimina el flex: 1 */
+    width: 100%; /* Ocupa el 100% del page-wrapper (que ahora es 800px) */
+    min-width: unset; /* Reinicia el min-width */
 }
 
-html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    background-color: #444444;
+.page-wrapper.no-sidebar .main-content .container {
+    max-width: 800px; /* Restablece el max-width para que el container se centre */
+    margin: auto; /* Centra el container dentro del main-content */
 }
 
 /* Estilos para lista_articulos.html */
@@ -202,13 +311,89 @@ html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dar
     border-radius: 5px;
 }
 
-/* Estilos para Comentarios */
-.comments-section {
-    margin-top: 40px;
+/* --- Estilos para Acciones de Publicación (Me gusta, Comentarios) --- */
+.post-actions {
+    margin-top: 20px;
+    padding-top: 15px;
     border-top: 1px solid #eee;
-    padding-top: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+.action-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio entre los botones/contadores */
+    width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.like-button,
+.comment-toggle-button,
+.reply-to-article-button,
+.share-instagram-button { /* Incluido share-instagram-button */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.like-button .icon,
+.comment-toggle-button .icon,
+.reply-to-article-button .icon,
+.share-instagram-button .icon { /* Incluido share-instagram-button */
+    font-size: 1.2em; /* Tamaño del icono */
+}
+
+.like-button:hover,
+.comment-toggle-button:hover,
+.reply-to-article-button:hover,
+.share-instagram-button:hover { /* Incluido share-instagram-button */
+    background-color: #f0f0f0;
+    color: #007bff; /* Color predeterminado */
+}
+
+/* Estilo específico para Instagram */
+.share-instagram-button:hover {
+    color: #c13584; /* Color de marca de Instagram al pasar el ratón */
+}
+
+.like-button.liked { /* Estilo cuando el usuario ya dio like */
+    color: #007bff; /* Color azul de "Me gusta" */
+    font-weight: bold;
+}
+
+.likes-count {
+    font-weight: bold;
+    color: #555;
+    margin-right: 5px; /* Espacio antes de la palabra 'Likes' */
+}
+
+/* Estilos para el contenedor de comentarios */
+.comments-container {
+    margin-top: 20px;
+    /* display: none; se controla con JS */
+}
+
+.comment-actions { /* Estilos para acciones en comentarios individuales */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+
+/* Estilos para Comentarios */
 .comment-form-container {
     margin-bottom: 30px;
     padding: 15px;
@@ -217,12 +402,21 @@ html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dar
 }
 
 .comment-form-container textarea {
-    width: calc(100% - 20px);
+    width: 100%; /* Ahora 100% de su padre */
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    border-radius: 5px; /* Bordes ligeramente más redondeados */
+    font-size: 1em;
+    color: #333;
+    box-sizing: border-box; /* Asegura que padding y border estén incluidos en el width */
     resize: vertical;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment-form-container textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
 }
 
 .comment-form-container button {
@@ -253,6 +447,7 @@ html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dar
 .comment-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .comment-item { /* Base para comentarios de nivel superior */
@@ -298,6 +493,7 @@ html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dar
 .replies { /* Contenedor de las respuestas */
     list-style: none;
     padding: 0;
+    margin: 0; /* Ajustado */
     margin-left: 30px; /* Indentación para las respuestas */
     margin-top: 15px;
     border-left: 3px solid #eee; /* Línea visual para los hilos */
@@ -317,190 +513,458 @@ html.dark-mode .theme-toggle-btn:hover { /* CAMBIO: de body.dark-mode a html.dar
     color: #28a745;
 } /* Color de autor diferente para respuestas */
 
-/* Estilos para usuarios/login.html y usuarios/register.html */
+/* Estilos para usuarios/login.html y usuarios/register.html (formularios generales) */
 .form-container {
     background: #fff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 300px;
+    width: 380px; /* Aumenta un poco el ancho del formulario */
+    margin: 50px auto; /* Centra el formulario en la pantalla */
     text-align: center;
 }
 
 .form-container h2 {
     color: #0056b3;
-    margin-bottom: 20px;
+    margin-bottom: 25px; /* Más espacio debajo del título */
+    font-size: 2em;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Más espacio entre grupos de formulario */
     text-align: left;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* Más espacio debajo de la etiqueta */
     font-weight: bold;
+    color: #444; /* Color de etiqueta */
+    font-size: 0.95em;
 }
 
+/* Estilo para los campos de entrada de formulario */
 .form-group input[type="text"],
 .form-group input[type="password"],
-.form-group input[type="email"] { /* Agregado si usas email en registro */
-    width: calc(100% - 20px);
+.form-group input[type="email"],
+.form-group .form-input { /* Asegurarse de que .form-input también reciba estilos */
+    width: 100%; /* Ahora 100% de su padre */
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 5px; /* Bordes ligeramente más redondeados */
+    font-size: 1em;
+    color: #333;
+    box-sizing: border-box; /* Asegura que padding y border estén incluidos en el width */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-container button {
-    background-color: #007bff; /* Ajusta este color si prefieres el verde para registro */
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="email"]:focus,
+.form-group .form-input:focus {
+    outline: none; /* Elimina el borde de enfoque por defecto del navegador */
+    border-color: #007bff; /* Color de borde al enfocar */
+    box-shadow: 0 0 5px rgba(0,123,255,0.3); /* Sombra suave al enfocar */
+}
+
+/* Estilo para el botón de envío */
+.submit-button { /* Nueva clase para los botones de envío */
+    background-color: #007bff;
     color: white;
-    padding: 10px 15px;
+    padding: 12px 10px; /* Tus ajustes: vertical 12px, horizontal 10px */
     border: none;
-    border-radius: 4px;
+    border-radius: 5px; /* Bordes redondeados */
     cursor: pointer;
-    font-size: 16px;
-    width: 100%;
+    font-size: 1.1em; /* Un poco más grande */
+    font-weight: bold;
+    width: 100%; /* Ocupa todo el ancho */
+    margin-top: 10px; /* Espacio superior */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Incluido para consistencia de ancho */
 }
 
-.form-container button:hover {
-    background-color: #0056b3; /* Ajusta este color si prefieres el verde para registro */
+.submit-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .errorlist {
-    color: red;
+    color: #dc3545; /* Rojo para errores */
     list-style-type: none;
-    padding: 0;
+    padding: 5px 0 0 0; /* Ajusta padding */
     margin: 0;
+    font-size: 0.85em;
+    font-weight: bold;
 }
 
 .helptext {
-    font-size: 0.8em;
-    color: #666;
+    font-size: 0.85em;
+    color: #6c757d; /* Gris para texto de ayuda */
     margin-top: 5px;
+    padding-left: 5px;
 }
 
+/* --- Estilos para la Sección de Filtros Modernos (Categorías y Etiquetas) --- */
+/* Estas reglas ahora estarán dentro de .sidebar-left */
+.filters-section {
+    display: block; /* Vuelve a ser un bloque normal dentro de la barra lateral */
+    width: 100%; /* Ocupa el 100% del ancho de la barra lateral */
+    padding: 0; /* Eliminar padding y fondo si ya lo tiene sidebar-left */
+    background-color: transparent; /* Fondo transparente si ya lo tiene sidebar-left */
+    border-radius: 0;
+    box-shadow: none; /* Eliminar sombra si ya lo tiene sidebar-left */
+    margin-bottom: 0; /* Elimina el margen inferior si no es necesario */
+}
+
+.filter-group {
+    flex: none; /* No se comportará como flex item dentro de filters-section */
+    width: 100%; /* Ocupa todo el ancho de su contenedor */
+    margin-bottom: 30px; /* Espacio entre grupos de filtros */
+}
+
+.filter-group h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #0056b3;
+    font-size: 1.5em;
+    text-align: left; /* Alinea los títulos a la izquierda en la barra lateral */
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.filter-group h3::after { /* Subrayado decorativo */
+    content: '';
+    position: absolute;
+    left: 0; /* Alinea el subrayado a la izquierda */
+    transform: translateX(0%); /* Elimina la transformación de centrado */
+    bottom: 0;
+    width: 40px; /* Ancho ajustado para el subrayado */
+    height: 3px;
+    background-color: #007bff;
+    border-radius: 2px;
+}
+
+.filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espacio entre las píldoras */
+    justify-content: flex-start; /* Alinea las píldoras a la izquierda en la barra lateral */
+}
+
+.filter-pill {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 20px; /* Bordes redondeados para la forma de píldora */
+    background-color: #e0f2f7; /* Color de fondo de píldora */
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: bold;
+    white-space: nowrap; /* Evita que el texto se rompa */
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-pill:hover {
+    background-color: #cce9f5;
+    color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.filter-pill.active { /* Estilo para la píldora activa (filtro actual) */
+    background-color: #007bff;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.filter-pill.active:hover {
+    background-color: #0056b3;
+}
+
+
+/* Estilos para las etiquetas y categorías en el resumen/detalle del artículo */
+.category-tag,
+.tags-list {
+    font-size: 0.9em;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.category-tag a,
+.tags-list a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.category-tag a:hover,
+.tags-list a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos específicos para el enlace "Ver todos los artículos" en el sidebar */
+.clear-filters.sidebar-clear-filters {
+    display: block; /* Para que ocupe todo el ancho del filter-group */
+    width: auto; /* Restablecer el ancho si se sobrescribe */
+    text-align: center;
+    margin-top: 20px; /* Espacio arriba del botón */
+    font-size: 1em; /* Un poco más grande */
+    padding: 10px 15px; /* Más padding para que parezca un botón */
+    border-radius: 8px; /* Bordes un poco más suaves */
+    background-color: #f0f0f0;
+    border-color: #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.clear-filters.sidebar-clear-filters:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Ajustes para el .articles-header ahora que el enlace se ha movido */
+.articles-header {
+    text-align: center;
+    margin-bottom: 30px; /* Puedes ajustar si quieres menos espacio */
+    padding-bottom: 0; /* Quita el padding bottom si ya no tiene el enlace */
+    border-bottom: none; /* Quita el borde si ya no lo necesitas debajo del h1 */
+}
 
 /* --- Estilos para el Modo Noche (Dark Mode) --- */
 
 /* Contenedor principal: html (en lugar de body) */
-html.dark-mode { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    background-color: #1a1a1a; /* Fondo oscuro */
+html.dark-mode { 
+    background-color: #1a1a1a; /* Fondo oscuro principal para el documento */
     color: #e0e0e0; /* Texto claro */
 }
 
-/* **AGREGA O ASEGÚRATE DE ESTA REGLA** */
+/* Asegura que el body también se oscurezca si no hereda */
 html.dark-mode body {
-    background-color: #1a1a1a; /* Asegura que el fondo del body también sea oscuro */
-    color: #e0e0e0; /* Asegura que el texto del body también sea claro */
+    background-color: #1a1a1a;
+    color: #e0e0e0;
 }
 
 /* Encabezados y enlaces */
-html.dark-mode h1, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode h2, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode h2 a, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode .back-link a { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode h1,
+html.dark-mode h2,
+html.dark-mode h2 a,
+html.dark-mode .back-link a {
     color: #8bb4e8; /* Colores de encabezado/enlace adaptados */
 }
 
 /* Contenedor principal de contenido */
-html.dark-mode .container { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .container {
     background: #2a2a2a; /* Fondo del contenedor más oscuro */
     box-shadow: 0 0 10px rgba(255,255,255,0.1); /* Sombra clara */
 }
 
 /* Resúmenes de artículos (lista) */
-html.dark-mode .articulo-resumen { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .articulo-resumen {
     border-bottom: 1px solid #3a3a3a; /* Borde más oscuro */
 }
-html.dark-mode .articulo-resumen p, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode .articulo-resumen .meta { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .articulo-resumen p,
+html.dark-mode .articulo-resumen .meta {
     color: #cccccc; /* Texto secundario más claro */
 }
 
 /* Sección de comentarios y formularios */
-html.dark-mode .comments-section { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comments-section {
     border-top: 1px solid #3a3a3a;
 }
 
-html.dark-mode .comment-form-container { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container {
     background-color: #333333; /* Fondo de formulario oscuro */
 }
 
-html.dark-mode .comment-form-container textarea, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode .form-group input { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container textarea,
+html.dark-mode .form-group input,
+html.dark-mode .form-group .form-input { /* Incluido .form-input */
     background-color: #444444;
     color: #e0e0e0;
     border: 1px solid #555555;
 }
 
-html.dark-mode .comment-form-container textarea::placeholder, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode .form-group input::placeholder { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container textarea::placeholder,
+html.dark-mode .form-group input::placeholder,
+html.dark-mode .form-group .form-input::placeholder { /* Incluido .form-input */
     color: #aaaaaa;
 }
 
-html.dark-mode .comment-form-container button { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container button { /* Botones de formulario (comentar/enviar) */
     background-color: #4a7a58;
 }
-html.dark-mode .comment-form-container button:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container button:hover {
     background-color: #3d664a;
 }
 
-html.dark-mode .comment-form-container p.login-prompt { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container p.login-prompt {
     color: #cccccc;
 }
-html.dark-mode .comment-form-container p.login-prompt a { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-form-container p.login-prompt a {
     color: #8bb4e8;
 }
 
 /* Lista de comentarios */
-html.dark-mode .comment-item { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-item {
     background-color: #333333; /* Fondo de comentario oscuro */
     border: 1px solid #4a4a4a;
 }
-html.dark-mode .comment-item .author { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-item .author {
     color: #8bb4e8; /* Autor de comentario principal */
 }
-html.dark-mode .comment-item .date, /* CAMBIO: de body.dark-mode a html.dark-mode */
-html.dark-mode .comment-item .content { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-item .date,
+html.dark-mode .comment-item .content {
     color: #e0e0e0;
 }
-html.dark-mode .comment-item .reply-link { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-item .reply-link {
     color: #8bb4e8;
 }
-html.dark-mode .comment-item .reply-form { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .comment-item .reply-form {
     border-left: 2px solid #555555;
 }
 
 /* Respuestas anidadas */
-html.dark-mode .replies { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .replies {
     border-left: 3px solid #4a4a4a; /* Línea de hilo oscura */
 }
-html.dark-mode .reply-item { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .reply-item {
     background-color: #3d3d3d; /* Fondo de respuesta más oscuro */
     border: 1px solid #5a5a5a;
 }
-html.dark-mode .reply-item .author { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .reply-item .author {
     color: #6fb07b; /* Autor de respuesta */
 }
 
 /* Estilos de formulario de login/registro */
-html.dark-mode .form-container { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .form-container {
     background: #2a2a2a;
     box-shadow: 0 0 10px rgba(255,255,255,0.1);
 }
-html.dark-mode .form-container h2 { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .form-container h2 {
     color: #8bb4e8;
 }
-html.dark-mode .form-container button { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    background-color: #4a7a58;
+html.dark-mode .form-group label {
+    color: #cccccc;
 }
-html.dark-mode .form-container button:hover { /* CAMBIO: de body.dark-mode a html.dark-mode */
-    background-color: #3d664a;
+html.dark-mode .form-group input[type="text"],
+html.dark-mode .form-group input[type="password"],
+html.dark-mode .form-group input[type="email"],
+html.dark-mode .form-group .form-input {
+    background-color: #444444;
+    color: #e0e0e0;
+    border-color: #555555;
 }
-html.dark-mode .errorlist { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .form-group input[type="text"]:focus,
+html.dark-mode .form-group input[type="password"]:focus,
+html.dark-mode .form-group input[type="email"]:focus,
+html.dark-mode .form-group .form-input:focus,
+html.dark-mode .comment-form-container textarea:focus {
+    border-color: #8bb4e8;
+    box-shadow: 0 0 5px rgba(139,180,232,0.3);
+}
+html.dark-mode .submit-button {
+    background-color: #8bb4e8;
+    color: #1a1a1a;
+}
+html.dark-mode .submit-button:hover {
+    background-color: #6a9bd8;
+    box-shadow: 0 4px 8px rgba(255,255,255,0.08);
+}
+html.dark-mode .errorlist {
     color: #ff9999;
 }
-html.dark-mode .helptext { /* CAMBIO: de body.dark-mode a html.dark-mode */
+html.dark-mode .helptext {
     color: #bbbbbb;
+}
+
+/* Adaptaciones para la nueva sección de Acciones (Like, Comentarios) */
+html.dark-mode .post-actions {
+    border-top-color: #3a3a3a;
+    border-bottom-color: #3a3a3a;
+}
+
+html.dark-mode .like-button,
+html.dark-mode .comment-toggle-button,
+html.dark-mode .reply-to-article-button,
+html.dark-mode .share-instagram-button {
+    color: #ccc;
+}
+
+html.dark-mode .like-button:hover,
+html.dark-mode .comment-toggle-button:hover,
+html.dark-mode .reply-to-article-button:hover,
+html.dark-mode .share-instagram-button:hover {
+    background-color: #333;
+    color: #8bb4e8;
+}
+
+html.dark-mode .share-instagram-button:hover {
+    color: #d16b9b; /* Color de marca de Instagram en modo noche */
+}
+
+html.dark-mode .like-button.liked {
+    color: #8bb4e8; /* Color azul de "Me gusta" en modo noche */
+}
+
+html.dark-mode .likes-count {
+    color: #e0e0e0;
+}
+
+html.dark-mode .comment-actions {
+    color: #ccc;
+}
+
+/* --- Adaptaciones del Modo Noche para Categorías/Etiquetas --- */
+html.dark-mode .articles-header {
+    border-bottom-color: #3a3a3a;
+}
+
+html.dark-mode .articles-header h1 {
+    color: #e0e0e0;
+}
+
+html.dark-mode .articles-header .clear-filters {
+    color: #8bb4e8;
+    border-color: #8bb4e8;
+}
+
+html.dark-mode .articles-header .clear-filters:hover {
+    background-color: #8bb4e8;
+    color: #1a1a1a;
+}
+
+html.dark-mode .filters-section {
+    background-color: transparent; /* Ahora transparente en modo noche */
+    box-shadow: none; /* Sin sombra en modo noche */
+}
+
+html.dark-mode .filter-group h3 {
+    color: #8bb4e8;
+}
+
+html.dark-mode .filter-group h3::after {
+    background-color: #8bb4e8;
+}
+
+html.dark-mode .filter-pill {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.05);
+}
+
+html.dark-mode .filter-pill:hover {
+    background-color: #4a4a4a;
+    color: #8bb4e8;
+    box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+}
+
+html.dark-mode .filter-pill.active {
+    background-color: #8bb4e8;
+    color: #1a1a1a;
+}
+
+html.dark-mode .filter-pill.active:hover {
+    background-color: #6a9bd8;
 }
