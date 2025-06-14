@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bandeja de Entrada - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <div class="content-header">
+        <h1>Bandeja de Entrada</h1>
+        <p>Aquí puedes ver tus conversaciones y mensajes privados.</p>
+    </div>
+
+    {# --- Filtros de Bandeja de Entrada --- #}
+    <div class="inbox-filters">
+        <a href="{% url 'mensajeria:inbox' %}?status=active" class="inbox-filter-link {% if conversation_status == 'active' %}active{% endif %}">
+            <i class="fa-solid fa-inbox"></i> Activas
+        </a>
+        <a href="{% url 'mensajeria:inbox' %}?status=archived" class="inbox-filter-link {% if conversation_status == 'archived' %}active{% endif %}">
+            <i class="fa-solid fa-box-archive"></i> Archivadas
+        </a>
+        <a href="{% url 'mensajeria:inbox' %}?status=all" class="inbox-filter-link {% if conversation_status == 'all' %}active{% endif %}">
+            <i class="fa-solid fa-list-ul"></i> Todas
+        </a>
+    </div>
+    {# --- Fin Filtros de Bandeja de Entrada --- #}
+
+    <div class="inbox-list-container">
+        {% if conversations %}
+            <ul class="conversation-list">
+                {% for conversation in conversations %}
+                    {% with other_participant=conversation.other_participant_obj %}
+                    <li class="conversation-item" id="conv-{{ conversation.id }}">
+                        <a href="{% url 'mensajeria:conversation_detail' conversation_id=conversation.id %}" class="conversation-link">
+                            <div class="conversation-info">
+                                {% if other_participant %}
+                                    <h3 class="conversation-title">Conversación con {{ other_participant.username }}</h3>
+                                {% else %}
+                                    <h3 class="conversation-title">{{ conversation }}</h3> 
+                                {% endif %}
+                                <p class="last-message-time">Última actividad: {{ conversation.updated_at|date:"d M Y H:i" }}</p>
+                            </div>
+                            <div class="conversation-status">
+                                {% if conversation.has_unread_messages %}
+                                    <span class="unread-messages">Mensajes nuevos</span>
+                                {% endif %}
+                                <span class="message-count">{{ conversation.messages.count }} mensajes</span>
+                            </div>
+                        </a>
+                        {# --- CAMBIO CLAVE: Botón Archivar/Desarchivar --- #}
+                        <button class="archive-toggle-button" data-conv-id="{{ conversation.id }}" data-is-archived="{{ conversation.is_archived|yesno:'true,false' }}">
+                            {% if conversation.is_archived %}
+                                <i class="fa-solid fa-box-open"></i> Desarchivar
+                            {% else %}
+                                <i class="fa-solid fa-box-archive"></i> Archivar
+                            {% endif %}
+                        </button>
+                        {# --- FIN CAMBIO CLAVE --- #}
+                    </li>
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-conversations">
+                {% if conversation_status == 'active' %}
+                    No tienes conversaciones activas.
+                {% elif conversation_status == 'archived' %}
+                    No tienes conversaciones archivadas.
+                {% else %}
+                    No tienes conversaciones todavía.
+                {% endif %}
+            </p>
+            <p>Puedes ir a un artículo y enviar un mensaje al autor, o buscar un usuario para iniciar una nueva conversación.</p>
+        {% endif %}
+    </div>
+
+    <div class="start-new-conversation">
+        <a href="{% url 'mensajeria:start_new_conversation' %}" class="start-new-btn"><i class="fa-solid fa-plus-circle"></i> Iniciar nueva conversación</a>
+    </div>
+
+{% endblock content %}

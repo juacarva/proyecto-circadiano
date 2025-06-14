@@ -20,7 +20,9 @@
     {# Fin del script para prevenir el "flash" #}
 
     <link rel="stylesheet" href="{% static 'blog_circadiano/css/style.css' %}">
+    {# Enlace a Font Awesome para los íconos #}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     {% block extra_css %}{% endblock %} {# Bloque para CSS adicional por página #}
 </head>
 <body>
@@ -28,15 +30,20 @@
         <h1 class="site-title"><a href="{% url 'blog_circadiano:lista_articulos' %}">Circadiano</a></h1>
         
         <nav class="main-nav">
-            {# --- CAMBIO CLAVE: Formulario de Búsqueda --- #}
             <form action="{% url 'blog_circadiano:lista_articulos' %}" method="GET" class="search-form">
                 <input type="text" name="q" placeholder="Buscar artículos..." value="{{ query|default_if_none:'' }}" class="search-input">
                 <button type="submit" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
-            {# --- FIN CAMBIO CLAVE --- #}
 
             {% if user.is_authenticated %}
                 <span class="welcome-message">Hola, {{ user.username }}!</span>
+                {# Ícono de Bandeja de Entrada con Indicador #}
+                <a href="{% url 'mensajeria:inbox' %}" class="nav-link messages-inbox-link" title="Bandeja de Entrada">
+                    <i class="fa-solid fa-envelope"></i>
+                    {% if unread_messages_count > 0 %}
+                        <span class="unread-badge">{{ unread_messages_count }}</span>
+                    {% endif %}
+                </a>
                 <a href="{% url 'usuarios:logout' %}" class="nav-link" title="Cerrar Sesión">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </a>
@@ -50,6 +57,12 @@
         </nav>
     </header>
     
+    {# --- CAMBIO CLAVE: Formulario oculto para asegurar el CSRF token siempre disponible para AJAX --- #}
+    <form id="csrf-form" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+    {# --- FIN CAMBIO CLAVE --- #}
+
     {# Clase condicional en page-wrapper para controlar el layout #}
     <div class="page-wrapper {% if not show_sidebar %}no-sidebar{% endif %}">
         {% if show_sidebar %} {# Renderizar sidebar solo si show_sidebar es True #}

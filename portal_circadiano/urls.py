@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('usuarios/', include('usuarios.urls')), # <-- Ahora incluimos las URLs de tu app 'usuarios'
     path('', include('blog_circadiano.urls')), # Incluye las URLs de tu aplicación 'blog'
+    path('messages/', include('mensajeria.urls')), # <-- ¡Añade esta línea para incluir las URLs de mensajería!
 ]
 
 # Esto solo debe hacerse en desarrollo. En producción, tu servidor web (Nginx/Apache) servirá estos archivos.

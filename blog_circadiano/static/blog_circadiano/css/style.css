@@ -1,14 +1,113 @@
 /* blog_circadiano/static/blog_circadiano/css/style.css */
 
-/* Transiciones suaves para los cambios de color */
-html, /* Aseguramos que la transición también se aplique al elemento html para el modo noche */
+/* Define CSS custom properties for reusability */
+:root {
+    /* Colors */
+    --primary-color: #007bff;
+    --primary-dark: #0056b3;
+    --secondary-color: #28a745;
+    --secondary-dark: #218838;
+    --text-dark: #333;
+    --text-light: #e0e0e0;
+    --text-secondary: #555;
+    --text-muted: #888;
+    --text-help: #6c757d;
+    --error-color: #dc3545;
+    --error-light: #ff9999;
+    --background-light: #f4f4f4;
+    --background-white: #fff;
+    --background-light-gray: #f8f8f8;
+    --border-light: #eee;
+    --border-medium: #ccc;
+    --border-dark: #ddd;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-lighter: rgba(0, 0, 0, 0.05);
+    --shadow-white: rgba(255, 255, 255, 0.1);
+    --shadow-white-lighter: rgba(255, 255, 255, 0.05);
+    --comment-bg: #e9f5ff;
+    --comment-item-bg: #f9f9f9;
+    --reply-bg: #f0f8ff;
+    --inbox-bg: #f9f9f9;
+    --sent-message-bg: #dcf8c6;
+    --received-message-bg: #e0e0e0;
+    --filter-pill-bg: #e0f2f7;
+    --filter-pill-hover: #cce9f5;
+    --button-bg: #f0f0f0;
+    --button-hover: #e0e0e0;
+    --instagram-color: #c13584;
+    --instagram-dark: #d16b9b;
+
+    /* Dark mode colors */
+    --dark-background: #1a1a1a;
+    --dark-container: #2a2a2a;
+    --dark-element: #333333;
+    --dark-element-darker: #3d3d3d;
+    --dark-border: #3a3a3a;
+    --dark-border-darker: #4a4a4a;
+    --dark-input: #444444;
+    --dark-border-input: #555555;
+    --dark-primary: #8bb4e8;
+    --dark-primary-hover: #6a9bd8;
+    --dark-secondary: #4a7a58;
+    --dark-secondary-hover: #3d664a;
+    --dark-text-muted: #cccccc;
+    --dark-text-help: #bbbbbb;
+    --dark-text-status: #999;
+
+    /* Spacing */
+    --spacing-xs: 5px;
+    --spacing-sm: 8px;
+    --spacing-md: 10px;
+    --spacing-lg: 15px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 30px;
+    --spacing-3xl: 50px;
+
+    /* Border radius */
+    --border-radius-sm: 2px;
+    --border-radius-md: 5px;
+    --border-radius-lg: 8px;
+    --border-radius-xl: 15px;
+    --border-radius-pill: 20px;
+    --border-radius-round: 25px;
+
+    /* Font sizes */
+    --font-xs: 0.75em;
+    --font-sm: 0.85em;
+    --font-md: 0.9em;
+    --font-base: 0.95em;
+    --font-lg: 1em;
+    --font-xl: 1.05em;
+    --font-2xl: 1.1em;
+    --font-3xl: 1.3em;
+    --font-4xl: 1.5em;
+    --font-5xl: 1.8em;
+    --font-6xl: 2em;
+    --font-7xl: 2.2em;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px var(--shadow-light);
+    --shadow-md: 0 2px 5px var(--shadow-light);
+    --shadow-lg: 0 4px 8px var(--shadow-light);
+    --shadow-white-sm: 0 1px 3px var(--shadow-white-lighter);
+    --shadow-white-md: 0 2px 5px var(--shadow-white-lighter);
+    --shadow-white-lg: 0 4px 8px var(--shadow-white);
+}
+
+/* Apply transitions to elements */
+html,
 body,
 .container,
 .articulo-resumen,
 .comment-form-container,
 .comment-item,
 .reply-item,
-input, textarea,
+input,
+textarea,
 .main-header,
 .site-title a,
 .main-nav span,
@@ -33,221 +132,219 @@ input, textarea,
 .helptext,
 .search-form,
 .search-input,
-.search-button {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+.search-button,
+.messages-inbox-link,
+.inbox-filter-link,
+.archive-toggle-button,
+.send-message-btn {
+    transition: background-color var(--transition-normal), color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
+/* Base styles */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
-    padding: 0 20px; /* Añade un padding horizontal al body para el contenido general */
-    padding-top: 110px; /* Espacio para el header fijo. Ajusta este valor si tu header tiene otra altura */
-    background-color: #f4f4f4;
-    color: #333;
+    padding: 0 var(--spacing-xl);
+    padding-top: 110px;
+    background-color: var(--background-light);
+    color: var(--text-dark);
 }
 
 .container {
     max-width: 800px;
-    margin: auto; /* Se usará solo cuando .page-wrapper.no-sidebar lo permita */
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: auto;
+    background: var(--background-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
 h1 {
-    color: #0056b3;
+    color: var(--primary-dark);
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: var(--spacing-2xl);
 }
 
-/* --- Estilos para el Encabezado Global (base.html) --- */
+/* Header styles */
 .main-header {
-    padding: 10px 0px; /* Eliminamos el padding lateral aquí, ya que el contenido tiene su propio */
-    margin: 0; /* Eliminamos el margen negativo, el width: 100% lo cubrirá */
-    background-color: #f8f8f8;
-    border-bottom: 1px solid #eee;
+    padding: var(--spacing-md) 0;
+    background-color: var(--background-light-gray);
+    border-bottom: 1px solid var(--border-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    position: fixed; /* Lo fija en la ventana */
-    top: 0; /* Lo pega arriba */
-    left: 0; /* Lo pega a la izquierda */
-    width: 100%; /* Ocupa todo el ancho */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Opcional: una sombra para que se vea elevado */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
 }
 
 .site-title {
-    margin: 0; /* Elimina margen por defecto del h1 */
+    margin: 0;
 }
 
 .site-title a {
-    padding: 0px 20px; /* Tus ajustes */
+    padding: 0 var(--spacing-xl);
     text-decoration: none;
-    color: #333;
-    font-size: 1.8em; /* Tamaño del título del sitio */
+    color: var(--text-dark);
+    font-size: var(--font-5xl);
     font-weight: bold;
 }
 
 .main-nav {
-    display: flex; /* Para alinear los elementos de navegación */
+    display: flex;
     align-items: center;
-    padding: 0px 20px; /* Tus ajustes */
-    gap: 15px; /* Añadido espacio entre los elementos de navegación */
+    padding: 0 var(--spacing-xl);
+    gap: var(--spacing-lg);
 }
 
-/* Estilos para el formulario de búsqueda */
 .search-form {
     display: flex;
     align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 25px; /* Bordes redondeados para un look moderno */
-    overflow: hidden; /* Asegura que el contenido interno respete el border-radius */
-    background-color: #f0f0f0;
-    transition: all 0.3s ease;
-    flex-grow: 1; /* Permite que el formulario de búsqueda crezca para ocupar espacio */
-    max-width: 300px; /* Ancho máximo para el campo de búsqueda */
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-round);
+    overflow: hidden;
+    background-color: var(--button-bg);
+    flex-grow: 1;
+    max-width: 300px;
 }
 
-.search-form:focus-within { /* Estilos cuando el input dentro del formulario está enfocado */
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+.search-form:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 var(--spacing-md) rgba(0, 123, 255, 0.3);
 }
 
 .search-input {
-    border: none; /* Elimina el borde del input individual */
-    padding: 8px 15px;
-    font-size: 0.95em;
-    outline: none; /* Elimina el contorno de enfoque por defecto */
-    flex-grow: 1; /* Permite que el input ocupe el espacio disponible dentro del formulario */
-    background-color: transparent; /* Fondo transparente para el input */
-    color: #333;
-    width: 100%; /* Ocupa el 100% del espacio flexible */
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-base);
+    outline: none;
+    flex-grow: 1;
+    background-color: transparent;
+    color: var(--text-dark);
+    width: 100%;
 }
 
 .search-input::placeholder {
-    color: #888;
+    color: var(--text-muted);
 }
 
 .search-button {
-    background-color: #e0e0e0;
+    background-color: var(--button-hover);
     border: none;
-    padding: 8px 12px;
+    padding: var(--spacing-sm) 12px;
     cursor: pointer;
-    font-size: 1em;
-    color: #555;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: var(--font-lg);
+    color: var(--text-secondary);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .search-button:hover {
-    background-color: #d0d0d0;
-    color: #007bff;
+    background-color: var(--button-bg);
+    color: var(--primary-color);
 }
 
 .main-nav span {
-    margin-right: 15px; /* Espacio entre el mensaje de bienvenida y el enlace */
-    color: #555;
-    font-size: 0.95em;
+    margin-right: var(--spacing-lg);
+    color: var(--text-secondary);
+    font-size: var(--font-base);
 }
 
 .nav-link {
-    margin-left: 15px; /* Espacio entre enlaces de navegación */
+    margin-left: var(--spacing-lg);
     text-decoration: none;
-    color: #007bff;
-    font-weight: 600; /* Semi-negrita */
-    font-size: 1.05em; /* Ligeramente más grande */
-    padding: 8px 12px; /* Añade padding para que parezcan botones suaves */
-    border-radius: 5px; /* Bordes ligeramente redondeados */
-    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: var(--font-xl);
+    padding: var(--spacing-sm) 12px;
+    border-radius: var(--border-radius-md);
+    transition: background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .nav-link:hover {
-    background-color: #e0f2f7; /* Un fondo suave al pasar el ratón */
-    color: #0056b3;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra suave al pasar el ratón */
+    background-color: var(--filter-pill-bg);
+    color: var(--primary-dark);
+    box-shadow: var(--shadow-lighter);
 }
 
 .theme-toggle-btn {
-    margin-left: 15px;
-    padding: 10px 15px; /* Padding más generoso */
+    margin-left: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
     cursor: pointer;
-    border-radius: 25px; /* Forma de píldora para el botón */
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 0.95em; /* Un poco más grande */
-    font-weight: 600; /* Semi-negrita */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Sombra para que se vea elevado */
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    border-radius: var(--border-radius-round);
+    border: 1px solid var(--border-medium);
+    background-color: var(--button-bg);
+    color: var(--text-dark);
+    font-size: var(--font-base);
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .theme-toggle-btn:hover {
-    background-color: #e0e0e0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Sombra más fuerte al pasar el ratón */
+    background-color: var(--button-hover);
+    box-shadow: var(--shadow-lg);
 }
 
-/* --- Estilos para el Layout de Página (page-wrapper, sidebar-left, main-content) --- */
+/* Page layout */
 .page-wrapper {
-    display: flex; /* Habilitar Flexbox */
-    gap: 30px; /* Espacio entre la barra lateral y el contenido principal */
-    max-width: 1200px; /* Ancho máximo para el layout completo */
-    margin: 20px auto; /* Centrar el layout en la pantalla, con margen arriba/abajo */
-    padding: 0 20px; /* Padding interno para evitar que el contenido toque los bordes del navegador */
+    display: flex;
+    gap: var(--spacing-2xl);
+    max-width: 1200px;
+    margin: var(--spacing-xl) auto;
+    padding: 0 var(--spacing-xl);
 }
 
 .sidebar-left {
-    flex: 0 0 250px; /* No crece, no encoge, tiene un ancho base de 250px */
-    padding-right: 20px; /* Espacio entre el contenido de la barra lateral y su borde */
-    box-sizing: border-box; /* Asegura que padding y border no aumenten el ancho total */
-    
-    position: sticky; /* Hace que el elemento se pegue al scroll */
-    top: 130px; /* Distancia desde la parte superior de la ventana donde se pegará. Ajusta según la altura de tu header y el espacio deseado. */
-    height: fit-content; /* Asegura que la altura del sticky container se ajuste a su contenido */
-    align-self: flex-start; /* Para que la barra lateral se alinee al inicio del cross-axis en flexbox */
+    flex: 0 0 250px;
+    padding-right: var(--spacing-xl);
+    box-sizing: border-box;
+    position: sticky;
+    top: 130px;
+    height: fit-content;
+    align-self: flex-start;
 }
 
 .main-content {
-    flex: 1; /* Permite que el contenido principal ocupe el resto del espacio disponible */
-    min-width: 0; /* Necesario para que el contenido se ajuste correctamente en flexbox */
+    flex: 1;
+    min-width: 0;
 }
 
-/* Ajuste al contenedor existente para que se adapte dentro del main-content */
 .container {
-    max-width: none; /* Eliminar el max-width fijo del container para que se adapte al main-content */
-    margin: 0; /* Eliminar el margin: auto; para que el container se adapte a su padre */
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: none;
+    margin: 0;
+    padding: var(--spacing-xl);
+    background: var(--background-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
-/* --- Estilos para cuando NO hay barra lateral (ej. en detalle de artículo) --- */
 .page-wrapper.no-sidebar {
-    justify-content: center; /* Centrar el contenido cuando no hay sidebar */
-    max-width: 800px; /* Vuelve al ancho original del contenedor para centrar */
-    padding: 0; /* Eliminar padding para que el container haga su propio padding */
-    margin: 20px auto; /* Centrar de nuevo en la página cuando no hay sidebar */
+    justify-content: center;
+    max-width: 800px;
+    padding: 0;
+    margin: var(--spacing-xl) auto;
 }
 
 .page-wrapper.no-sidebar .main-content {
-    flex: none; /* Elimina el flex: 1 */
-    width: 100%; /* Ocupa el 100% del page-wrapper (que ahora es 800px) */
-    min-width: unset; /* Reinicia el min-width */
+    flex: none;
+    width: 100%;
+    min-width: unset;
 }
 
 .page-wrapper.no-sidebar .main-content .container {
-    max-width: 800px; /* Restablece el max-width para que el container se centre */
-    margin: auto; /* Centra el container dentro del main-content */
+    max-width: 800px;
+    margin: auto;
 }
 
-/* Estilos para lista_articulos.html */
+/* Article list */
 .articulo-resumen {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
 }
 
 .articulo-resumen:last-child {
@@ -257,33 +354,33 @@ h1 {
 
 .articulo-resumen h2 {
     margin-top: 0;
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .articulo-resumen h2 a {
     text-decoration: none;
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .articulo-resumen p {
-    font-size: 0.9em;
+    font-size: var(--font-md);
     color: #666;
 }
 
 .meta {
-    font-size: 0.85em;
-    color: #888;
-    margin-top: 5px;
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
 }
 
-/* Estilos para detalle_articulo.html y comentarios */
+/* Article detail and comments */
 .articulo-titulo {
     margin-top: 0;
 }
 
 .contenido-articulo {
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
 }
 
 .contenido-articulo p {
@@ -293,13 +390,13 @@ h1 {
 
 .back-link {
     display: block;
-    margin-top: 30px;
+    margin-top: var(--spacing-2xl);
     text-align: center;
 }
 
 .back-link a {
     text-decoration: none;
-    color: #007bff;
+    color: var(--primary-color);
     font-weight: bold;
 }
 
@@ -307,17 +404,16 @@ h1 {
     max-width: 100%;
     height: auto;
     display: block;
-    margin: 20px auto;
-    border-radius: 5px;
+    margin: var(--spacing-xl) auto;
+    border-radius: var(--border-radius-md);
 }
 
-/* --- Estilos para Acciones de Publicación (Me gusta, Comentarios) --- */
+/* Post actions */
 .post-actions {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -326,120 +422,116 @@ h1 {
 .action-bar {
     display: flex;
     align-items: center;
-    gap: 15px; /* Espacio entre los botones/contadores */
-    width: 100%; /* Ocupa todo el ancho disponible */
+    gap: var(--spacing-lg);
+    width: 100%;
 }
 
 .like-button,
 .comment-toggle-button,
 .reply-to-article-button,
-.share-instagram-button { /* Incluido share-instagram-button */
+.share-instagram-button {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1em;
-    color: #555;
+    font-size: var(--font-lg);
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .like-button .icon,
 .comment-toggle-button .icon,
 .reply-to-article-button .icon,
-.share-instagram-button .icon { /* Incluido share-instagram-button */
-    font-size: 1.2em; /* Tamaño del icono */
+.share-instagram-button .icon {
+    font-size: 1.2em;
 }
 
 .like-button:hover,
 .comment-toggle-button:hover,
 .reply-to-article-button:hover,
-.share-instagram-button:hover { /* Incluido share-instagram-button */
-    background-color: #f0f0f0;
-    color: #007bff; /* Color predeterminado */
-}
-
-/* Estilo específico para Instagram */
 .share-instagram-button:hover {
-    color: #c13584; /* Color de marca de Instagram al pasar el ratón */
+    background-color: var(--button-bg);
+    color: var(--primary-color);
 }
 
-.like-button.liked { /* Estilo cuando el usuario ya dio like */
-    color: #007bff; /* Color azul de "Me gusta" */
+.share-instagram-button:hover {
+    color: var(--instagram-color);
+}
+
+.like-button.liked {
+    color: var(--primary-color);
     font-weight: bold;
 }
 
 .likes-count {
     font-weight: bold;
-    color: #555;
-    margin-right: 5px; /* Espacio antes de la palabra 'Likes' */
+    color: var(--text-secondary);
+    margin-right: var(--spacing-xs);
 }
 
-/* Estilos para el contenedor de comentarios */
 .comments-container {
-    margin-top: 20px;
-    /* display: none; se controla con JS */
+    margin-top: var(--spacing-xl);
 }
 
-.comment-actions { /* Estilos para acciones en comentarios individuales */
+.comment-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    font-size: 0.9em;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    font-size: var(--font-md);
 }
 
-
-/* Estilos para Comentarios */
+/* Comments */
 .comment-form-container {
-    margin-bottom: 30px;
-    padding: 15px;
-    background-color: #e9f5ff;
-    border-radius: 5px;
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background-color: var(--comment-bg);
+    border-radius: var(--border-radius-md);
 }
 
 .comment-form-container textarea {
-    width: 100%; /* Ahora 100% de su padre */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px; /* Bordes ligeramente más redondeados */
-    font-size: 1em;
-    color: #333;
-    box-sizing: border-box; /* Asegura que padding y border estén incluidos en el width */
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-lg);
+    color: var(--text-dark);
+    box-sizing: border-box;
     resize: vertical;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .comment-form-container textarea:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 var(--spacing-md) rgba(0, 123, 255, 0.3);
 }
 
 .comment-form-container button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 15px;
+    background-color: var(--secondary-color);
+    color: var(--background-white);
+    padding: var(--spacing-md) var(--spacing-lg);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius-md);
     cursor: pointer;
 }
 
 .comment-form-container button:hover {
-    background-color: #218838;
+    background-color: var(--secondary-dark);
 }
 
 .comment-form-container p.login-prompt {
     text-align: center;
-    font-size: 1.1em;
-    color: #555;
+    font-size: var(--font-2xl);
+    color: var(--text-secondary);
 }
 
 .comment-form-container p.login-prompt a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: bold;
 }
@@ -450,198 +542,191 @@ h1 {
     margin: 0;
 }
 
-.comment-item { /* Base para comentarios de nivel superior */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 15px;
+.comment-item {
+    background-color: var(--comment-item-bg);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
     position: relative;
 }
 
 .comment-item .author {
     font-weight: bold;
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .comment-item .date {
-    font-size: 0.8em;
-    color: #999;
-    margin-left: 10px;
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    margin-left: var(--spacing-md);
 }
 
 .comment-item .content {
-    margin-top: 10px;
+    margin-top: var(--spacing-md);
 }
 
 .comment-item .reply-link {
     display: inline-block;
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #007bff;
+    margin-top: var(--spacing-md);
+    font-size: var(--font-md);
+    color: var(--primary-color);
     cursor: pointer;
     text-decoration: none;
 }
 
 .comment-item .reply-form {
-    margin-top: 10px;
-    padding-left: 20px;
-    border-left: 2px solid #ccc;
+    margin-top: var(--spacing-md);
+    padding-left: var(--spacing-xl);
+    border-left: 2px solid var(--border-medium);
 }
 
-/* Estilos para las respuestas */
-.replies { /* Contenedor de las respuestas */
+.replies {
     list-style: none;
     padding: 0;
-    margin: 0; /* Ajustado */
-    margin-left: 30px; /* Indentación para las respuestas */
-    margin-top: 15px;
-    border-left: 3px solid #eee; /* Línea visual para los hilos */
-    padding-left: 15px;
+    margin: 0;
+    margin-left: var(--spacing-2xl);
+    margin-top: var(--spacing-lg);
+    border-left: 3px solid var(--border-light);
+    padding-left: var(--spacing-lg);
 }
 
-.reply-item { /* Cada elemento de respuesta (dentro de .replies) */
-    background-color: #f0f8ff; /* Fondo ligeramente diferente para respuestas */
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
+.reply-item {
+    background-color: var(--reply-bg);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
     padding: 12px;
-    margin-top: 10px;
-    margin-bottom: 10px; /* Separación entre respuestas anidadas */
+    margin: var(--spacing-md) 0;
 }
 
 .reply-item .author {
-    color: #28a745;
-} /* Color de autor diferente para respuestas */
+    color: var(--secondary-color);
+}
 
-/* Estilos para usuarios/login.html y usuarios/register.html (formularios generales) */
+/* Forms (login/register) */
 .form-container {
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 380px; /* Aumenta un poco el ancho del formulario */
-    margin: 50px auto; /* Centra el formulario en la pantalla */
+    background: var(--background-white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    width: 380px;
+    margin: var(--spacing-3xl) auto;
     text-align: center;
 }
 
 .form-container h2 {
-    color: #0056b3;
-    margin-bottom: 25px; /* Más espacio debajo del título */
-    font-size: 2em;
+    color: var(--primary-dark);
+    margin-bottom: 25px;
+    font-size: var(--font-6xl);
 }
 
 .form-group {
-    margin-bottom: 20px; /* Más espacio entre grupos de formulario */
+    margin-bottom: var(--spacing-xl);
     text-align: left;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px; /* Más espacio debajo de la etiqueta */
+    margin-bottom: var(--spacing-sm);
     font-weight: bold;
-    color: #444; /* Color de etiqueta */
-    font-size: 0.95em;
+    color: #444;
+    font-size: var(--font-base);
 }
 
-/* Estilo para los campos de entrada de formulario */
 .form-group input[type="text"],
 .form-group input[type="password"],
 .form-group input[type="email"],
-.form-group .form-input { /* Asegurarse de que .form-input también reciba estilos */
-    width: 100%; /* Ahora 100% de su padre */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px; /* Bordes ligeramente más redondeados */
-    font-size: 1em;
-    color: #333;
-    box-sizing: border-box; /* Asegura que padding y border estén incluidos en el width */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.form-group .form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-lg);
+    color: var(--text-dark);
+    box-sizing: border-box;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="password"]:focus,
 .form-group input[type="email"]:focus,
 .form-group .form-input:focus {
-    outline: none; /* Elimina el borde de enfoque por defecto del navegador */
-    border-color: #007bff; /* Color de borde al enfocar */
-    box-shadow: 0 0 5px rgba(0,123,255,0.3); /* Sombra suave al enfocar */
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 var(--spacing-md) rgba(0, 123, 255, 0.3);
 }
 
-/* Estilo para el botón de envío */
-.submit-button { /* Nueva clase para los botones de envío */
-    background-color: #007bff;
-    color: white;
-    padding: 12px 10px; /* Tus ajustes: vertical 12px, horizontal 10px */
+.submit-button {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    padding: 12px var(--spacing-md);
     border: none;
-    border-radius: 5px; /* Bordes redondeados */
+    border-radius: var(--border-radius-md);
     cursor: pointer;
-    font-size: 1.1em; /* Un poco más grande */
+    font-size: var(--font-2xl);
     font-weight: bold;
-    width: 100%; /* Ocupa todo el ancho */
-    margin-top: 10px; /* Espacio superior */
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
-    box-sizing: border-box; /* Incluido para consistencia de ancho */
+    width: 100%;
+    margin-top: var(--spacing-md);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    box-sizing: border-box;
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background-color: var(--primary-dark);
+    box-shadow: var(--shadow-lg);
 }
 
 .errorlist {
-    color: #dc3545; /* Rojo para errores */
+    color: var(--error-color);
     list-style-type: none;
-    padding: 5px 0 0 0; /* Ajusta padding */
+    padding: var(--spacing-xs) 0 0 0;
     margin: 0;
-    font-size: 0.85em;
+    font-size: var(--font-sm);
     font-weight: bold;
 }
 
 .helptext {
-    font-size: 0.85em;
-    color: #6c757d; /* Gris para texto de ayuda */
-    margin-top: 5px;
-    padding-left: 5px;
+    font-size: var(--font-sm);
+    color: var(--text-help);
+    margin-top: var(--spacing-xs);
+    padding-left: var(--spacing-xs);
 }
 
-/* --- Estilos para la Sección de Filtros Modernos (Categorías y Etiquetas) --- */
-/* Estas reglas ahora estarán dentro de .sidebar-left */
+/* Filters section */
 .filters-section {
-    display: block; /* Vuelve a ser un bloque normal dentro de la barra lateral */
-    width: 100%; /* Ocupa el 100% del ancho de la barra lateral */
-    padding: 0; /* Eliminar padding y fondo si ya lo tiene sidebar-left */
-    background-color: transparent; /* Fondo transparente si ya lo tiene sidebar-left */
+    display: block;
+    width: 100%;
+    padding: 0;
+    background-color: transparent;
     border-radius: 0;
-    box-shadow: none; /* Eliminar sombra si ya lo tiene sidebar-left */
-    margin-bottom: 0; /* Elimina el margen inferior si no es necesario */
+    box-shadow: none;
+    margin-bottom: 0;
 }
 
 .filter-group {
-    flex: none; /* No se comportará como flex item dentro de filters-section */
-    width: 100%; /* Ocupa todo el ancho de su contenedor */
-    margin-bottom: 30px; /* Espacio entre grupos de filtros */
+    flex: none;
+    width: 100%;
+    margin-bottom: var(--spacing-2xl);
 }
 
 .filter-group h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: #0056b3;
-    font-size: 1.5em;
-    text-align: left; /* Alinea los títulos a la izquierda en la barra lateral */
+    margin: 0 0 var(--spacing-xl);
+    color: var(--primary-dark);
+    font-size: var(--font-4xl);
+    text-align: left;
     position: relative;
-    padding-bottom: 10px;
+    padding-bottom: var(--spacing-md);
 }
 
-.filter-group h3::after { /* Subrayado decorativo */
+.filter-group h3::after {
     content: '';
     position: absolute;
-    left: 0; /* Alinea el subrayado a la izquierda */
-    transform: translateX(0%); /* Elimina la transformación de centrado */
+    left: 0;
     bottom: 0;
-    width: 40px; /* Ancho ajustado para el subrayado */
+    width: 40px;
     height: 3px;
-    background-color: #007bff;
-    border-radius: 2px;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius-sm);
 }
 
 .filter-list {
@@ -650,52 +735,50 @@ h1 {
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; /* Espacio entre las píldoras */
-    justify-content: flex-start; /* Alinea las píldoras a la izquierda en la barra lateral */
+    gap: var(--spacing-md);
+    justify-content: flex-start;
 }
 
 .filter-pill {
     display: inline-block;
-    padding: 8px 15px;
-    border-radius: 20px; /* Bordes redondeados para la forma de píldora */
-    background-color: #e0f2f7; /* Color de fondo de píldora */
-    color: #007bff;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-pill);
+    background-color: var(--filter-pill-bg);
+    color: var(--primary-color);
     text-decoration: none;
-    font-size: 0.95em;
+    font-size: var(--font-base);
     font-weight: bold;
-    white-space: nowrap; /* Evita que el texto se rompa */
-    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: var(--shadow-lighter);
 }
 
 .filter-pill:hover {
-    background-color: #cce9f5;
-    color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: var(--filter-pill-hover);
+    color: var(--primary-dark);
+    box-shadow: var(--shadow-lg);
 }
 
-.filter-pill.active { /* Estilo para la píldora activa (filtro actual) */
-    background-color: #007bff;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+.filter-pill.active {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .filter-pill.active:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-dark);
 }
 
-
-/* Estilos para las etiquetas y categorías en el resumen/detalle del artículo */
 .category-tag,
 .tags-list {
-    font-size: 0.9em;
-    margin-left: 15px;
+    font-size: var(--font-md);
+    margin-left: var(--spacing-lg);
     display: inline-block;
 }
 
 .category-tag a,
 .tags-list a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: bold;
 }
@@ -705,266 +788,882 @@ h1 {
     text-decoration: underline;
 }
 
-/* Estilos específicos para el enlace "Ver todos los artículos" en el sidebar */
 .clear-filters.sidebar-clear-filters {
-    display: block; /* Para que ocupe todo el ancho del filter-group */
-    width: auto; /* Restablecer el ancho si se sobrescribe */
+    display: block;
+    width: auto;
     text-align: center;
-    margin-top: 20px; /* Espacio arriba del botón */
-    font-size: 1em; /* Un poco más grande */
-    padding: 10px 15px; /* Más padding para que parezca un botón */
-    border-radius: 8px; /* Bordes un poco más suaves */
-    background-color: #f0f0f0;
-    border-color: #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-top: var(--spacing-xl);
+    font-size: var(--font-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-dark);
+    box-shadow: var(--shadow-lighter);
 }
 
 .clear-filters.sidebar-clear-filters:hover {
-    background-color: #e0e0e0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: var(--button-hover);
+    box-shadow: var(--shadow-lg);
 }
 
-/* Ajustes para el .articles-header ahora que el enlace se ha movido */
 .articles-header {
     text-align: center;
-    margin-bottom: 30px; /* Puedes ajustar si quieres menos espacio */
-    padding-bottom: 0; /* Quita el padding bottom si ya no tiene el enlace */
-    border-bottom: none; /* Quita el borde si ya no lo necesitas debajo del h1 */
+    margin-bottom: var(--spacing-2xl);
 }
 
-/* --- Estilos para el Modo Noche (Dark Mode) --- */
-
-/* Contenedor principal: html (en lugar de body) */
-html.dark-mode { 
-    background-color: #1a1a1a; /* Fondo oscuro principal para el documento */
-    color: #e0e0e0; /* Texto claro */
+/* Dark mode */
+html.dark-mode {
+    background-color: var(--dark-background);
+    color: var(--text-light);
 }
 
-/* Asegura que el body también se oscurezca si no hereda */
 html.dark-mode body {
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    background-color: var(--dark-background);
+    color: var(--text-light);
 }
 
-/* Encabezados y enlaces */
 html.dark-mode h1,
 html.dark-mode h2,
 html.dark-mode h2 a,
 html.dark-mode .back-link a {
-    color: #8bb4e8; /* Colores de encabezado/enlace adaptados */
+    color: var(--dark-primary);
 }
 
-/* Contenedor principal de contenido */
 html.dark-mode .container {
-    background: #2a2a2a; /* Fondo del contenedor más oscuro */
-    box-shadow: 0 0 10px rgba(255,255,255,0.1); /* Sombra clara */
+    background: var(--dark-container);
+    box-shadow: var(--shadow-white);
 }
 
-/* Resúmenes de artículos (lista) */
 html.dark-mode .articulo-resumen {
-    border-bottom: 1px solid #3a3a3a; /* Borde más oscuro */
+    border-bottom: 1px solid var(--dark-border);
 }
+
 html.dark-mode .articulo-resumen p,
 html.dark-mode .articulo-resumen .meta {
-    color: #cccccc; /* Texto secundario más claro */
+    color: var(--dark-text-muted);
 }
 
-/* Sección de comentarios y formularios */
 html.dark-mode .comments-section {
-    border-top: 1px solid #3a3a3a;
+    border-top: 1px solid var(--dark-border);
 }
 
 html.dark-mode .comment-form-container {
-    background-color: #333333; /* Fondo de formulario oscuro */
+    background-color: var(--dark-element);
 }
 
 html.dark-mode .comment-form-container textarea,
 html.dark-mode .form-group input,
-html.dark-mode .form-group .form-input { /* Incluido .form-input */
-    background-color: #444444;
-    color: #e0e0e0;
-    border: 1px solid #555555;
+html.dark-mode .form-group .form-input {
+    background-color: var(--dark-input);
+    color: var(--text-light);
+    border: 1px solid var(--dark-border-input);
 }
 
 html.dark-mode .comment-form-container textarea::placeholder,
 html.dark-mode .form-group input::placeholder,
-html.dark-mode .form-group .form-input::placeholder { /* Incluido .form-input */
+html.dark-mode .form-group .form-input::placeholder {
     color: #aaaaaa;
 }
 
-html.dark-mode .comment-form-container button { /* Botones de formulario (comentar/enviar) */
-    background-color: #4a7a58;
+html.dark-mode .comment-form-container button {
+    background-color: var(--dark-secondary);
 }
+
 html.dark-mode .comment-form-container button:hover {
-    background-color: #3d664a;
+    background-color: var(--dark-secondary-hover);
 }
 
 html.dark-mode .comment-form-container p.login-prompt {
-    color: #cccccc;
-}
-html.dark-mode .comment-form-container p.login-prompt a {
-    color: #8bb4e8;
+    color: var(--dark-text-muted);
 }
 
-/* Lista de comentarios */
+html.dark-mode .comment-form-container p.login-prompt a {
+    color: var(--dark-primary);
+}
+
 html.dark-mode .comment-item {
-    background-color: #333333; /* Fondo de comentario oscuro */
-    border: 1px solid #4a4a4a;
+    background-color: var(--dark-element);
+    border: 1px solid var(--dark-border-darker);
 }
+
 html.dark-mode .comment-item .author {
-    color: #8bb4e8; /* Autor de comentario principal */
+    color: var(--dark-primary);
 }
+
 html.dark-mode .comment-item .date,
 html.dark-mode .comment-item .content {
-    color: #e0e0e0;
-}
-html.dark-mode .comment-item .reply-link {
-    color: #8bb4e8;
-}
-html.dark-mode .comment-item .reply-form {
-    border-left: 2px solid #555555;
+    color: var(--text-light);
 }
 
-/* Respuestas anidadas */
-html.dark-mode .replies {
-    border-left: 3px solid #4a4a4a; /* Línea de hilo oscura */
+html.dark-mode .comment-item .reply-link {
+    color: var(--dark-primary);
 }
+
+html.dark-mode .comment-item .reply-form {
+    border-left: 2px solid var(--dark-border-input);
+}
+
+html.dark-mode .replies {
+    border-left: 3px solid var(--dark-border-darker);
+}
+
 html.dark-mode .reply-item {
-    background-color: #3d3d3d; /* Fondo de respuesta más oscuro */
+    background-color: var(--dark-element-darker);
     border: 1px solid #5a5a5a;
 }
+
 html.dark-mode .reply-item .author {
-    color: #6fb07b; /* Autor de respuesta */
+    color: var(--dark-secondary);
 }
 
-/* Estilos de formulario de login/registro */
 html.dark-mode .form-container {
-    background: #2a2a2a;
-    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    background: var(--dark-container);
+    box-shadow: var(--shadow-white);
 }
+
 html.dark-mode .form-container h2 {
-    color: #8bb4e8;
+    color: var(--dark-primary);
 }
+
 html.dark-mode .form-group label {
-    color: #cccccc;
+    color: var(--dark-text-muted);
 }
+
 html.dark-mode .form-group input[type="text"],
 html.dark-mode .form-group input[type="password"],
 html.dark-mode .form-group input[type="email"],
 html.dark-mode .form-group .form-input {
-    background-color: #444444;
-    color: #e0e0e0;
-    border-color: #555555;
+    background-color: var(--dark-input);
+    color: var(--text-light);
+    border-color: var(--dark-border-input);
 }
+
 html.dark-mode .form-group input[type="text"]:focus,
 html.dark-mode .form-group input[type="password"]:focus,
 html.dark-mode .form-group input[type="email"]:focus,
 html.dark-mode .form-group .form-input:focus,
 html.dark-mode .comment-form-container textarea:focus {
-    border-color: #8bb4e8;
-    box-shadow: 0 0 5px rgba(139,180,232,0.3);
-}
-html.dark-mode .submit-button {
-    background-color: #8bb4e8;
-    color: #1a1a1a;
-}
-html.dark-mode .submit-button:hover {
-    background-color: #6a9bd8;
-    box-shadow: 0 4px 8px rgba(255,255,255,0.08);
-}
-html.dark-mode .errorlist {
-    color: #ff9999;
-}
-html.dark-mode .helptext {
-    color: #bbbbbb;
+    border-color: var(--dark-primary);
+    box-shadow: 0 0 var(--spacing-md) rgba(139, 180, 232, 0.3);
 }
 
-/* Adaptaciones para la nueva sección de Acciones (Like, Comentarios) */
+html.dark-mode .submit-button {
+    background-color: var(--dark-primary);
+    color: var(--dark-background);
+}
+
+html.dark-mode .submit-button:hover {
+    background-color: var(--dark-primary-hover);
+    box-shadow: var(--shadow-white-lg);
+}
+
+html.dark-mode .errorlist {
+    color: var(--error-light);
+}
+
+html.dark-mode .helptext {
+    color: var(--dark-text-help);
+}
+
 html.dark-mode .post-actions {
-    border-top-color: #3a3a3a;
-    border-bottom-color: #3a3a3a;
+    border-top-color: var(--dark-border);
+    border-bottom-color: var(--dark-border);
 }
 
 html.dark-mode .like-button,
 html.dark-mode .comment-toggle-button,
 html.dark-mode .reply-to-article-button,
 html.dark-mode .share-instagram-button {
-    color: #ccc;
+    color: var(--dark-text-muted);
 }
 
 html.dark-mode .like-button:hover,
 html.dark-mode .comment-toggle-button:hover,
 html.dark-mode .reply-to-article-button:hover,
 html.dark-mode .share-instagram-button:hover {
-    background-color: #333;
-    color: #8bb4e8;
+    background-color: var(--dark-element);
+    color: var(--dark-primary);
 }
 
 html.dark-mode .share-instagram-button:hover {
-    color: #d16b9b; /* Color de marca de Instagram en modo noche */
+    color: var(--instagram-dark);
 }
 
 html.dark-mode .like-button.liked {
-    color: #8bb4e8; /* Color azul de "Me gusta" en modo noche */
+    color: var(--dark-primary);
 }
 
 html.dark-mode .likes-count {
-    color: #e0e0e0;
+    color: var(--text-light);
 }
 
 html.dark-mode .comment-actions {
-    color: #ccc;
+    color: var(--dark-text-muted);
 }
 
-/* --- Adaptaciones del Modo Noche para Categorías/Etiquetas --- */
 html.dark-mode .articles-header {
-    border-bottom-color: #3a3a3a;
+    border-bottom-color: var(--dark-border);
 }
 
 html.dark-mode .articles-header h1 {
-    color: #e0e0e0;
+    color: var(--text-light);
 }
 
 html.dark-mode .articles-header .clear-filters {
-    color: #8bb4e8;
-    border-color: #8bb4e8;
+    color: var(--dark-primary);
+    border-color: var(--dark-primary);
 }
 
 html.dark-mode .articles-header .clear-filters:hover {
-    background-color: #8bb4e8;
-    color: #1a1a1a;
+    background-color: var(--dark-primary);
+    color: var(--dark-background);
 }
 
 html.dark-mode .filters-section {
-    background-color: transparent; /* Ahora transparente en modo noche */
-    box-shadow: none; /* Sin sombra en modo noche */
+    background-color: transparent;
+    box-shadow: none;
 }
 
 html.dark-mode .filter-group h3 {
-    color: #8bb4e8;
+    color: var(--dark-primary);
 }
 
 html.dark-mode .filter-group h3::after {
-    background-color: #8bb4e8;
+    background-color: var(--dark-primary);
 }
 
 html.dark-mode .filter-pill {
-    background-color: #3a3a3a;
-    color: #e0e0e0;
-    box-shadow: 0 2px 4px rgba(255,255,255,0.05);
+    background-color: var(--dark-border);
+    color: var(--text-light);
+    box-shadow: var(--shadow-white-lighter);
 }
 
 html.dark-mode .filter-pill:hover {
-    background-color: #4a4a4a;
-    color: #8bb4e8;
-    box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+    background-color: var(--dark-border-darker);
+    color: var(--dark-primary);
+    box-shadow: var(--shadow-white-lg);
 }
 
 html.dark-mode .filter-pill.active {
-    background-color: #8bb4e8;
-    color: #1a1a1a;
+    background-color: var(--dark-primary);
+    color: var(--dark-background);
 }
 
 html.dark-mode .filter-pill.active:hover {
-    background-color: #6a9bd8;
+    background-color: var(--dark-primary-hover);
+}
+
+/* Messaging */
+.content-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.content-header h1 {
+    font-size: var(--font-7xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+}
+
+.inbox-filters {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: 25px;
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.inbox-filter-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-pill);
+    background-color: var(--button-bg);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: var(--font-base);
+    transition: background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: var(--shadow-lighter);
+}
+
+.inbox-filter-link:hover {
+    background-color: var(--button-hover);
+    color: var(--primary-color);
+    box-shadow: var(--shadow-lg);
+}
+
+.inbox-filter-link.active {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.inbox-filter-link.active:hover {
+    background-color: var(--primary-dark);
+}
+
+.inbox-list-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: var(--background-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.conversation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.conversation-item {
+    border-bottom: 1px solid var(--border-light);
+    padding: var(--spacing-lg) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-item:last-child {
+    border-bottom: none;
+}
+
+.conversation-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: background-color var(--transition-fast);
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius-md);
+    flex-grow: 1;
+    margin-right: var(--spacing-lg);
+}
+
+.conversation-link:hover {
+    background-color: var(--button-bg);
+}
+
+.conversation-info {
+    flex-grow: 1;
+}
+
+.conversation-title {
+    margin: 0;
+    font-size: var(--font-2xl);
+    color: var(--primary-color);
+}
+
+.last-message-time {
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+}
+
+.conversation-status {
+    text-align: right;
+    font-size: var(--font-md);
+    color: #666;
+}
+
+.unread-messages {
+    font-weight: bold;
+    color: var(--error-color);
+    display: block;
+}
+
+.message-count {
+    display: block;
+}
+
+.no-conversations {
+    text-align: center;
+    font-style: italic;
+    color: var(--text-muted);
+    padding: var(--spacing-xl);
+}
+
+.start-new-conversation {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+}
+
+.start-new-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background-color: var(--secondary-color);
+    color: var(--background-white);
+    padding: 12px 25px;
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: var(--font-2xl);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.start-new-btn:hover {
+    background-color: var(--secondary-dark);
+    box-shadow: var(--shadow-lg);
+}
+
+.archive-toggle-button {
+    background: none;
+    border: 1px solid var(--border-medium);
+    padding: var(--spacing-sm) 12px;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-md);
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.archive-toggle-button:hover {
+    background-color: var(--button-hover);
+    color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.archive-toggle-button .fa-box-archive,
+.archive-toggle-button .fa-box-open {
+    font-size: 1.2em;
+}
+
+.conversation-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.conversation-header h1 {
+    font-size: var(--font-6xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+}
+
+.back-to-inbox-link {
+    font-size: var(--font-md);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: var(--spacing-md);
+    display: inline-block;
+}
+
+.back-to-inbox-link:hover {
+    text-decoration: underline;
+}
+
+.message-list-container {
+    max-width: 700px;
+    margin: 0 auto var(--spacing-2xl) auto;
+    background-color: var(--inbox-bg);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.message-item {
+    display: flex;
+}
+
+.message-bubble {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-xl);
+    max-width: 80%;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+}
+
+.message-item.sent {
+    justify-content: flex-end;
+}
+
+.message-item.sent .message-bubble {
+    background-color: var(--sent-message-bg);
+    color: var(--text-dark);
+    border-bottom-right-radius: var(--border-radius-sm);
+}
+
+.message-item.received {
+    justify-content: flex-start;
+}
+
+.message-item.received .message-bubble {
+    background-color: var(--received-message-bg);
+    color: var(--text-dark);
+    border-bottom-left-radius: var(--border-radius-sm);
+}
+
+.message-meta {
+    font-size: var(--font-xs);
+    color: #777;
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.message-meta .sender-username {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.message-meta .timestamp {
+    margin-left: var(--spacing-md);
+}
+
+.message-meta .read-status {
+    font-size: 0.8em;
+    font-style: italic;
+    margin-left: var(--spacing-md);
+    color: var(--text-secondary);
+}
+
+.message-meta .read-status.unread {
+    color: var(--error-color);
+    font-weight: bold;
+}
+
+.message-content {
+    font-size: var(--font-base);
+    word-wrap: break-word;
+}
+
+.message-form-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: var(--background-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.message-form-container h3 {
+    margin-top: 0;
+    font-size: var(--font-4xl);
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-xl);
+}
+
+.start-new-conversation {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+}
+
+.start-new-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background-color: var(--secondary-color);
+    color: var(--background-white);
+    padding: 12px 25px;
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: var(--font-2xl);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.start-new-btn:hover {
+    background-color: var(--secondary-dark);
+    box-shadow: var(--shadow-lg);
+}
+
+.search-results-section {
+    margin-top: var(--spacing-2xl);
+    text-align: left;
+    border-top: 1px solid var(--border-light);
+    padding-top: var(--spacing-xl);
+}
+
+.search-results-section h4 {
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-3xl);
+}
+
+.results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.results-list .result-item {
+    border-bottom: 1px solid var(--button-bg);
+    padding: var(--spacing-md) 0;
+}
+
+.results-list .result-item:last-child {
+    border-bottom: none;
+}
+
+.results-list .result-link {
+    display: block;
+    padding: var(--spacing-xs) 0;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: bold;
+    transition: color var(--transition-fast);
+}
+
+.results-list .result-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.send-message-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-left: var(--spacing-lg);
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    font-size: var(--font-sm);
+    font-weight: bold;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.send-message-btn:hover {
+    background-color: var(--primary-dark);
+    box-shadow: var(--shadow-md);
+}
+
+.messages-inbox-link {
+    position: relative;
+}
+
+.unread-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: var(--error-color);
+    color: var(--background-white);
+    font-size: 0.7em;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 3px 6px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+html.dark-mode .main-header {
+    background-color: #222222;
+    border-bottom-color: var(--dark-border);
+    box-shadow: 0 4px 10px var(--shadow-white-lighter);
+}
+
+html.dark-mode .site-title a {
+    color: var(--text-light);
+}
+
+html.dark-mode .main-nav span.welcome-message {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .nav-link {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .nav-link:hover {
+    background-color: var(--dark-element);
+    color: var(--dark-primary-hover);
+    box-shadow: var(--shadow-white-sm);
+}
+
+html.dark-mode .theme-toggle-btn {
+    background-color: var(--dark-element);
+    color: var(--text-light);
+    border-color: var(--dark-border-input);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .theme-toggle-btn:hover {
+    background-color: var(--dark-input);
+    box-shadow: var(--shadow-white-lg);
+}
+
+html.dark-mode .content-header {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .content-header h1 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .inbox-list-container {
+    background-color: var(--dark-container);
+    box-shadow: var(--shadow-white);
+}
+
+html.dark-mode .conversation-item {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .conversation-link {
+    color: var(--text-light);
+}
+
+html.dark-mode .conversation-link:hover {
+    background-color: var(--dark-element);
+}
+
+html.dark-mode .conversation-title {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .last-message-time {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .conversation-status {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .unread-messages {
+    color: var(--error-light);
+}
+
+html.dark-mode .no-conversations {
+    color: #aaa;
+}
+
+html.dark-mode .start-new-btn {
+    background-color: var(--dark-secondary);
+}
+
+html.dark-mode .start-new-btn:hover {
+    background-color: var(--dark-secondary-hover);
+    box-shadow: var(--shadow-white-lg);
+}
+
+html.dark-mode .archive-toggle-button {
+    background-color: var(--dark-input);
+    border-color: #666;
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .archive-toggle-button:hover {
+    background-color: var(--dark-border-input);
+    color: var(--dark-primary);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .conversation-header {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .conversation-header h1 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .back-to-inbox-link {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .back-to-inbox-link:hover {
+    color: var(--dark-primary-hover);
+}
+
+html.dark-mode .message-list-container {
+    background-color: var(--dark-element);
+    box-shadow: var(--shadow-white);
+}
+
+html.dark-mode .message-bubble {
+    box-shadow: var(--shadow-white-sm);
+}
+
+html.dark-mode .message-item.sent .message-bubble {
+    background-color: var(--dark-secondary);
+    color: var(--text-light);
+}
+
+html.dark-mode .message-item.received .message-bubble {
+    background-color: var(--dark-input);
+    color: var(--text-light);
+}
+
+html.dark-mode .message-meta {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .message-meta .sender-username {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .message-meta .timestamp {
+    color: var(--dark-text-status);
+}
+
+html.dark-mode .message-meta .read-status {
+    color: var(--dark-text-status);
+}
+
+html.dark-mode .message-meta .read-status.unread {
+    color: var(--error-light);
+}
+
+html.dark-mode .message-content {
+    color: var(--text-light);
+}
+
+html.dark-mode .message-form-container {
+    background-color: var(--dark-container);
+    box-shadow: var(--shadow-white);
+}
+
+html.dark-mode .message-form-container h3 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .send-message-btn {
+    background-color: var(--dark-primary);
+    color: var(--dark-background);
+}
+
+html.dark-mode .send-message-btn:hover {
+    background-color: var(--dark-primary-hover);
+    color: var(--dark-background);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .search-results-section {
+    border-top-color: var(--dark-border);
+}
+
+html.dark-mode .search-results-section h4 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .results-list .result-link {
+    color: var(--text-light);
+}
+
+html.dark-mode .results-list .result-link:hover {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .results-list .result-item {
+    border-bottom-color: var(--dark-border);
 }

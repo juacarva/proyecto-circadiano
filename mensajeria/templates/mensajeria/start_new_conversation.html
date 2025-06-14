@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Iniciar Nueva Conversación - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <div class="content-header">
+        <h1>Iniciar Nueva Conversación</h1>
+        <p>Busca un usuario para enviarle un mensaje privado.</p>
+    </div>
+
+    <div class="form-container" style="max-width: 500px;">
+        <h3>Buscar Destinatario</h3>
+        <form method="post" action="{% url 'mensajeria:start_new_conversation' %}"> {# Esta URL es para el POST del formulario de búsqueda, sin username #}
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}" class="sr-only">Nombre de usuario del destinatario:</label>
+                {{ form.username|add_class:"form-input" }}
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <p class="errorlist">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="submit" class="submit-button">Buscar Usuario</button>
+        </form>
+
+        {% if search_results %}
+            <div class="search-results-section">
+                <h4>Resultados de la búsqueda:</h4>
+                <ul class="results-list">
+                    {% for user_result in search_results %}
+                        <li class="result-item">
+                            {# CAMBIO CLAVE AQUÍ: Usar 'start_new_conversation_with_user' #}
+                            <a href="{% url 'mensajeria:start_new_conversation_with_user' username=user_result.username %}" class="result-link">
+                                {{ user_result.username }} {% if user_result.first_name and user_result.last_name %}({{ user_result.first_name }} {{ user_result.last_name }}){% endif %}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li>No se encontraron usuarios con ese nombre.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="back-link" style="margin-top: 30px;">
+            <a href="{% url 'mensajeria:inbox' %}">Volver a la Bandeja de Entrada</a>
+        </div>
+    </div>
+{% endblock content %}

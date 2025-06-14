@@ -139,6 +139,75 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // --- Lógica para el botón "Archivar/Desarchivar Conversación" ---
+    document.querySelectorAll('.archive-toggle-button').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const convId = this.dataset.convId;
+            const isArchivedInitial = this.dataset.isArchived === 'true'; // Convierte el string a booleano
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            if (!convId) {
+                console.error('ID de conversación no definido para el archivo.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/messages/toggle_archive/', { // Ajusta la URL si es diferente
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: `conversation_id=${convId}`
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error HTTP al archivar/desarchivar:', response.status, response.statusText, 'Respuesta:', errorText);
+                    alert(`Error al archivar/desarchivar conversación: ${response.status} ${response.statusText}. Por favor, inténtalo de nuevo.`);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // Actualizar el botón y posiblemente eliminar/mover la conversación de la lista
+                    const conversationItem = document.getElementById(`conv-${convId}`);
+                    
+                    if (data.is_archived) {
+                        this.innerHTML = '<i class="fa-solid fa-box-open"></i> Desarchivar';
+                        this.dataset.isArchived = 'true';
+                        // Opcional: Eliminar el elemento de la lista "Activas" o moverlo
+                        // if (conversationItem) { conversationItem.remove(); } // Si quieres que desaparezca inmediatamente
+                        // Opcional: Añadir una animación o mensaje de confirmación
+                    } else {
+                        this.innerHTML = '<i class="fa-solid fa-box-archive"></i> Archivar';
+                        this.dataset.isArchived = 'false';
+                        // Opcional: Eliminar el elemento de la lista "Archivadas"
+                        // if (conversationItem) { conversationItem.remove(); }
+                    }
+                    alert(data.message); // Muestra el mensaje de éxito del servidor
+
+                    // Para una experiencia de usuario fluida, podrías recargar solo la lista
+                    // o redirigir a la URL actual para que se aplique el filtro.
+                    // location.reload(); // Recargar la página para aplicar el filtro
+
+                    // Una mejor opción es simplemente recargar la lista de conversaciones
+                    // sin una recarga completa de la página, pero eso es más avanzado (AJAX para la lista).
+                    // Por ahora, un reload simple es efectivo.
+                    window.location.reload(); // Recargar la página para que se actualice el filtro
+                } else {
+                    console.error('Error al procesar archivo (respuesta del servidor):', data.message);
+                    alert('Error al archivar/desarchivar: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error de red o parsing JSON al archivar:', error);
+                alert('Hubo un error de conexión o el servidor envió una respuesta inesperada al archivar/desarchivar.');
+            }
+        });
+    });
+
     // --- Lógica para mostrar/ocultar comentarios y desplazar ---
     // Asegúrate de que el ID del artículo esté en el h1.articulo-titulo con data-pk
     const articlePkElement = document.querySelector('.articulo-titulo');

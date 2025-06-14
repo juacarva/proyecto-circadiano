@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog_circadiano',
     'usuarios',
     'widget_tweaks',
+    'mensajeria',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mensajeria.context_processors.unread_messages_count', 
             ],
         },
     },
