@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Conexión de Cuenta Social{% endblock %}
+
+{% block content %}
+<div class="form-container" style="text-align: center;">
+
+    {% if process == "connect" %}
+        <h2>Conectar Cuenta de Google</h2>
+        <p>
+            Estás a punto de conectar tu cuenta de Google a tu cuenta existente en Portal Circadiano.
+        </p>
+    {% else %}
+        <h2>Iniciar Sesión con Google</h2>
+        <p>
+            Estás a punto de iniciar sesión usando tu cuenta de Google.
+        </p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="submit-button">Continuar</button>
+    </form>
+
+</div>
+{% endblock %}

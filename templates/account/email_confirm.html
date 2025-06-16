@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Confirmar Correo Electrónico{% endblock %}
+
+{% block content %}
+<div class="form-container" style="text-align: center;">
+    
+    {% if confirmation %}
+        <h2>Confirmar Correo Electrónico</h2>
+        <p>
+            Por favor, confirma que <a href="mailto:{{ email }}">{{ email }}</a> es tu dirección de correo electrónico.
+        </p>
+
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit" class="submit-button">Confirmar</button>
+        </form>
+    {% else %}
+        {# --- ESTE ES EL CAMBIO IMPORTANTE --- #}
+        <h2>Enlace Inválido</h2>
+        <p>Este enlace de confirmación ha expirado o ya ha sido utilizado.</p>
+        
+        <div style="margin-top: 25px; padding: 15px; background-color: var(--filter-pill-bg); border-radius: var(--border-radius-lg);">
+            <p style="font-weight: bold; font-size: 1.1em;">¿Cómo obtengo un nuevo enlace?</p>
+            <p>
+                Simplemente intenta <a href="{% url 'account_login' %}">iniciar sesión</a> de nuevo. 
+                El sistema detectará que tu cuenta no está verificada y te dará la opción de reenviar el correo.
+            </p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load allauth %}
+
+{% block title %}Cerrar Sesión{% endblock %}
+
+{% block content %}
+<div class="form-container" style="text-align: center;">
+    <h2>Cerrar Sesión</h2>
+    
+    <p>{% trans "Are you sure you want to sign out?" %}</p>
+
+    <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button class="submit-button" type="submit">{% trans 'Sign Out' %}</button>
+    </form>
+
+    {# --- CORRECCIÓN: Se mueve el enlace "Cancelar" fuera del formulario --- #}
+    <a href="{% url 'blog_circadiano:lista_articulos' %}" 
+       class="submit-button" 
+       style="background-color: var(--text-help); margin-top: 10px; text-decoration: none; display: block;">
+       Cancelar
+    </a>
+</div>
+{% endblock %}

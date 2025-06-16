@@ -1667,3 +1667,108 @@ html.dark-mode .results-list .result-link:hover {
 html.dark-mode .results-list .result-item {
     border-bottom-color: var(--dark-border);
 }
+
+/* Estilos para el botón de login social */
+
+.social-login-section {
+    margin-bottom: 15px;
+}
+
+.social-login-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius-md); /* Usa tu variable de CSS */
+    font-size: 1.1em; /* Un poco más pequeño que el principal */
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.social-login-btn .fa-brands {
+    font-size: 1.2em;
+}
+
+.social-login-btn.google {
+    background-color: #4285F4; /* Color oficial de Google */
+    color: white;
+}
+
+.social-login-btn.google:hover {
+    background-color: #357ae8;
+    box-shadow: var(--shadow-lg); /* Usa tu variable de CSS */
+}
+
+/* Estilos para el divisor "o" */
+.login-or {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-muted);
+    margin: 25px 0;
+}
+
+.login-or::before,
+.login-or::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-light);
+}
+
+html.dark-mode .login-or::before,
+html.dark-mode .login-or::after {
+    border-bottom-color: var(--dark-border);
+}
+
+.login-or:not(:empty)::before {
+    margin-right: .5em;
+}
+
+.login-or:not(:empty)::after {
+    margin-left: .5em;
+}
+
+/* Estilos para el framework de mensajes de Django */
+.messages-container {
+    max-width: 1200px;
+    margin: 0 auto 15px auto;
+    padding: 0 20px;
+}
+
+.message {
+    padding: 15px 20px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 15px;
+    font-weight: bold;
+    border: 1px solid transparent;
+}
+
+.message.success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.message.error {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.message.warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+}
+
+.message.info {
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+}

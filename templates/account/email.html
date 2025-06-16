@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load allauth %}
+{% load widget_tweaks %}
+
+{% block title %}Gestionar Correos Electrónicos{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Gestionar Correos Electrónicos</h2>
+
+    {% if user.emailaddress_set.all %}
+        <p style="text-align: left; margin-bottom: 20px;">A continuación se muestran los correos electrónicos asociados a tu cuenta:</p>
+
+        <form action="{% url 'account_email' %}" class="email_list" method="post">
+            {% csrf_token %}
+            <fieldset style="border: none; padding: 0; margin: 0;">
+                {% for emailaddress in user.emailaddress_set.all %}
+                    <div style="text-align: left; margin-bottom: 15px; padding: 10px; border: 1px solid var(--border-light); border-radius: var(--border-radius-md);">
+                        <label for="email_radio_{{forloop.counter}}">
+                            <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary %}checked="checked"{%endif %} value="{{emailaddress.email}}"/>
+                            <strong style="font-size: 1.1em;">{{ emailaddress.email }}</strong>
+                            
+                            {% if emailaddress.verified %}
+                                <span style="color: var(--secondary-color); font-weight: bold;"> (Verificado)</span>
+                            {% else %}
+                                <span style="color: var(--error-color); font-weight: bold;"> (No verificado)</span>
+                            {% endif %}
+                            
+                            {% if emailaddress.primary %}
+                                <span style="font-weight: bold;"> (Principal)</span>
+                            {% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+
+                <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
+                    <button class="submit-button" type="submit" name="action_primary" style="flex-grow: 1;">Hacer Principal</button>
+                    <button class="submit-button" type="submit" name="action_send" style="flex-grow: 1; background-color: var(--text-help);">Reenviar Verificación</button>
+                </div>
+            </fieldset>
+        </form>
+    {% else %}
+        <p>No tienes correos electrónicos asociados a tu cuenta.</p>
+    {% endif %}
+
+    <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border-light);">
+
+    <h3 style="text-align: left; margin-top: 20px;">Añadir Correo Electrónico</h3>
+
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">E-mail:</label>
+            {% render_field form.email class="form-input" placeholder="tu-nuevo@email.com" %}
+            {% for error in form.email.errors %}
+                <p class="errorlist">{{ error }}</p>
+            {% endfor %}
+        </div>
+        
+        <button name="action_add" type="submit" class="submit-button">Añadir Correo</button>
+    </form>
+</div>
+{% endblock %}

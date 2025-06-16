@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# Cargar las variables de entorno del archivo .env ANTES que nada.
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,8 +42,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django.contrib.sites', # Requerido por allauth
+
+    # Apps de allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # Proveedores de redes sociales
+    'allauth.socialaccount.providers.google',
+
+    # Mis Apps
     'blog_circadiano',
-    'usuarios',
+    'usuarios.apps.UsuariosConfig',
     'widget_tweaks',
     'mensajeria',
 ]
@@ -46,6 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -58,7 +76,7 @@ ROOT_URLCONF = 'portal_circadiano.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # <--- Asegúrate que sea BASE_DIR / 'templates'
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,7 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'mensajeria.context_processors.unread_messages_count', 
+                'mensajeria.context_processors.unread_messages_count',
             ],
         },
     },
@@ -76,79 +94,86 @@ WSGI_APPLICATION = 'portal_circadiano.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'portal_circadiano',  # Nombre de tu base de datos
-        'USER': 'jpcarvajal',  # Usuario de PostgreSQL
-        'PASSWORD': 'peumino2020',  # Contraseña del usuario
-        'HOST': 'localhost',  # O la IP de tu servidor de PostgreSQL si no es local
-        'PORT': '',  # Deja vacío para el puerto por defecto (5432)
+        'NAME': 'portal_circadiano',
+        'USER': 'jpcarvajal',
+        'PASSWORD': 'peumino2020',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'es'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# Static & Media Files
 STATIC_URL = 'static/'
-
-# Opcional: Directorios adicionales donde Django buscará archivos estáticos.
-# Útil para archivos estáticos a nivel de proyecto.
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'staticfiles', # Ejemplo de una carpeta 'staticfiles' en la raíz del proyecto
-# ]
-
-# Directorio donde Django recolectará todos los archivos estáticos para producción
-STATIC_ROOT = BASE_DIR / 'staticfiles_collected' # Donde se copiarán los archivos estáticos para despliegue
-
-# Configuración para archivos de medios (imágenes subidas por usuarios)
+STATIC_ROOT = BASE_DIR / 'staticfiles_collected'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media' # Esto creará una carpeta 'media' en la raíz de tu proyecto
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# URL a la que se redirige después de un inicio de sesión exitoso (si no se especifica 'next')
-LOGIN_REDIRECT_URL = '/' # Redirige a la página principal del blog
 
-# URL donde se encuentra la vista de login (usada por @login_required)
-LOGIN_URL = 'usuarios:login' # Nombre de la URL de tu aplicación 'usuarios'
+# --- INICIO: Bloque de Configuración de Autenticación y Allauth (Versión Final y Única) ---
 
-# URL a la que se redirige después de un cierre de sesión exitoso
-LOGOUT_REDIRECT_URL = '/' # Redirige a la página principal del blog
+# Backends de Autenticación
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Email Backend (puedes cambiar a Gmail cuando quieras)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER_GMAIL')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD_GMAIL')
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER_GMAIL')
+
+
+# Redirecciones y URLs de Login
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'account_login'
+LOGOUT_REDIRECT_URL = '/'
+
+# Configuración del Sitio para allauth
+SITE_ID = 1
+
+# Comportamiento del Registro y Login
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Formularios y Flujos
+ACCOUNT_FORMS = {'signup': 'usuarios.forms.CustomSignupForm'}
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_MESSAGES_ENABLED = False
+
+# Configuración de Cuentas Sociales (Google, etc.)
+SOCIALACCOUNT_ADAPTER = 'usuarios.adapters.CustomSocialAccountAdapter'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# --- FIN: Bloque de Configuración ---

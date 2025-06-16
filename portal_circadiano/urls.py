@@ -5,9 +5,13 @@ from django.conf.urls.static import static # Importa static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('usuarios/', include('usuarios.urls')), # <-- Ahora incluimos las URLs de tu app 'usuarios'
+    #path('usuarios/', include('usuarios.urls')), # <-- Ahora incluimos las URLs de tu app 'usuarios'
     path('', include('blog_circadiano.urls')), # Incluye las URLs de tu aplicación 'blog'
     path('messages/', include('mensajeria.urls')), # <-- ¡Añade esta línea para incluir las URLs de mensajería!
+    # Añade las URLs de allauth
+    # Esto manejará /accounts/login/, /accounts/signup/, /accounts/logout/, etc.
+    # Ya no necesitaremos las URLs de tu app 'usuarios' para login/registro
+    path('accounts/', include('allauth.urls')),
 ]
 
 # Esto solo debe hacerse en desarrollo. En producción, tu servidor web (Nginx/Apache) servirá estos archivos.

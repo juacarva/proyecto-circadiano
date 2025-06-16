@@ -1,0 +1,13 @@
+{% load i18n %}
+¡Hola, {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.email }}{% endif %}!
+
+Bienvenido a {{ current_site.name }}. Estamos muy contentos de que te unas a nuestra comunidad.
+
+Para activar tu cuenta y confirmar tu dirección de correo electrónico, por favor, haz clic en el siguiente enlace:
+
+{{ activate_url }}
+
+Si el enlace no funciona, puedes copiarlo y pegarlo directamente en la barra de direcciones de tu navegador.
+
+¡Gracias!
+El equipo de {{ current_site.name }}

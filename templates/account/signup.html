@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load allauth %}
+{% load widget_tweaks %}
+
+{% block title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Crear una Cuenta</h2>
+
+    {# La sección del botón social ha sido eliminada de esta plantilla #}
+
+    <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% render_field field class="form-input" %}
+                
+                {% if field.help_text %}
+                    <p class="helptext">{{ field.help_text|safe }}</p>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <p class="errorlist">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p class="errorlist">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <button type="submit" class="submit-button">Registrarse</button>
+    </form>
+
+    <p style="margin-top: 20px;">
+        ¿Ya tienes una cuenta? <a href="{% url 'account_login' %}">Inicia sesión</a>.
+    </p>
+</div>
+{% endblock %}

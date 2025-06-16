@@ -36,23 +36,24 @@
             </form>
 
             {% if user.is_authenticated %}
-                <span class="welcome-message">Hola, {{ user.username }}!</span>
-                {# Ícono de Bandeja de Entrada con Indicador #}
+                <span class="welcome-message">Hola, {{ user.email }}!</span> {# Mostramos el email #}
+                
                 <a href="{% url 'mensajeria:inbox' %}" class="nav-link messages-inbox-link" title="Bandeja de Entrada">
                     <i class="fa-solid fa-envelope"></i>
                     {% if unread_messages_count > 0 %}
                         <span class="unread-badge">{{ unread_messages_count }}</span>
                     {% endif %}
                 </a>
-                <a href="{% url 'usuarios:logout' %}" class="nav-link" title="Cerrar Sesión">
+                <a href="{% url 'account_logout' %}" class="nav-link" title="Cerrar Sesión"> {# URL de logout de allauth #}
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </a>
             {% else %}
-                <a href="{% url 'usuarios:login' %}" class="nav-link" title="Iniciar Sesión">Iniciar Sesión</a>
-                <a href="{% url 'usuarios:register' %}" class="nav-link" title="Registrarse">Regístrate</a>
+                <a href="{% url 'account_login' %}" class="nav-link" title="Iniciar Sesión">Iniciar Sesión</a> {# URL de login de allauth #}
+                <a href="{% url 'account_signup' %}" class="nav-link" title="Registrarse">Regístrate</a> {# URL de registro de allauth #}
             {% endif %}
+
             <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Modo">
-                <i class="fa-solid fa-moon"></i><span class="sr-only">Modo Noche</span> 
+                <i class="fa-solid fa-moon"></i><span class="sr-only">Modo Noche</span>
             </button>
         </nav>
     </header>
@@ -62,6 +63,17 @@
         {% csrf_token %}
     </form>
     {# --- FIN CAMBIO CLAVE --- #}
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                {# La etiqueta message.tags será "success", "error", etc. #}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     {# Clase condicional en page-wrapper para controlar el layout #}
     <div class="page-wrapper {% if not show_sidebar %}no-sidebar{% endif %}">

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Verificación de Correo Enviada{% endblock %}
+
+{% block content %}
+<div class="form-container" style="text-align: center;">
+    <h2>¡Casi listo! Revisa tu correo</h2>
+    
+    <p>
+        Te hemos enviado un correo electrónico de verificación.
+    </p>
+    <p>
+        Por favor, haz clic en el enlace que contiene para activar tu cuenta y finalizar el proceso de registro.
+    </p>
+    <p style="margin-top: 15px; font-size: 0.9em; color: var(--text-muted);">
+        Si no has recibido el correo en unos minutos, revisa tu carpeta de spam.
+    </p>
+
+    <a href="{% url 'blog_circadiano:lista_articulos' %}" class="submit-button" style="text-decoration: none; display: block; margin-top: 20px;">
+        Volver a la Página Principal
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Conexiones de Cuentas Externas{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Conexiones de Cuentas Externas</h2>
+
+    {% if form.accounts %}
+        <p>Puedes iniciar sesión en tu cuenta utilizando una de las siguientes cuentas de terceros:</p>
+        
+        <form method="post" action="{% url 'socialaccount_connections' %}">
+            {% csrf_token %}
+            <fieldset>
+                {% if form.non_field_errors %}
+                    <div class="errorlist">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for base_account in form.accounts %}
+                {% with base_account.get_provider_account as account %}
+                    <div style="padding: 15px; border: 1px solid var(--border-light); border-radius: var(--border-radius-md); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <label for="id_account_{{ base_account.id }}">
+                            <input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}"/>
+                            <strong style="text-transform: capitalize;">{{ base_account.provider }}</strong> - {{ account.get_profile.name }} ({{ account.get_profile.email }})
+                        </label>
+                    </div>
+                {% endwith %}
+                {% endfor %}
+
+                <div class="buttonHolder" style="margin-top: 20px;">
+                    <button class="submit-button" type="submit" name="action_remove" style="background-color: var(--error-color);">Eliminar</button>
+                </div>
+            </fieldset>
+        </form>
+
+    {% else %}
+        <p>No has conectado ninguna cuenta de terceros.</p>
+    {% endif %}
+
+    <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border-light);">
+
+    <h3>Agregar una cuenta de terceros</h3>
+    {# Aquí mostramos el botón para conectar con Google #}
+    <div class="social-login-section">
+        <a href="{% url 'google_login' %}" class="social-login-btn google">
+            <i class="fa-brands fa-google"></i> Conectar otra cuenta de Google
+        </a>
+    </div>
+
+</div>
+{% endblock %}
