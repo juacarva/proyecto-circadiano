@@ -6,16 +6,14 @@
 
 {% block content %}
     <h1 class="articulo-titulo" data-pk="{{ articulo.pk }}">{{ articulo.titulo }}</h1>
+    
     <div class="meta">
-        Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
-        {# --- CAMBIO CLAVE: Botón "Enviar Mensaje" al autor del artículo --- #}
-        {% if user.is_authenticated and user != articulo.autor %} {# Solo si está logueado y no es el propio autor #}
-            {# CAMBIO CLAVE AQUÍ: Usar 'start_new_conversation_with_user' #}
+        Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.first_name }} {{ articulo.autor.last_name }}
+        {% if user.is_authenticated and user != articulo.autor %}
             <a href="{% url 'mensajeria:start_new_conversation_with_user' username=articulo.autor.username %}" class="send-message-btn" title="Enviar mensaje a {{ articulo.autor.username }}">
                 <i class="fa-solid fa-comment-dots"></i> Mensaje
             </a>
         {% endif %}
-        {# --- FIN CAMBIO CLAVE --- #}
         {% if articulo.categoria %}
             <span class="category-tag">Categoría: <a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=articulo.categoria.slug %}">{{ articulo.categoria.nombre }}</a></span>
         {% endif %}
@@ -33,14 +31,46 @@
     {% endif %}
 
     <div class="contenido-articulo">
-        {{ articulo.contenido|linebreaksbr }}
+        {{ articulo.contenido | safe }}
     </div>
 
+    <h3>Quieres saber más?</h3>
+
+    <div class="acciones-articulo-container">
+        {% if articulo.guia_slug %}
+            <a href="{% url 'blog_circadiano:vista_guia' pk=articulo.pk %}" class="guia-link-linea">
+                <span class="guia-link-icono"><i class="fas fa-flask"></i></span>
+                <span class="guia-link-texto">Ingresa a la Guía Interactiva</span>
+                <span class="guia-link-accion">&rarr;</span>
+            </a>
+        {% endif %}
+        {% if articulo.documento_detallado %}
+            <a href="{% url 'blog_circadiano:vista_documento' pk=articulo.pk %}" class="guia-link-linea">
+                <span class="guia-link-icono"><i class="fas fa-file-alt"></i></span>
+                <span class="guia-link-texto">Accede a la Investigación completa</span>
+                <span class="guia-link-accion">&rarr;</span>
+            </a>
+        {% endif %}
+    </div>
+
+    {# --- INICIO DE LA MODIFICACIÓN --- #}
+    {# Si el artículo pertenece a una serie, muestra este enlace #}
+    {% if articulo.serie %}
+        <div class="serie-badge">
+            Parte de la serie: <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=articulo.serie.slug %}">{{ articulo.serie.titulo }}</a>.
+        </div>
+        <div class="back-link" style="margin-top: 1rem;">
+             <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=articulo.serie.slug %}">&larr; Volver a la serie</a>
+        </div>
+    {% endif %}
+
+    {# Este enlace se muestra siempre #}
     <div class="back-link">
-        <a href="{% url 'blog_circadiano:lista_articulos' %}">Volver a la lista de artículos</a>
+        <a href="{% url 'blog_circadiano:lista_articulos' %}">Volver a todos los artículos</a>
     </div>
+    {# --- FIN DE LA MODIFICACIÓN --- #}
 
-    {# ... Resto del contenido de detalle_articulo.html (acciones de likes, comentarios) ... #}
+
     <div class="post-actions">
         <div class="action-bar">
             <button class="like-button {% if user_liked_article %}liked{% endif %}" data-item-type="articulo" data-item-id="{{ articulo.pk }}">
@@ -55,43 +85,33 @@
             <button class="comment-toggle-button" id="comment-toggle-btn-{{ articulo.pk }}">
                 <span class="icon">&#x1F4AC;</span> Comentarios ({{ articulo.comentarios.count }})
             </button>
-            <button class="reply-to-article-button" id="reply-to-article-btn-{{ articulo.pk }}">
-                <span class="icon">&#x270D;</span> Comentar
-            </button>
         </div>
     </div>
 
     <div class="comments-container" id="comments-section-{{ articulo.pk }}" style="display: none;">
         <h2>Comentarios</h2>
         
-        {# Formulario para comentarios de nivel superior (responder al artículo) #}
         <div class="comment-form-container" id="article-comment-form">
             {% if user.is_authenticated %}
                 <h3>Deja un Comentario</h3>
                 <form action="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}" method="post">
                     {% csrf_token %}
-                    {# --- CAMBIO CLAVE AQUÍ: Renderizado granular del formulario de comentarios --- #}
                     {% for field in form %}
                         <div class="form-group">
-                            <label for="{{ field.id_for_label }}" {% if field.label == 'Contenido' %}class="sr-only"{% endif %}>{{ field.label }}:</label> {# Oculta label de contenido si solo quieres placeholder #}
-                            {% load widget_tweaks %} {# ¡Añade esta línea al principio del archivo! #}
-                            {# ... #}
-                            {{ field|add_class:"form-input" }} {# <-- ¡CAMBIO CLAVE AQUÍ! #}
+                            <label for="{{ field.id_for_label }}" {% if field.label == 'Contenido' %}class="sr-only"{% endif %}>{{ field.label }}:</label>
+                            {{ field|add_class:"form-input" }}
                             {% if field.help_text %}
                                 <p class="helptext">{{ field.help_text }}</p>
                             {% endif %}
-                            {% if field.errors %}
-                                {% for error in field.errors %}
-                                    <p class="errorlist">{{ error }}</p>
-                                {% endfor %}
-                            {% endif %}
+                            {% for error in field.errors %}
+                                <p class="errorlist">{{ error }}</p>
+                            {% endfor %}
                         </div>
                     {% endfor %}
                     <button type="submit" class="submit-button">Publicar Comentario</button>
-                    {# --- FIN CAMBIO CLAVE --- #}
                 </form>
             {% else %}
-                <p class="login-prompt">Por favor, <a href="{% url 'usuarios:login' %}?next={{ request.path }}">inicia sesión</a> para dejar un comentario.</p>
+                <p class="login-prompt">Por favor, <a href="{% url 'account_login' %}?next={{ request.path }}">inicia sesión</a> para dejar un comentario.</p>
             {% endif %}
         </div>
 

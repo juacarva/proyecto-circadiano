@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Series de Artículos - Blog Circadiano{% endblock %}
+
+{% block content %}
+    <div class="articles-header">
+        <h1>Series de Artículos</h1>
+        <p>Explora nuestras colecciones temáticas de artículos para un aprendizaje profundo.</p>
+    </div>
+
+    <div class="articles-list-container">
+        {% if series %}
+            {% for serie in series %}
+                <div class="articulo-resumen">
+                    <div class="resumen-header">
+                        
+                        {% if serie.imagen_destacada %}
+                        {# El contenedor de la imagen ya no tiene el contador #}
+                        <div class="resumen-imagen-container">
+                            <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=serie.slug %}">
+                                <img src="{{ serie.imagen_destacada.url }}" alt="Imagen de la serie {{ serie.titulo }}" class="resumen-imagen">
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <div class="resumen-contenido">
+                            <div class="resumen-titulo-wrapper">
+                                {# --- CAMBIO 1: Movimos el contador aquí, al lado del título --- #}
+                                <h2><a href="{% url 'blog_circadiano:detalle_serie' serie_slug=serie.slug %}">{{ serie.titulo }}</a></h2>
+                                <span class="serie-article-count">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                    <span>{{ serie.articulos.count }} art.</span>
+                                </span>
+                            </div>
+
+                            {% if serie.descripcion %}
+                                <p class="card-excerpt">{{ serie.descripcion|truncatewords:30 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-articles">
+                <p>Aún no hay series disponibles. ¡Vuelve pronto!</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

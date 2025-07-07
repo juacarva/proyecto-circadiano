@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Blog Circadiano{% endblock %}</title>
+    <title>{% block title %}circadia{% endblock %}</title>
     {% load static %}
 
     {# Script para prevenir el "flash" del modo día #}
@@ -27,8 +27,17 @@
 </head>
 <body>
     <header class="main-header">
-        <h1 class="site-title"><a href="{% url 'blog_circadiano:lista_articulos' %}">Circadiano</a></h1>
+        <h1 class="site-title"><i>circadia.cl</i></a></h1>
         
+        <nav class="site-navigation">
+            <ul>
+                <li><a href="{% url 'blog_circadiano:nosotros' %}" class="nav-link">Nosotros</a></li>
+                <li><a href="{% url 'blog_circadiano:lista_articulos' %}" class="nav-link">Artículos del Blog</a></li>
+                <li><a href="{% url 'blog_circadiano:lista_series' %}" class="nav-link">Series de Artículos</a></li>
+                <!-- <li><a href="#" class="nav-link">Tienda Virtual</a></li> -->
+            </ul>
+        </nav>
+
         <nav class="main-nav">
             <form action="{% url 'blog_circadiano:lista_articulos' %}" method="GET" class="search-form">
                 <input type="text" name="q" placeholder="Buscar artículos..." value="{{ query|default_if_none:'' }}" class="search-input">
@@ -36,7 +45,7 @@
             </form>
 
             {% if user.is_authenticated %}
-                <span class="welcome-message">Hola, {{ user.email }}!</span> {# Mostramos el email #}
+                <span class="welcome-message">Hola, {{ user.first_name }}!</span> {# Mostramos el nombre #}
                 
                 <a href="{% url 'mensajeria:inbox' %}" class="nav-link messages-inbox-link" title="Bandeja de Entrada">
                     <i class="fa-solid fa-envelope"></i>
@@ -53,7 +62,7 @@
             {% endif %}
 
             <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Modo">
-                <i class="fa-solid fa-moon"></i><span class="sr-only">Modo Noche</span>
+                <i class="fa-solid fa-sun" style="color: #FFD43B;"></i><span class="sr-only">Modo Noche</span>
             </button>
         </nav>
     </header>
@@ -63,17 +72,6 @@
         {% csrf_token %}
     </form>
     {# --- FIN CAMBIO CLAVE --- #}
-
-    {% if messages %}
-        <div class="messages-container">
-            {% for message in messages %}
-                {# La etiqueta message.tags será "success", "error", etc. #}
-                <div class="message {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
 
     {# Clase condicional en page-wrapper para controlar el layout #}
     <div class="page-wrapper {% if not show_sidebar %}no-sidebar{% endif %}">
@@ -96,5 +94,6 @@
 
     {% block extra_js %}{% endblock %}
     <script src="{% static 'blog_circadiano/js/script.js' %}"></script>
+
 </body>
 </html>

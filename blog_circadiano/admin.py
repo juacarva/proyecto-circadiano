@@ -1,7 +1,7 @@
 # blog_circadiano/admin.py
 
 from django.contrib import admin
-from .models import Articulo, Comentario, Categoria, Etiqueta
+from .models import Articulo, Comentario, Categoria, Etiqueta, Serie
 
 # Personalizar la visualización de Articulo en el admin
 class ArticuloAdmin(admin.ModelAdmin):
@@ -37,6 +37,11 @@ class ComentarioAdmin(admin.ModelAdmin):
         queryset.update(activo=False)
     make_inactive.short_description = "Marcar comentarios seleccionados como inactivos"
 
+class SerieAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'descripcion')
+    search_fields = ('titulo',)
+    prepopulated_fields = {'slug': ('titulo',)} # Ayuda a autocompletar el slug
+
 
 # Registrar los nuevos modelos
 admin.site.register(Categoria)
@@ -45,3 +50,4 @@ admin.site.register(Etiqueta)
 # Registrar los modelos existentes con sus clases Admin personalizadas
 admin.site.register(Articulo, ArticuloAdmin)
 admin.site.register(Comentario, ComentarioAdmin)
+admin.site.register(Serie, SerieAdmin)

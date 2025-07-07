@@ -3,54 +3,65 @@ from django.contrib.auth.decorators import login_required # Para requerir inicio
 from django.urls import reverse # Para construir URLs dinámicamente
 from django.http import JsonResponse, Http404 # Importar para respuestas AJAX
 from django.views.decorators.http import require_POST # Para asegurar que la vista solo acepte POST
-from django.db.models import Q # <-- ¡Importa Q para búsquedas complejas!
+from django.db.models import Max, Q # <-- ¡Importa Q para búsquedas complejas!
+from django.views.generic import DetailView
+from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Articulo, Comentario, Categoria, Etiqueta
+from .models import Articulo, Comentario, Categoria, Etiqueta,Serie
 from .forms import ComentarioForm # Importa tu formulario de comentarios
 
 
-def lista_articulos(request, categoria_slug=None, etiqueta_slug=None):
-    articulos_qs = Articulo.objects.all() # Queryset base para todos los artículos
-    
-    categoria = None
-    etiqueta = None
-    query = None # Variable para almacenar el término de búsqueda
+# circadia/blog_circadiano/views.py
 
+from django.shortcuts import render, get_object_or_404
+from .models import Articulo, Categoria, Etiqueta, Serie # Asegúrate de importar Serie
+from django.db.models import Q
+
+def lista_articulos(request, categoria_slug=None, etiqueta_slug=None):
+    """
+    Vista que obtiene TODOS los artículos y permite que la plantilla
+    muestre un marcador si pertenecen a una serie.
+    """
+    # 1. Empezamos con TODOS los artículos. Este es el cambio clave.
+    articulos_qs = Articulo.objects.all() 
+    
+    categoria_actual = None
+    etiqueta_actual = None
+    query = request.GET.get('q')
+
+    # 2. Aplicamos los filtros de categoría y etiqueta
     if categoria_slug:
-        categoria = get_object_or_404(Categoria, slug=categoria_slug)
-        articulos_qs = articulos_qs.filter(categoria=categoria)
+        categoria_actual = get_object_or_404(Categoria, slug=categoria_slug)
+        articulos_qs = articulos_qs.filter(categoria=categoria_actual)
     
     if etiqueta_slug:
-        etiqueta = get_object_or_404(Etiqueta, slug=etiqueta_slug)
-        articulos_qs = articulos_qs.filter(etiquetas=etiqueta)
+        etiqueta_actual = get_object_or_404(Etiqueta, slug=etiqueta_slug)
+        articulos_qs = articulos_qs.filter(etiquetas=etiqueta_actual)
 
-    # --- Lógica de Búsqueda por Palabra Clave ---
-    if 'q' in request.GET:
-        query = request.GET.get('q')
-        if query: # Si el término de búsqueda no está vacío
-            # Filtra artículos donde el título o el contenido contengan el término (case-insensitive)
-            articulos_qs = articulos_qs.filter(
-                Q(titulo__icontains=query) | Q(contenido__icontains=query)
-            )
-    # --- Fin Lógica de Búsqueda ---
+    # 3. Aplicamos el filtro de búsqueda
+    if query:
+        articulos_qs = articulos_qs.filter(
+            Q(titulo__icontains=query) | Q(contenido__icontains=query)
+        )
 
-    articulos = articulos_qs.order_by('-fecha_publicacion') # Asegura el orden por fecha
+    # 4. Ordenamos y preparamos el contexto final
+    articulos = articulos_qs.order_by('-fecha_publicacion')
 
     todas_categorias = Categoria.objects.all()
     todas_etiquetas = Etiqueta.objects.all()
 
     context = {
-        'articulos': articulos,
-        'categoria_actual': categoria,
-        'etiqueta_actual': etiqueta,
+        # La plantilla espera esta variable: 'articulos'
+        'articulos': articulos, 
+        'categoria_actual': categoria_actual,
+        'etiqueta_actual': etiqueta_actual,
         'todas_categorias': todas_categorias,
         'todas_etiquetas': todas_etiquetas,
-        'show_sidebar': True, # Mostrar sidebar en la lista de artículos
-        'query': query, # <-- Pasa el término de búsqueda a la plantilla para mantenerlo en el campo
+        'query': query,
+        'show_sidebar': True, # <-- ¡ESTA ES LA LÍNEA QUE FALTABA!
     }
     return render(request, 'blog_circadiano/lista_articulos.html', context)
-
-# ... (resto de tus vistas como detalle_articulo y toggle_like) ...
 
 def detalle_articulo(request, pk):
     articulo = get_object_or_404(Articulo, pk=pk)
@@ -167,3 +178,68 @@ def toggle_like(request):
         # Si DEBUG es True, podrías considerar devolver un mensaje más detallado
         # en producción, un mensaje genérico de error interno.
         return JsonResponse({'status': 'error', 'message': 'Ocurrió un error interno del servidor.'}, status=500)
+    
+
+# 1. La vista que muestra el marco y el iframe (la que el usuario visita)
+class GuiaWrapperView(DetailView):
+    model = Articulo
+    template_name = "blog_circadiano/guia_wrapper.html"
+    pk_url_kwarg = 'pk'
+    context_object_name = 'articulo' # Pasamos el artículo como 'articulo' al contexto
+
+# 2. La vista que renderiza SOLO el contenido de la guía para el iframe
+@xframe_options_sameorigin
+def guia_contenido_view(request, pk):
+    articulo = get_object_or_404(Articulo, pk=pk)
+    
+    if not articulo.guia_slug:
+        raise Http404("Guía no encontrada.")
+
+    template_name = f"blog_circadiano/guias/{articulo.guia_slug}"
+    context = {
+        'articulo': articulo,
+        'titulo_guia': f"Guía para: {articulo.titulo}"
+    }
+    return render(request, template_name, context)
+
+class DocumentoDetalladoView(LoginRequiredMixin, DetailView):
+    model = Articulo
+    # Esta es la plantilla que crearemos en el siguiente paso
+    template_name = 'blog_circadiano/documento_detallado_page.html' 
+    context_object_name = 'articulo'
+
+def lista_series(request):
+    """
+    Vista para mostrar todas las series disponibles, incluyendo el sidebar.
+    """
+    series = Serie.objects.all()
+
+    # --- LÍNEAS AÑADIDAS ---
+    # Obtenemos los datos para el sidebar
+    todas_categorias = Categoria.objects.all()
+    todas_etiquetas = Etiqueta.objects.all()
+    # -------------------------
+
+    context = {
+        'series': series,
+        'todas_categorias': todas_categorias, # <-- Nueva variable
+        'todas_etiquetas': todas_etiquetas,   # <-- Nueva variable
+        'show_sidebar': False,               # <-- Variable para mostrar el sidebar
+    }
+    return render(request, 'blog_circadiano/lista_series.html', context)
+
+def detalle_serie(request, serie_slug):
+    """
+    Vista para mostrar los artículos de una serie específica.
+    """
+    serie = get_object_or_404(Serie, slug=serie_slug)
+    articulos_en_serie = serie.articulos.all().order_by('fecha_publicacion') # Ordenamos los artículos cronológicamente
+    context = {
+        'serie': serie,
+        'articulos_en_serie': articulos_en_serie,
+        'show_sidebar': False, # Tampoco mostramos el sidebar aquí
+    }
+    return render(request, 'blog_circadiano/detalle_serie.html', context)
+
+def nosotros(request):
+    return render(request, 'blog_circadiano/nosotros.html')

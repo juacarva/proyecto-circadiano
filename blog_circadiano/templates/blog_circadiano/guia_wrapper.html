@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Guía: {{ articulo.titulo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Guía Interactiva: {{ articulo.titulo }}</h2>
+    <p>Explora la guía a continuación. <a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">&larr; Volver al artículo</a>.</p>
+
+    <iframe 
+        id="guia-iframe"
+        src="{% url 'blog_circadiano:vista_guia_contenido' pk=articulo.pk %}"
+        style="width: 100%; border: none; min-height: 500px;"
+        scrolling="no"
+        title="Guía Interactiva">
+    </iframe>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{# Script para auto-ajustar la altura del iframe a su contenido #}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const iframe = document.getElementById('guia-iframe');
+
+        // Escuchamos mensajes que vienen DESDE el iframe
+        window.addEventListener('message', function(event) {
+            // Por seguridad, verificamos que el mensaje viene del iframe que esperamos
+            if (event.source !== iframe.contentWindow) return;
+
+            // Ajustamos la altura del iframe según el dato recibido
+            if (event.data.type === 'resize' && event.data.height) {
+                iframe.style.height = event.data.height + 'px';
+            }
+        });
+    });
+</script>
+{% endblock %}

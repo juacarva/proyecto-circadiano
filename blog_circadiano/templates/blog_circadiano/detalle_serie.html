@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ serie.titulo }} - Serie de Artículos{% endblock %}
+
+{% block content %}
+    {# -------- NUEVO ENCABEZADO DE LA SERIE -------- #}
+    <div class="serie-hero-header">
+        {% if serie.imagen_destacada %}
+            <div class="serie-hero-image-container">
+                <img src="{{ serie.imagen_destacada.url }}" alt="Imagen de la serie {{ serie.titulo }}" class="serie-hero-image">
+            </div>
+        {% endif %}
+        <div class="serie-hero-content">
+            <h1 class="serie-hero-title">{{ serie.titulo }}</h1>
+            {% if serie.descripcion %}
+                <p class="serie-hero-description">{{ serie.descripcion }}</p>
+            {% endif %}
+            <span class="serie-hero-meta">
+                <i class="fa-solid fa-layer-group"></i>
+                Serie de {{ articulos_en_serie.count }} partes
+            </span>
+        </div>
+    </div>
+
+    {# -------- NUEVA LISTA DE ARTÍCULOS EN TARJETAS -------- #}
+    <div class="serie-articles-grid">
+        {% for articulo in articulos_en_serie %}
+            <div class="serie-article-card">
+                <div class="card-part-number">
+                    Parte {{ forloop.counter }}
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">
+                        <a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">{{ articulo.titulo }}</a>
+                    </h3>
+                    <p class="card-meta">
+                        Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }}
+                    </p>
+                </div>
+                <div class="card-action">
+                    <a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}" class="card-link">
+                        Leer artículo <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay artículos en esta serie todavía.</p>
+        {% endfor %}
+    </div>
+
+    <div class="back-link" style="margin-top: 2rem;">
+        <a href="{% url 'blog_circadiano:lista_series' %}">&larr; Volver a todas las series</a>
+    </div>
+{% endblock content %}

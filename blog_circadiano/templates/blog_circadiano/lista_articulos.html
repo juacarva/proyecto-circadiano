@@ -7,24 +7,22 @@
     {% elif etiqueta_actual %}
         {{ etiqueta_actual.nombre }} - Artículos de Circadiano
     {% else %}
-        Últimos Artículos - Blog Circadiano
+        Últimos Artículos - circadia.cl
     {% endif %}
 {% endblock %}
 
 {% block sidebar_filters %} {# ¡Este es el bloque para los filtros! #}
     <div class="filters-section">
-        {# --- CAMBIO CLAVE AQUÍ: Mover el enlace "Ver todos los artículos" a la barra lateral --- #}
         <div class="filter-group">
             <a href="{% url 'blog_circadiano:lista_articulos' %}" class="filter-pill">Ver todos los artículos</a>
         </div>
-        {# --- FIN CAMBIO CLAVE --- #}
         <div class="filter-group">
             <h3>Categorías</h3>
             <ul class="filter-list categories-filter">
                 {% for categoria in todas_categorias %}
                     <li><a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=categoria.slug %}"
                            class="filter-pill {% if categoria_actual.slug == categoria.slug %}active{% endif %}">
-                           {{ categoria.nombre }}
+                            {{ categoria.nombre }}
                     </a></li>
                 {% empty %}
                     <li>No hay categorías.</li>
@@ -38,15 +36,13 @@
                 {% for etiqueta in todas_etiquetas %}
                     <li><a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}"
                            class="filter-pill {% if etiqueta_actual.slug == etiqueta.slug %}active{% endif %}">
-                           {{ etiqueta.nombre }}
+                            {{ etiqueta.nombre }}
                     </a></li>
                 {% empty %}
                     <li>No hay etiquetas.</li>
                 {% endfor %}
             </ul>
         </div>
-
-        
     </div>
 {% endblock sidebar_filters %}
 
@@ -58,32 +54,51 @@
             {% elif etiqueta_actual %}
                 Artículos con la etiqueta: "{{ etiqueta_actual.nombre }}"
             {% else %}
-                Últimos Artículos de Circadiano
+                Artículos Publicados en circadia
             {% endif %}
         </h1>
-        {# --- CAMBIO CLAVE AQUÍ: ¡ELIMINAR el enlace de aquí! --- #}
-        {# <a href="{% url 'blog_circadiano:lista_articulos' %}" class="clear-filters">Ver todos los artículos</a> #}
-        {# --- FIN CAMBIO CLAVE --- #}
     </div>
 
     <div class="articles-list-container">
         {% if articulos %}
             {% for articulo in articulos %}
                 <div class="articulo-resumen">
-                    <h2><a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">{{ articulo.titulo }}</a></h2>
-                    <p>{{ articulo.contenido|truncatechars:200 }}</p>
-                    <div class="meta">
-                        Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.username }}
-                        {% if articulo.categoria %}
-                            <span class="category-tag">Categoría: <a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=articulo.categoria.slug %}">{{ articulo.categoria.nombre }}</a></span>
+                    <div class="resumen-header">
+                        
+                        {% if articulo.imagen_destacada %}
+                        <div class="resumen-imagen-container">
+                            <a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">
+                                <img src="{{ articulo.imagen_destacada.url }}" alt="Imagen de {{ articulo.titulo }}" class="resumen-imagen">
+                            </a>
+                        </div>
                         {% endif %}
-                        {% if articulo.etiquetas.all %}
-                            <span class="tags-list">Etiquetas: 
-                                {% for etiqueta in articulo.etiquetas.all %}
-                                    <a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}">{{ etiqueta.nombre }}</a>{% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </span>
-                        {% endif %}
+
+                        <div class="resumen-contenido">
+                            <h2><a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">{{ articulo.titulo }}</a></h2>
+
+                            <div class="meta">
+                                Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.first_name }} {{ articulo.autor.last_name }}
+                                
+                                <div class="meta-tags">
+                                    {% if articulo.categoria %}
+                                        <span class="category-tag">Categoría: <a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=articulo.categoria.slug %}">{{ articulo.categoria.nombre }}</a></span>
+                                    {% endif %}
+                                    {% if articulo.etiquetas.all %}
+                                        <span class="tags-list">Etiquetas: 
+                                            {% for etiqueta in articulo.etiquetas.all %}
+                                                <a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}">{{ etiqueta.nombre }}</a>{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </span>
+                                    {% endif %}
+
+                                    {% if articulo.serie %}
+                                        <span class="serie-tag">
+                                            Parte de la serie: <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=articulo.serie.slug %}">{{ articulo.serie.titulo }}</a>
+                                        </span>
+                                    {% endif %}
+                                    </div>
+                            </div>       
+                        </div>
                     </div>
                 </div>
             {% endfor %}

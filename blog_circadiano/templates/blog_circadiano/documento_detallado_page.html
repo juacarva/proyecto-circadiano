@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ articulo.titulo }} - Documento Detallado{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="contenido-articulo">
+        <h1>{{ articulo.titulo }}</h1>
+        <p class="meta">
+            <div class="back-link">
+            <a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}">&larr; Volver al artículo principal</a>
+            </div>
+        </p>
+        <hr>
+
+        {# --- CAMBIO CLAVE --- #}
+        {# Añadimos la clase 'prose' para aplicar estilos de tipografía #}
+        <div class="contenido-articulo">
+            {{ articulo.documento_detallado | safe }}
+        </div>
+    </article>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+{# Ya no necesitamos los estilos aquí, los moveremos al CSS principal #}
+{% endblock %}

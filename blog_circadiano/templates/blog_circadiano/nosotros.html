@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Nosotros{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="text-center text-success mb-2">Quiénes Somos</h1>
+
+  <div class="bg-light p-4 rounded mb-4">
+    <p>
+      Somos un grupo de personas comprometidas con la salud real, aquella que nace del conocimiento independiente, de la observación crítica y del respeto por los ritmos naturales del cuerpo y la vida. 
+    </p>
+    <p>
+      Nos dedicamos a investigar y divulgar ciencia no condicionada por intereses económicos. Estudiamos fuentes confiables, independientes, y nos mantenemos al margen de la influencia de la industria farmacéutica y alimentaria tradicional.
+    </p>
+    <p>
+      Nuestra motivación nace del cuestionamiento consciente: ¿están las guías oficiales realmente hechas para cuidar nuestra salud, o responden a lógicas de mercado? Creemos que muchas veces es lo segundo, y por eso nos organizamos para generar y compartir información que tenga a las personas y su bienestar como eje central.
+    </p>
+  </div>
+
+  <div class="bg-white p-4 rounded shadow-sm mb-4">
+    <h2 class="text-success">Qué Hacemos</h2>
+    <ul class="list-unstyled mt-3">
+      <li><strong>Investigamos:</strong> Revisamos estudios científicos independientes y publicamos nuestras síntesis y reflexiones.</li>
+      <li><strong>Divulgamos:</strong> Traducimos el lenguaje científico para hacerlo accesible y útil en la vida cotidiana.</li>
+      <li><strong>Promovemos:</strong> Estilos de vida saludables basados en alimentación real, exposición natural a la luz, descanso adecuado, movimiento consciente y conexión con la naturaleza.</li>
+      <li><strong>Conectamos:</strong> A personas que buscan una salud profunda, integral y libre.</li>
+    </ul>
+  </div>
+
+  <div class="bg-light p-4 rounded mb-4">
+    <h2 class="text-success">Nuestra Tienda</h2>
+    <p>
+      Como parte de nuestro compromiso con una vida más sana, ofrecemos productos que acompañan y refuerzan estos estilos de vida: alimentos reales, suplementos naturales, herramientas de fotobiomodulación, productos sin tóxicos, libros y mucho más.
+    </p>
+    <p>
+      Solo ofrecemos lo que nosotros mismos usamos y recomendamos.
+    </p>
+    <a href="" class="btn btn-success mt-3">Visita nuestra tienda (pronto disponible)</a>
+  </div>
+
+  <div class="bg-white p-4 rounded shadow-sm">
+    <h2 class="text-success">Nuestros Principios</h2>
+    <ul class="list-unstyled mt-3">
+      <li><strong>Independencia científica:</strong> nuestras fuentes no están financiadas por la industria.</li>
+      <li><strong>Ética y transparencia:</strong> lo que compartimos está basado en evidencia real y sin conflictos de interés.</li>
+      <li><strong>Salud integral:</strong> cuerpo, mente y entorno deben estar en equilibrio.</li>
+      <li><strong>Accesibilidad del conocimiento:</strong> creemos que la información útil debe ser comprensible y pública.</li>
+      <li><strong>Coherencia práctica:</strong> no solo decimos, también hacemos: investigamos, vivimos y vendemos en la misma dirección.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="bg-success text-white p-5 rounded mt-5 text-center">
+  <h2 class="mb-3">¿Quieres saber más?</h2>
+  <p class="mb-4">
+    Súmate a nuestra comunidad <a href="{% url 'account_signup' %}" class="btn btn-light btn-lg px-4 mb-4">aquí</a>. Recibe contenido exclusivo, estudios, recomendaciones y mucho más.
+  </p>
+
+<!-- Contenedor de íconos centrado horizontalmente -->
+  <div class="social-icons-wrapper">
+    <a href="https://instagram.com/tucuenta" class="social-icon instagram" target="_blank" aria-label="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://facebook.com/tucuenta" class="social-icon facebook" target="_blank" aria-label="Facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://youtube.com/tucuenta" class="social-icon youtube" target="_blank" aria-label="YouTube">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="mailto:contacto@circadia.cl" class="social-icon email" target="_blank" aria-label="Email">
+      <i class="fas fa-envelope"></i>
+    </a>
+  </div>
+
+{% endblock %}
+

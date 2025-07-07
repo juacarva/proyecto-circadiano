@@ -12,6 +12,8 @@ urlpatterns = [
     # Esto manejará /accounts/login/, /accounts/signup/, /accounts/logout/, etc.
     # Ya no necesitaremos las URLs de tu app 'usuarios' para login/registro
     path('accounts/', include('allauth.urls')),
+
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 # Esto solo debe hacerse en desarrollo. En producción, tu servidor web (Nginx/Apache) servirá estos archivos.

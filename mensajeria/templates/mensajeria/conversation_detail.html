@@ -13,62 +13,57 @@
 {% endblock %}
 
 {% block content %}
-    <div class="conversation-header">
-        <h1>
-            {% if is_new_conversation %}
-                Iniciar nueva conversación con {{ other_participant.username }}
-            {% elif other_participant %}
-                Conversación con {{ other_participant.username }}
-            {% else %}
-                Detalle de Conversación #{{ conversation.id }}
-            {% endif %}
-        </h1>
-        <p><a href="{% url 'mensajeria:inbox' %}" class="back-to-inbox-link">Volver a la Bandeja de Entrada</a></p>
-    </div>
-
-    <div class="message-list-container">
-        {% if messages %} {# Mostrar mensajes solo si existen #}
-            <ul class="message-list">
-                {% for message in messages %}
-                    <li class="message-item {% if message.sender == user %}sent{% else %}received{% endif %}">
-                        <div class="message-bubble">
-                            <div class="message-meta">
-                                <span class="sender-username">{{ message.sender.username }}</span>
-                                <span class="timestamp">{{ message.timestamp|date:"d M Y H:i" }}</span>
-                                {% if message.sender == user %}
-                                    {% if message.is_read %}
-                                        <span class="read-status">Leído</span>
-                                    {% else %}
-                                        <span class="read-status unread">No leído</span>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            <div class="message-content">
-                                {{ message.content|linebreaksbr }}
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+<div class="conversation-header">
+    <h1>
+        {% if is_new_conversation %}
+            Iniciar nueva conversación con {{ other_participant.username }}
+        {% elif other_participant %}
+            Conversación con {{ other_participant.username }}
         {% else %}
-            {% if not is_new_conversation %} {# Si no es nueva, pero no hay mensajes, mostrar este mensaje #}
-                <p class="no-messages">No hay mensajes en esta conversación todavía.</p>
-            {% else %} {# Si es nueva conversación, mostrar instrucciones #}
-                <p class="no-messages">Envía tu primer mensaje para iniciar la conversación con {{ other_participant.username }}.</p>
-            {% endif %}
+            Detalle de Conversación #{{ conversation.id }}
         {% endif %}
-    </div>
+    </h1>
+    <a href="{% url 'mensajeria:inbox' %}" class="back-to-inbox-link">Volver a la Bandeja de Entrada</a>
+</div>
 
-    <div class="message-form-container">
-        <h3>Enviar Mensaje</h3>
-        <form method="post" action="{% url 'mensajeria:conversation_detail' conversation_id=conversation.id|default:0 %}?recipient_username={% if is_new_conversation %}{{ other_participant.username }}{% endif %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.content.id_for_label }}" class="sr-only">Contenido del Mensaje:</label>
-                {{ form.content|add_class:"form-input" }}
+<div class="message-list-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-item {% if message.sender == user %}sent{% else %}received{% endif %}">
+                <div class="message-bubble">
+                    <div class="message-meta">
+                        <span class="sender-username">{{ message.sender.username }}</span>
+                        <span class="timestamp">{{ message.timestamp|date:"d M Y H:i" }}</span>
+                        {% if message.sender == user %}
+                            <span class="read-status {% if not message.is_read %}unread{% endif %}">
+                                {{ message.is_read|yesno:"Leído,No leído" }}
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="message-content">{{ message.content|linebreaksbr }}</div>
+                </div>
             </div>
-            <button type="submit" class="submit-button">Enviar Mensaje</button>
-        </form>
-    </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-conversations">
+            {% if is_new_conversation %}
+                Envía tu primer mensaje para iniciar la conversación con {{ other_participant.username }}.
+            {% else %}
+                No hay mensajes en esta conversación todavía.
+            {% endif %}
+        </p>
+    {% endif %}
+</div>
 
-{% endblock content %}
+<div class="message-form-container">
+    <h3>Enviar Mensaje</h3>
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}">Contenido del Mensaje:</label>
+            {% render_field form.content class="form-input" placeholder="Escribe tu mensaje..." %}
+        </div>
+        <button type="submit" class="send-message-btn">Enviar Mensaje</button>
+    </form>
+</div>
+{% endblock %}

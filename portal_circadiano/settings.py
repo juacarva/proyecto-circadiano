@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-ykq1v#(mg*m)bc=6k28^=njr2xtk_k+_1fv1k#k@ps1g!h3n^n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.100.114', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -58,6 +58,9 @@ INSTALLED_APPS = [
     'usuarios.apps.UsuariosConfig',
     'widget_tweaks',
     'mensajeria',
+
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -175,5 +178,8 @@ ACCOUNT_MESSAGES_ENABLED = False
 SOCIALACCOUNT_ADAPTER = 'usuarios.adapters.CustomSocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Al final de settings.py
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 # --- FIN: Bloque de Configuración ---

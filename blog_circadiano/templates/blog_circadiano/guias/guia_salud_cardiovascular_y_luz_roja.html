@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Verdad Sobre el Sol: Una Guía Interactiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Sunlight -->
+    <!-- Application Structure Plan: The SPA is designed as a narrative journey to shift user perspective. It starts with a familiar concept (the "Sunlight Paradox"), deconstructs it with an interactive chart (Risk vs. Reality), then builds a new understanding through a visually engaging, card-based exploration of the full spectrum's benefits (Beyond Vitamin D). It culminates in an actionable, practical guide. This thematic, non-linear structure is chosen over a simple report summary to facilitate discovery and make complex biological concepts digestible and memorable, promoting genuine understanding rather than passive reading. -->
+    <!-- Visualization & Content Choices: 1. Melanoma Risk: Report Info -> Exposure pattern dictates risk. Goal -> Compare intermittent vs. chronic exposure. Viz -> Interactive Bar Chart. Interaction -> Buttons toggle datasets to visually contrast high risk (intermittent) vs. protective effect (chronic). Justification -> Interaction makes the core argument of the report—that pattern matters more than dose—instantly clear. Library -> Chart.js. 2. Systemic Benefits: Report Info -> Multiple non-vitamin D benefits exist (NO, PBM, Circadian, etc.). Goal -> Organize and explain these complex ideas. Viz -> Interactive Cards. Interaction -> Clicking a card reveals concise details. Justification -> Breaks down dense information into manageable, explorable chunks, preventing user overwhelm. Library -> Vanilla JS. 3. Circadian Hormones: Report Info -> Light drives cortisol/melatonin cycle. Goal -> Visualize this daily rhythm. Viz -> Line Chart. Interaction -> Static display with clear annotations. Justification -> Provides a simple, powerful visual metaphor for the body's internal clock. Library -> Chart.js. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin-top: 5px;
+            right: 0;
+            background: #F59E0B;
+            transition: width 0.3s ease;
+            -webkit-transition: width 0.3s ease;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+            left: 0;
+            background-color: #F59E0B;
+        }
+        .active-tab {
+            background-color: #F59E0B;
+            color: white;
+        }
+        .inactive-tab {
+            background-color: #E5E7EB;
+            color: #4B5563;
+        }
+        .benefit-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .content-hidden {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.3s ease-in-out;
+            margin-top: 0;
+        }
+        .content-visible {
+            max-height: 500px;
+            opacity: 1;
+            transition: max-height 0.7s ease-in, opacity 0.5s ease-in-out;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-[#FFFBF5] text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-amber-600">Sol y Salud</div>
+            <ul class="flex space-x-4 md:space-x-8 text-sm md:text-base">
+                <li><a href="#paradigma" class="nav-link text-gray-600 hover:text-amber-600">Paradigma</a></li>
+                <li><a href="#beneficios" class="nav-link text-gray-600 hover:text-amber-600">Beneficios</a></li>
+                <li><a href="#guia" class="nav-link text-gray-600 hover:text-amber-600">Guía Práctica</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="intro" class="text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-orange-600">La Paradoja del Sol</h1>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">Nos han enseñado a temerle, pero la vida en la Tierra depende de él. Esta guía interactiva explora la ciencia más allá de la narrativa convencional, revelando cómo una relación inteligente con el sol es fundamental para nuestra salud celular y metabólica.</p>
+        </section>
+
+        <section id="paradigma" class="mb-24 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-2">Deconstruyendo el Riesgo: Dosis vs. Patrón</h2>
+                <p class="max-w-3xl mx-auto text-gray-600">La ciencia muestra que el riesgo de melanoma no depende tanto de la cantidad total de sol, sino de *cómo* nos exponemos. La exposición regular (como la de un trabajador al aire libre) es muy diferente a las quemaduras solares intensas e intermitentes.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg">
+                <div class="flex justify-center mb-6 space-x-2">
+                    <button id="btn-intermitente" class="px-4 py-2 rounded-lg font-semibold text-sm md:text-base transition-colors duration-300 active-tab">Exposición Intermitente (Quemaduras)</button>
+                    <button id="btn-cronica" class="px-4 py-2 rounded-lg font-semibold text-sm md:text-base transition-colors duration-300 inactive-tab">Exposición Crónica (Ocupacional)</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="melanomaRiskChart"></canvas>
+                </div>
+                <div id="risk-explanation" class="mt-6 text-center text-gray-600 max-w-2xl mx-auto">
+                    <p>Las quemaduras solares agudas en piel no acostumbrada sobrecargan los sistemas de reparación, aumentando significativamente el riesgo de melanoma.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="beneficios" class="mb-24 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-2">Más Allá de la Vitamina D: La Sinfonía del Espectro Completo</h2>
+                <p class="max-w-3xl mx-auto text-gray-600">Nuestro cuerpo utiliza todo el espectro de luz solar, no solo los UVB para la vitamina D. Descubre los beneficios sistémicos cruciales que se pierden con la evitación total del sol. Haz clic en cada tarjeta para explorar.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="benefit-card bg-white p-6 rounded-2xl shadow-lg cursor-pointer" data-content="no-content">
+                    <h3 class="text-xl font-bold mb-2 text-blue-600">❤️ Salud Cardiovascular</h3>
+                    <p class="text-gray-600">La luz UVA libera Óxido Nítrico (NO) desde la piel, un potente vasodilatador que reduce la presión arterial y mejora la circulación.</p>
+                    <div id="no-content" class="content-hidden text-sm text-gray-500">
+                        Este mecanismo es independiente de la vitamina D y no puede ser replicado con suplementos. Es una de las razones por las que la mortalidad cardiovascular es mayor en invierno.
+                    </div>
+                </div>
+
+                <div class="benefit-card bg-white p-6 rounded-2xl shadow-lg cursor-pointer" data-content="circadiano-content">
+                    <h3 class="text-xl font-bold mb-2 text-indigo-600">🧠 Ritmo Circadiano</h3>
+                    <p class="text-gray-600">La luz matutina sincroniza nuestro "reloj maestro" en el cerebro, regulando hormonas como el cortisol y la melatonina.</p>
+                    <div id="circadiano-content" class="content-hidden text-sm text-gray-500">
+                         Una sincronización robusta es clave para la energía diurna, el sueño reparador y la prevención del síndrome metabólico. La falta de luz diurna y el exceso de luz artificial nocturna lo alteran.
+                        <div class="chart-container !h-64 mt-4">
+                            <canvas id="circadianChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="benefit-card bg-white p-6 rounded-2xl shadow-lg cursor-pointer" data-content="metabolismo-content">
+                    <h3 class="text-xl font-bold mb-2 text-green-600">🔥 Salud Metabólica</h3>
+                    <p class="text-gray-600">La luz azul del sol penetra la piel y puede activar receptores en las células grasas, ayudando a liberar ácidos grasos para su uso como energía.</p>
+                     <div id="metabolismo-content" class="content-hidden text-sm text-gray-500">
+                        Este efecto directo, sumado a la correcta sincronización circadiana, asocia una mayor exposición a la luz diurna con una mejor sensibilidad a la insulina y un menor IMC.
+                    </div>
+                </div>
+
+                <div class="benefit-card bg-white p-6 rounded-2xl shadow-lg cursor-pointer" data-content="pbm-content">
+                    <h3 class="text-xl font-bold mb-2 text-red-600">⚡ Energía Celular (PBM)</h3>
+                    <p class="text-gray-600">La luz roja e infrarroja cercana del sol energiza nuestras mitocondrias, aumentando la producción de ATP (la moneda energética celular).</p>
+                    <div id="pbm-content" class="content-hidden text-sm text-gray-500">
+                        Este proceso, llamado fotobiomodulación, mejora la reparación de tejidos y reduce la inflamación. La iluminación interior moderna carece de estas longitudes de onda terapéuticas.
+                    </div>
+                </div>
+
+                <div class="benefit-card bg-white p-6 rounded-2xl shadow-lg cursor-pointer" data-content="endorfinas-content">
+                    <h3 class="text-xl font-bold mb-2 text-purple-600">😊 Estado de Ánimo y Hormonas</h3>
+                    <p class="text-gray-600">La luz UV estimula la producción de β-endorfinas (sensación de bienestar) y α-MSH (hormona que regula el bronceado y la reparación del ADN).</p>
+                    <div id="endorfinas-content" class="content-hidden text-sm text-gray-500">
+                        Estos mecanismos explican por qué el sol mejora el estado de ánimo y cómo la piel se adapta y protege a sí misma de forma inteligente con una exposición regular.
+                    </div>
+                </div>
+                
+                <div class="benefit-card bg-white p-6 rounded-2xl shadow-lg cursor-pointer" data-content="inmune-content">
+                    <h3 class="text-xl font-bold mb-2 text-teal-600">🛡️ Función Inmune</h3>
+                    <p class="text-gray-600">La luz solar modula el sistema inmunitario. Este efecto es útil para tratar enfermedades autoinmunes de la piel como la psoriasis.</p>
+                     <div id="inmune-content" class="content-hidden text-sm text-gray-500">
+                        La vitamina D producida por el sol también es un potente regulador inmunitario, crucial para la defensa contra infecciones. La exposición sensata entrena y equilibra nuestra respuesta inmune.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="guia" class="scroll-mt-20">
+             <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-2">Guía Práctica para una Exposición Solar Inteligente</h2>
+                <p class="max-w-3xl mx-auto text-gray-600">No se trata de evitar el sol, sino de interactuar con él de forma consciente y beneficiosa. Adopta estos hábitos para optimizar tu salud.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg max-w-4xl mx-auto">
+                <ul class="space-y-6">
+                    <li class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl">🌅</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Prioriza la Luz Matutina</h4>
+                            <p class="text-gray-600">Busca 10-30 minutos de luz solar directa en tus ojos y piel poco después de despertar. Es la señal más potente para anclar tu ritmo circadiano, mejorar tu energía y tu estado de ánimo.</p>
+                        </div>
+                    </li>
+                     <li class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl">☀️</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Exposición al Mediodía sin Quemaduras</h4>
+                            <p class="text-gray-600">Para una síntesis óptima de vitamina D, expón la mayor cantidad de piel posible durante periodos cortos al mediodía. La clave es NUNCA QUEMARSE. Empieza con pocos minutos y aumenta gradualmente según tu tipo de piel.</p>
+                        </div>
+                    </li>
+                     <li class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl">🛡️</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Evita el uso de Protector Solar como Herramienta</h4>
+                            <p class="text-gray-600">No lo uses como una "armadura" diaria que bloquea todos los beneficios. Si lo vas a usar (espero que no), prefiere protectores minerales (óxido de zinc) de amplio espectro.</p>
+                        </div>
+                    </li>
+                     <li class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl">🌃</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Crea un Entorno Pro-Circadiano</h4>
+                            <p class="text-gray-600">Maximiza la exposición a la luz natural (del sol) durante el día. Por la noche, dos horas antes de dormir, usa luz roja ojalá tenue y apaga las pantallas (o usalas con filtro de luz azul) para permitir la producción natural de melatonina. Si es inmanejable tu ambiente de luz nocturna, usa gafas con bloqueo de luz azul y verde</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="text-gray-400">Esta aplicación es una interpretación interactiva de la investigación científica sobre la luz solar y la salud. No constituye un consejo médico. Consulta siempre a un profesional de la salud.</p>
+            <p class="mt-2 text-sm text-gray-500">&copy; 2024 Guía Interactiva Sol y Salud. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const riskExplanation = document.getElementById('risk-explanation');
+            const btnIntermitente = document.getElementById('btn-intermitente');
+            const btnCronica = document.getElementById('btn-cronica');
+
+            const riskData = {
+                intermitente: {
+                    label: 'Riesgo de Melanoma (Odds Ratio)',
+                    data: [2.0],
+                    backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    explanation: 'Las quemaduras solares agudas en piel no acostumbrada sobrecargan los sistemas de reparación, duplicando el riesgo de melanoma.'
+                },
+                cronica: {
+                    label: 'Riesgo de Melanoma (Odds Ratio)',
+                    data: [0.86],
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    explanation: 'La exposición regular y sin quemaduras induce mecanismos de protección (bronceado, reparación de ADN), asociándose con una reducción del riesgo.'
+                }
+            };
+            
+            const ctxRisk = document.getElementById('melanomaRiskChart').getContext('2d');
+            const melanomaRiskChart = new Chart(ctxRisk, {
+                type: 'bar',
+                data: {
+                    labels: ['Riesgo Relativo'],
+                    datasets: [{
+                        label: riskData.intermitente.label,
+                        data: riskData.intermitente.data,
+                        backgroundColor: riskData.intermitente.backgroundColor,
+                        borderColor: riskData.intermitente.borderColor,
+                        borderWidth: 1,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 2.5,
+                            title: {
+                                display: true,
+                                text: 'Odds Ratio (1.0 = Sin cambio en el riesgo)'
+                            }
+                        },
+                        y: {
+                           display: false
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x.toFixed(2);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function updateRiskChart(type) {
+                const chart = melanomaRiskChart;
+                const data = riskData[type];
+                chart.data.datasets[0].data = data.data;
+                chart.data.datasets[0].backgroundColor = data.backgroundColor;
+                chart.data.datasets[0].borderColor = data.borderColor;
+                chart.update();
+                riskExplanation.innerText = data.explanation;
+
+                if (type === 'intermitente') {
+                    btnIntermitente.classList.add('active-tab');
+                    btnIntermitente.classList.remove('inactive-tab');
+                    btnCronica.classList.add('inactive-tab');
+                    btnCronica.classList.remove('active-tab');
+                } else {
+                    btnCronica.classList.add('active-tab');
+                    btnCronica.classList.remove('inactive-tab');
+                    btnIntermitente.classList.add('inactive-tab');
+                    btnIntermitente.classList.remove('active-tab');
+                }
+            }
+
+            btnIntermitente.addEventListener('click', () => updateRiskChart('intermitente'));
+            btnCronica.addEventListener('click', () => updateRiskChart('cronica'));
+
+            const benefitCards = document.querySelectorAll('.benefit-card');
+            benefitCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const contentId = card.getAttribute('data-content');
+                    const contentElement = document.getElementById(contentId);
+                    
+                    const isVisible = contentElement.classList.contains('content-visible');
+
+                    document.querySelectorAll('.content-visible').forEach(openContent => {
+                        if (openContent !== contentElement) {
+                             openContent.classList.remove('content-visible');
+                             openContent.classList.add('content-hidden');
+                        }
+                    });
+
+                    if (isVisible) {
+                        contentElement.classList.remove('content-visible');
+                        contentElement.classList.add('content-hidden');
+                    } else {
+                        contentElement.classList.remove('content-hidden');
+                        contentElement.classList.add('content-visible');
+                        if (contentId === 'circadiano-content' && !window.circadianChartInstance) {
+                            createCircadianChart();
+                        }
+                    }
+                });
+            });
+
+            function createCircadianChart() {
+                const ctxCircadian = document.getElementById('circadianChart').getContext('2d');
+                window.circadianChartInstance = new Chart(ctxCircadian, {
+                    type: 'line',
+                    data: {
+                        labels: ['6am', '9am', '12pm', '3pm', '6pm', '9pm', '12am', '3am'],
+                        datasets: [{
+                            label: 'Cortisol (Energía)',
+                            data: [8, 10, 6, 4, 3, 2, 1, 1],
+                            borderColor: 'rgb(252, 165, 165)',
+                            backgroundColor: 'rgba(252, 165, 165, 0.5)',
+                            tension: 0.4,
+                            fill: true,
+                        }, {
+                            label: 'Melatonina (Sueño)',
+                            data: [1, 1, 1, 1, 2, 5, 9, 7],
+                            borderColor: 'rgb(129, 140, 248)',
+                            backgroundColor: 'rgba(129, 140, 248, 0.5)',
+                            tension: 0.4,
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { display: false },
+                            x: {
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    font: { size: 10 }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        // Este script se ejecuta DENTRO del iframe
+        function sendHeight() {
+            // Obtenemos la altura total del contenido de la guía
+            const height = document.documentElement.scrollHeight;
+            // Enviamos un mensaje a la ventana padre (la que contiene el iframe)
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+
+        // Enviamos la altura cuando la página carga
+        window.addEventListener('load', sendHeight);
+
+        // Opcional: Si el contenido cambia dinámicamente, volvemos a enviar la altura
+        const box = document.getElementById('interactive-element');
+        box.addEventListener('click', () => {
+            // ... tu código de click ...
+            // Le damos un pequeño respiro para que el DOM se actualice y recalculamos
+            setTimeout(sendHeight, 50); 
+        });
+
+    </script>
+
+</body>
+</html>

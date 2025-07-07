@@ -1,0 +1,36 @@
+<div class="sidebar-widget">
+    <h3 class="widget-title">Buscar</h3>
+    <form method="get" action="{% url 'blog_circadiano:lista_articulos' %}" class="search-form">
+        <input type="text" name="q" placeholder="Buscar artículos y series..." value="{{ query|default:'' }}">
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
+{% if todas_categorias %}
+<div class="sidebar-widget">
+    <h3 class="widget-title">Categorías</h3>
+    <ul class="widget-list">
+        <li><a href="{% url 'blog_circadiano:lista_articulos' %}" class="{% if not categoria_actual %}active{% endif %}">Todas</a></li>
+        {% for categoria in todas_categorias %}
+        <li>
+            <a href="{% url 'blog_circadiano:articulos_por_categoria' categoria_slug=categoria.slug %}" class="{% if categoria_actual.slug == categoria.slug %}active{% endif %}">
+                {{ categoria.nombre }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if todas_etiquetas %}
+<div class="sidebar-widget">
+    <h3 class="widget-title">Etiquetas</h3>
+    <div class="tag-cloud">
+        {% for etiqueta in todas_etiquetas %}
+        <a href="{% url 'blog_circadiano:articulos_por_etiqueta' etiqueta_slug=etiqueta.slug %}" class="tag-item {% if etiqueta_actual.slug == etiqueta.slug %}active{% endif %}">
+            {{ etiqueta.nombre }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
