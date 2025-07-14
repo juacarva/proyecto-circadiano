@@ -243,3 +243,20 @@ def detalle_serie(request, serie_slug):
 
 def nosotros(request):
     return render(request, 'blog_circadiano/nosotros.html')
+
+def home_view(request):
+    """
+    Vista para la página de inicio.
+    Muestra los últimos 3 artículos y las últimas 3 series.
+    """
+    latest_articles = Articulo.objects.order_by('-fecha_publicacion')[:3] # Get the 3 most recent articles
+    featured_series = Serie.objects.all()[:3] # Get 3 series (you might want a 'is_featured' field for better control)
+
+    context = {
+        'latest_articles': latest_articles,
+        'featured_series': featured_series,
+        'show_sidebar': False, # The home page typically does not have a sidebar
+    }
+    return render(request, 'blog_circadiano/home.html', context)
+
+# ... (rest of your existing views) ...

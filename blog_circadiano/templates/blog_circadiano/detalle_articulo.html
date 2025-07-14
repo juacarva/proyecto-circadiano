@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1 class="articulo-titulo" data-pk="{{ articulo.pk }}">{{ articulo.titulo }}</h1>
-    
+
     <div class="meta">
         Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }} por {{ articulo.autor.first_name }} {{ articulo.autor.last_name }}
         {% if user.is_authenticated and user != articulo.autor %}
@@ -25,6 +25,14 @@
             </span>
         {% endif %}
     </div>
+
+    {# --- INICIO DE LA MODIFICACIÓN --- #}
+    {# Si el artículo pertenece a una serie, muestra este enlace #}
+    {% if articulo.serie %}
+        <div class="serie-badge">
+            Parte de la serie: <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=articulo.serie.slug %}">{{ articulo.serie.titulo }}</a>.
+        </div>
+    {% endif %}
 
     {% if articulo.imagen_destacada %}
         <img src="{{ articulo.imagen_destacada.url }}" alt="{{ articulo.titulo }}" class="articulo-imagen">
@@ -53,21 +61,21 @@
         {% endif %}
     </div>
 
+
+    {# Este enlace se muestra siempre #}
+    <div class="back-link">
+        <a href="{% url 'blog_circadiano:lista_articulos' %}">Ir a todos los artículos</a>
+    </div>
+
     {# --- INICIO DE LA MODIFICACIÓN --- #}
     {# Si el artículo pertenece a una serie, muestra este enlace #}
     {% if articulo.serie %}
-        <div class="serie-badge">
-            Parte de la serie: <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=articulo.serie.slug %}">{{ articulo.serie.titulo }}</a>.
-        </div>
         <div class="back-link" style="margin-top: 1rem;">
              <a href="{% url 'blog_circadiano:detalle_serie' serie_slug=articulo.serie.slug %}">&larr; Volver a la serie</a>
         </div>
     {% endif %}
 
-    {# Este enlace se muestra siempre #}
-    <div class="back-link">
-        <a href="{% url 'blog_circadiano:lista_articulos' %}">Volver a todos los artículos</a>
-    </div>
+
     {# --- FIN DE LA MODIFICACIÓN --- #}
 
 

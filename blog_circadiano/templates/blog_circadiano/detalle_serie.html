@@ -38,18 +38,18 @@
                         Publicado el {{ articulo.fecha_publicacion|date:"d M Y" }}
                     </p>
                 </div>
-                <div class="card-action">
+<!--                 <div class="card-action">
                     <a href="{% url 'blog_circadiano:detalle_articulo' pk=articulo.pk %}" class="card-link">
                         Leer artículo <i class="fa-solid fa-arrow-right"></i>
                     </a>
-                </div>
+                </div> -->
             </div>
         {% empty %}
-            <p>No hay artículos en esta serie todavía.</p>
+            <p>Aún no hay artículos en esta serie.</p>
         {% endfor %}
     </div>
 
     <div class="back-link" style="margin-top: 2rem;">
-        <a href="{% url 'blog_circadiano:lista_series' %}">&larr; Volver a todas las series</a>
+        <a href="{% url 'blog_circadiano:lista_series' %}">&larr; Ver todas las series</a>
     </div>
 {% endblock content %}
