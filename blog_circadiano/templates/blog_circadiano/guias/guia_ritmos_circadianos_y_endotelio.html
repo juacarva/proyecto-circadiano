@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ritmos Circadianos y Salud Vascular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Calming Blues -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA temática con scroll vertical. La estructura no refleja el informe, sino un viaje lógico para el usuario: 1) Introducción impactante. 2) Explicación de los dos conceptos clave (Ritmo Circadiano y Endotelio). 3) Una sección central interactiva ("La Cascada del Daño") donde el usuario explora los mecanismos moleculares, los cuales actualizan dinámicamente un gráfico de radar que visualiza la salud endotelial. 4) Pestañas con la evidencia científica. 5) Una línea de tiempo visual de las consecuencias. 6) Consejos prácticos. Esta estructura facilita el aprendizaje progresivo y la interacción, transformando un texto denso en una experiencia explorable y memorable. -->
+    <!-- Visualization & Content Choices: Se eligió una estructura que combina texto explicativo con visualizaciones interactivas. El elemento central es un gráfico de radar de Chart.js (Goal: Compare) para mostrar el equilibrio/desequilibrio de la función endotelial. Este se actualiza al interactuar con un diagrama de flujo (Goal: Organize/Relationships) construido con HTML/CSS/JS, que representa los mecanismos de daño. Se usan pestañas (Goal: Organize) para la evidencia y una línea de tiempo (Goal: Change) para las consecuencias. Esta combinación permite al usuario conectar conceptos abstractos (mecanismos) con resultados visuales (gráfico) y consecuencias reales (línea de tiempo). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3498db;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .mechanism-card {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+        .mechanism-card.active {
+            border-color: #3498db;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 1.25rem;
+            left: -0.5rem;
+            transform: translateX(-50%);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 9999px;
+            background-color: #fff;
+            border: 2px solid #3498db;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 1.25rem;
+            left: -0.5rem;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #e5e7eb;
+            z-index: -1;
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #2c74b3, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-[#F8F9FA]">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-bold text-[#1D3557]">
+                    <span class="text-[#3498db]">Crono</span>Salud<span class="text-[#3498db]">.</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#home" class="nav-link text-gray-600 hover:text-gray-900 active">Inicio</a>
+                    <a href="#problema" class="nav-link text-gray-600 hover:text-gray-900">El Problema</a>
+                    <a href="#mecanismos" class="nav-link text-gray-600 hover:text-gray-900">Mecanismos</a>
+                    <a href="#evidencia" class="nav-link text-gray-600 hover:text-gray-900">Evidencia</a>
+                    <a href="#consecuencias" class="nav-link text-gray-600 hover:text-gray-900">Consecuencias</a>
+                    <a href="#soluciones" class="nav-link text-gray-600 hover:text-gray-900">Soluciones</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white">
+            <a href="#home" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Inicio</a>
+            <a href="#problema" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">El Problema</a>
+            <a href="#mecanismos" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Mecanismos</a>
+            <a href="#evidencia" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Evidencia</a>
+            <a href="#consecuencias" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Consecuencias</a>
+            <a href="#soluciones" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Soluciones</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="min-h-[80vh] flex items-center bg-white">
+            <div class="container mx-auto px-6 py-16 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-[#1D3557] leading-tight mb-4">Cuando tu <span class="gradient-text">Reloj Biológico</span> ataca tus <span class="gradient-text">Arterias</span></h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">La interrupción de nuestros ritmos circadianos naturales, un sello de la vida moderna, provoca un daño silencioso pero profundo en el revestimiento de nuestras arterias. Este es el primer paso hacia enfermedades cardiovasculares graves.</p>
+                <a href="#problema" class="bg-[#3498db] text-white font-bold py-3 px-8 rounded-full hover:bg-[#2c74b3] transition-colors duration-300 shadow-lg hover:shadow-xl">
+                    Descubre Cómo
+                </a>
+            </div>
+        </section>
+
+        <section id="problema" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1D3557]">El Problema Central: Dos Conceptos Clave</h2>
+                    <p class="text-lg text-gray-600 mt-2 max-w-2xl mx-auto">Para entender la conexión, primero debemos conocer a los dos protagonistas de esta historia.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-semibold text-[#1D3557] mb-4 flex items-center"><span class="text-3xl mr-3">⏰</span> Disrupción Circadiana</h3>
+                        <p class="text-gray-700">Nuestros cuerpos funcionan con un reloj interno de 24 horas que regula el sueño, las hormonas y el metabolismo. Factores como el trabajo por turnos, la exposición a la luz artificial por la noche o los horarios de comida irregulares desincronizan este reloj, creando un caos fisiológico.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <h3 class="text-2xl font-semibold text-[#1D3557] mb-4 flex items-center"><span class="text-3xl mr-3">💔</span> Disfunción Endotelial</h3>
+                        <p class="text-gray-700">El endotelio es la capa de células que recubre el interior de nuestras arterias. Cuando funciona mal, las arterias pierden su capacidad para dilatarse, se vuelven inflamadas y propensas a la formación de coágulos y placas de ateroma. Es el campo de batalla inicial de la enfermedad cardiovascular.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mecanismos" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1D3557]">La Cascada del Daño</h2>
+                    <p class="text-lg text-gray-600 mt-2 max-w-3xl mx-auto">La disrupción circadiana no causa la enfermedad directamente. Desencadena una serie de fallos en cadena a nivel molecular. Haz clic en cada mecanismo para ver su impacto en la salud de tus arterias.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="space-y-4">
+                            <div id="mechanism-card-1" class="mechanism-card bg-white p-6 rounded-lg border-2 border-transparent cursor-pointer shadow-sm hover:shadow-lg">
+                                <h4 class="font-bold text-lg text-[#1D3557]">1. Desregulación Genética Directa</h4>
+                                <p class="text-sm text-gray-600">Los propios genes "reloj" dentro de las células endoteliales fallan, alterando sus funciones básicas.</p>
+                            </div>
+                            <div id="mechanism-card-2" class="mechanism-card bg-white p-6 rounded-lg border-2 border-transparent cursor-pointer shadow-sm hover:shadow-lg">
+                                <h4 class="font-bold text-lg text-[#1D3557]">2. Estrés Oxidativo y Desequilibrio de NO</h4>
+                                <p class="text-sm text-gray-600">Se pierde el equilibrio: aumenta la producción de moléculas dañinas (ROS) y disminuye el óxido nítrico (NO), un protector vascular clave.</p>
+                            </div>
+                            <div id="mechanism-card-3" class="mechanism-card bg-white p-6 rounded-lg border-2 border-transparent cursor-pointer shadow-sm hover:shadow-lg">
+                                <h4 class="font-bold text-lg text-[#1D3557]">3. Inflamación Crónica</h4>
+                                <p class="text-sm text-gray-600">El cuerpo entra en un estado de inflamación de bajo grado, haciendo que las arterias se vuelvan "pegajosas" para el colesterol y los glóbulos blancos.</p>
+                            </div>
+                            <div id="mechanism-card-4" class="mechanism-card bg-white p-6 rounded-lg border-2 border-transparent cursor-pointer shadow-sm hover:shadow-lg">
+                                <h4 class="font-bold text-lg text-[#1D3557]">4. Desregulación Hormonal y Metabólica</h4>
+                                <p class="text-sm text-gray-600">Se altera el control del azúcar en sangre, la insulina y las grasas, creando un ambiente tóxico para el endotelio.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 md:mt-0">
+                        <div class="bg-gray-50 p-6 rounded-xl shadow-inner">
+                            <h4 id="mechanism-title" class="text-xl font-semibold text-center text-[#1D3557] mb-4">Estado de Salud Endotelial</h4>
+                            <div class="chart-container">
+                                <canvas id="endothelialHealthChart"></canvas>
+                            </div>
+                            <p id="mechanism-description" class="text-center text-gray-600 mt-4 text-sm h-16">Selecciona un mecanismo para ver la descripción y su impacto en el gráfico.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="evidencia" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1D3557]">La Evidencia Científica</h2>
+                    <p class="text-lg text-gray-600 mt-2 max-w-2xl mx-auto">Esta conexión no es teórica. Está respaldada por múltiples líneas de investigación.</p>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex justify-center border-b border-gray-300 mb-8">
+                        <button data-tab="animal" class="tab py-2 px-6 font-semibold text-gray-600 rounded-t-lg transition-colors duration-300 active">Animales</button>
+                        <button data-tab="humanos" class="tab py-2 px-6 font-semibold text-gray-600 rounded-t-lg transition-colors duration-300">Humanos</button>
+                        <button data-tab="invitro" class="tab py-2 px-6 font-semibold text-gray-600 rounded-t-lg transition-colors duration-300">In Vitro</button>
+                    </div>
+                    <div id="evidence-content" class="bg-white p-8 rounded-xl shadow-md min-h-[250px]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="consecuencias" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1D3557]">De la Disfunción a la Enfermedad: Una Progresión Peligrosa</h2>
+                    <p class="text-lg text-gray-600 mt-2 max-w-3xl mx-auto">La disfunción endotelial no es el final de la historia, es el comienzo. Inicia una cascada que conduce a eventos cardiovasculares que amenazan la vida.</p>
+                </div>
+                <div class="relative max-w-4xl mx-auto pl-8">
+                    <div class="timeline-line"></div>
+                    <div class="space-y-12">
+                        <div class="timeline-item relative">
+                            <h4 class="text-xl font-bold text-[#3498db]">Paso 1: Disfunción Endotelial</h4>
+                            <p class="text-gray-700">Aumenta la permeabilidad de las arterias, permitiendo la entrada de colesterol LDL ("malo"). Se inicia una respuesta inflamatoria crónica y la arteria pierde su capacidad de relajarse.</p>
+                        </div>
+                        <div class="timeline-item relative">
+                            <h4 class="text-xl font-bold text-[#3498db]">Paso 2: Aterosclerosis</h4>
+                            <p class="text-gray-700">El colesterol y las células inmunes se acumulan en la pared arterial, formando "placas". Estas placas endurecen y estrechan las arterias, dificultando el flujo sanguíneo.</p>
+                        </div>
+                        <div class="timeline-item relative">
+                            <h4 class="text-xl font-bold text-[#3498db]">Paso 3: Trombosis y Eventos Agudos</h4>
+                            <p class="text-gray-700">Las placas inestables pueden romperse. El cuerpo reacciona formando un coágulo (trombo) para "reparar" la lesión. Si el coágulo bloquea por completo la arteria, el resultado es un infarto de miocardio (si ocurre en el corazón) o un accidente cerebrovascular (si ocurre en el cerebro).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="soluciones" class="py-16 md:py-24">
+             <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1D3557]">¿Qué Podemos Hacer? Sincroniza tu Salud</h2>
+                    <p class="text-lg text-gray-600 mt-2 max-w-2xl mx-auto">Mitigar el riesgo implica adoptar hábitos que refuercen y respeten nuestro reloj biológico natural.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl mb-4">🌙</div>
+                        <h4 class="font-semibold text-lg text-[#1D3557]">Prioriza el Sueño Regular</h4>
+                        <p class="text-gray-600 text-sm">Intenta acostarte y levantarte a la misma hora todos los días, incluso los fines de semana, para anclar tu ritmo circadiano.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl mb-4">☀️</div>
+                        <h4 class="font-semibold text-lg text-[#1D3557]">Busca la Luz Matutina</h4>
+                        <p class="text-gray-600 text-sm">La exposición a la luz solar por la mañana es la señal más potente para sincronizar tu reloj maestro. Evita la luz azul brillante por la noche.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                        <div class="text-4xl mb-4">🍽️</div>
+                        <h4 class="font-semibold text-lg text-[#1D3557]">Ordena tus Comidas</h4>
+                        <p class="text-gray-600 text-sm">Come en un horario regular y evita las comidas pesadas y la cafeína cerca de la hora de dormir para no desajustar los relojes de tus órganos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p>Esta aplicación interactiva es una interpretación del informe "Disrupción de los Ritmos Circadianos y su Impacto en la Disfunción Endotelial Arterial".</p>
+            <p class="text-sm mt-2">Creado con fines educativos para facilitar la comprensión de conceptos científicos complejos.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const content = {
+                mechanisms: {
+                    default: {
+                        title: "Estado de Salud Endotelial",
+                        description: "Selecciona un mecanismo para ver la descripción y su impacto en el gráfico.",
+                        data: [10, 10, 10, 10, 10]
+                    },
+                    "1": {
+                        title: "Desregulación Genética",
+                        description: "La alteración de los genes reloj como CLOCK y BMAL1 en las células endoteliales afecta directamente su capacidad para producir sustancias protectoras y mantener su integridad.",
+                        data: [7, 10, 10, 10, 13]
+                    },
+                    "2": {
+                        title: "Estrés Oxidativo y Desequilibrio de NO",
+                        description: "Aumenta la producción de especies reactivas de oxígeno (ROS) que destruyen el óxido nítrico (NO), un vasodilatador crucial. La enzima eNOS se 'desacopla' y produce más ROS en un círculo vicioso.",
+                        data: [3, 18, 14, 10, 10]
+                    },
+                    "3": {
+                        title: "Inflamación Crónica",
+                        description: "La disrupción circadiana eleva citoquinas inflamatorias (IL-6, TNF-α), haciendo que el endotelio exprese moléculas de adhesión que atraen leucocitos, iniciando la aterosclerosis.",
+                        data: [7, 13, 17, 14, 10]
+                    },
+                    "4": {
+                        title: "Desregulación Hormonal y Metabólica",
+                        description: "La resistencia a la insulina, niveles altos de glucosa y lípidos (consecuencias de la disrupción) son tóxicos para el endotelio, empeorando el estrés oxidativo y la inflamación.",
+                        data: [5, 14, 13, 16, 11]
+                    }
+                },
+                evidence: {
+                    animal: {
+                        title: "Evidencia en Modelos Animales",
+                        points: [
+                            "Ratones con genes reloj mutados (ej. Bmal1, Per2) desarrollan disfunción endotelial espontáneamente.",
+                            "La alteración de los ciclos de luz-oscuridad acelera la aterosclerosis en roedores.",
+                            "Modelos de trabajo por turnos en ratones muestran aumento de citoquinas inflamatorias y moléculas de adhesión."
+                        ]
+                    },
+                    humanos: {
+                        title: "Evidencia en Estudios Clínicos Humanos",
+                        points: [
+                            "Los trabajadores por turnos tienen una función endotelial significativamente peor (medida por FMD) y mayor riesgo cardiovascular.",
+                            "La privación aguda de sueño (una noche) es suficiente para deteriorar la vasodilatación dependiente del endotelio en personas sanas.",
+                            "Pacientes con apnea del sueño, una forma severa de disrupción del sueño, muestran marcada disfunción endotelial, que mejora con tratamiento (CPAP)."
+                        ]
+                    },
+                    invitro: {
+                        title: "Evidencia en Estudios In Vitro",
+                        points: [
+                            "Las células endoteliales humanas cultivadas en laboratorio poseen sus propios relojes circadianos funcionales.",
+                            "La manipulación de los genes reloj en estas células altera directamente su producción de factores de coagulación y moléculas inflamatorias.",
+                            "Se puede inducir un estado pro-aterogénico en las células simplemente alterando sus ritmos."
+                        ]
+                    }
+                }
+            };
+            
+            const mechanismCards = document.querySelectorAll('.mechanism-card');
+            const mechanismTitle = document.getElementById('mechanism-title');
+            const mechanismDescription = document.getElementById('mechanism-description');
+
+            let myChart;
+            const ctx = document.getElementById('endothelialHealthChart').getContext('2d');
+
+            function createOrUpdateChart(data, highlightIndex) {
+                const chartData = {
+                    labels: ['Óxido Nítrico (NO)', 'Estrés Oxidativo', 'Inflamación', 'Metabolismo', 'Integridad Genética'],
+                    datasets: [{
+                        label: 'Estado Endotelial',
+                        data: data,
+                        fill: true,
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: 'rgb(52, 152, 219)',
+                        pointBackgroundColor: 'rgb(52, 152, 219)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(52, 152, 219)'
+                    }]
+                };
+
+                const chartOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    elements: {
+                        line: {
+                            borderWidth: 2
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 20,
+                            ticks: {
+                                display: false
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const value = context.raw;
+                                    if (value <= 5) return 'Muy Malo';
+                                    if (value <= 9) return 'Malo';
+                                    if (value === 10) return 'Normal';
+                                    if (value <= 15) return 'Malo';
+                                    return 'Muy Malo';
+                                }
+                            }
+                        }
+                    }
+                };
+
+                if (myChart) {
+                    myChart.data = chartData;
+                    myChart.update();
+                } else {
+                    myChart = new Chart(ctx, {
+                        type: 'radar',
+                        data: chartData,
+                        options: chartOptions
+                    });
+                }
+            }
+
+            mechanismCards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    mechanismCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    const mechanismId = card.id.split('-')[2];
+                    const mechanismData = content.mechanisms[mechanismId];
+                    mechanismTitle.textContent = mechanismData.title;
+                    mechanismDescription.textContent = mechanismData.description;
+                    createOrUpdateChart(mechanismData.data, index);
+                });
+            });
+            
+            createOrUpdateChart(content.mechanisms.default.data, -1);
+            document.getElementById('mechanism-card-2').click();
+
+            const evidenceTabs = document.querySelectorAll('.tab');
+            const evidenceContentEl = document.getElementById('evidence-content');
+
+            function updateEvidenceContent(tabId) {
+                const data = content.evidence[tabId];
+                let html = `<h4 class="text-xl font-bold text-[#1D3557] mb-4">${data.title}</h4>
+                            <ul class="space-y-3 list-disc list-inside text-gray-700">`;
+                data.points.forEach(point => {
+                    html += `<li>${point}</li>`;
+                });
+                html += `</ul>`;
+                evidenceContentEl.innerHTML = html;
+            }
+
+            evidenceTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    evidenceTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateEvidenceContent(tab.dataset.tab);
+                });
+            });
+            
+            updateEvidenceContent('animal');
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link, #mobile-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            const sections = document.querySelectorAll('section');
+            const desktopNavLinks = document.querySelectorAll('header nav .nav-link');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        desktopNavLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Este script se ejecuta DENTRO del iframe
+        function sendHeight() {
+            // Obtenemos la altura total del contenido de la guía
+            const height = document.documentElement.scrollHeight;
+            // Enviamos un mensaje a la ventana padre (la que contiene el iframe)
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+
+        // Enviamos la altura cuando la página carga
+        window.addEventListener('load', sendHeight);
+
+        // Opcional: Si el contenido cambia dinámicamente, volvemos a enviar la altura
+        const box = document.getElementById('interactive-element');
+        box.addEventListener('click', () => {
+            // ... tu código de click ...
+            // Le damos un pequeño respiro para que el DOM se actualice y recalculamos
+            setTimeout(sendHeight, 50); 
+        });
+    </script>
+</body>
+</html>

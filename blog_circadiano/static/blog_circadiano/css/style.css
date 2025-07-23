@@ -176,7 +176,7 @@ body {
     box-shadow: var(--shadow-md); /* Subtle shadow */
 }
 
-h1 {
+h1 h2 h3 {
     color: var(--primary-dark);
     text-align: center;
     margin-bottom: var(--spacing-xl);
