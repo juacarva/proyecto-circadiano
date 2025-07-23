@@ -31,13 +31,22 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-ykq1v#(mg*m)bc
 # CAMBIO: DEBUG se desactiva en producción leyendo una variable de entorno.
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-# CAMBIO: Se añaden los hosts de Heroku y tu dominio dinámicamente.
+# settings.py
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
 if HEROKU_APP_NAME:
-    ALLOWED_HOSTS.append(f"{HEROKU_APP_NAME}.herokuapp.com")
-    ALLOWED_HOSTS.append("circadiandos.cl")
-    ALLOWED_HOSTS.append("www.circadiandos.cl")
+    # Permite el dominio base de herokuapp y tus dominios personalizados
+    ALLOWED_HOSTS.extend([
+        f"{HEROKU_APP_NAME}.herokuapp.com",
+        "circadiandos.cl",
+        "www.circadiandos.cl"
+    ])
+
+# La URL que te dio el error tiene un formato nuevo. 
+# Añadimos una capa extra para permitir CUALQUIER subdominio de herokuapp.com
+# Esto es seguro siempre que confíes en la plataforma de Heroku.
+ALLOWED_HOSTS.append('.herokuapp.com')
 
 
 # Application definition
