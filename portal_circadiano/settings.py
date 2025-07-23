@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # CAMBIO: La SECRET_KEY se lee desde las variables de entorno para mayor seguridad.
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-ykq1v#(mg*m)bc=6k28^=njr2xtk_k+_1fv1k#k@ps1g!h3n^n')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # CAMBIO: DEBUG se desactiva en producción leyendo una variable de entorno.
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
