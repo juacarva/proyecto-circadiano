@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url # <-- CAMBIO: Importado para la base de datos de Heroku
+import dj_database_url
 from dotenv import load_dotenv
 
 # Cargar las variables de entorno del archivo .env
@@ -21,32 +21,31 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# --- INICIO: CONFIGURACIÓN DE SEGURIDAD Y ENTORNO ---
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# CAMBIO: La SECRET_KEY se lee desde las variables de entorno para mayor seguridad.
+# La SECRET_KEY se lee desde las variables de entorno. Falla si no existe en producción.
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-# CAMBIO: DEBUG se desactiva en producción leyendo una variable de entorno.
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+# DEBUG se desactiva en producción leyendo una variable de entorno.
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# settings.py
+# Configuración de hosts permitidos
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
-if HEROKU_APP_NAME:
-    # Permite el dominio base de herokuapp y tus dominios personalizados
-    ALLOWED_HOSTS.extend([
-        f"{HEROKU_APP_NAME}.herokuapp.com",
-        "circadiandos.cl",
-        "www.circadiandos.cl"
-    ])
+if not DEBUG:
+    HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
+    if HEROKU_APP_NAME:
+        ALLOWED_HOSTS.extend([
+            f"{HEROKU_APP_NAME}.herokuapp.com",
+            # Añadimos la URL específica de tu app por si acaso
+            f"{HEROKU_APP_NAME}-c1ec05eba808.herokuapp.com", 
+            "circadiandos.cl",
+            "www.circadiandos.cl",
+        ])
+    # Permite CUALQUIER subdominio de herokuapp.com de forma segura
+    ALLOWED_HOSTS.append('.herokuapp.com')
 
-# La URL que te dio el error tiene un formato nuevo. 
-# Añadimos una capa extra para permitir CUALQUIER subdominio de herokuapp.com
-# Esto es seguro siempre que confíes en la plataforma de Heroku.
-ALLOWED_HOSTS.append('.herokuapp.com')
+# --- FIN: CONFIGURACIÓN DE SEGURIDAD Y ENTORNO ---
 
 
 # Application definition
@@ -57,30 +56,24 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic', # <-- CAMBIO: Añadido para Whitenoise
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-
     'django.contrib.sites',
-
-    # Apps de allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-    # Mis Apps
     'blog_circadiano',
     'usuarios.apps.UsuariosConfig',
     'widget_tweaks',
     'mensajeria',
-
     'ckeditor',
     'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # <-- CAMBIO: Añadido para servir archivos estáticos
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -112,31 +105,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'portal_circadiano.wsgi.application'
 
 
-# Database
-# CAMBIO: Configuración de base de datos flexible para Heroku y local.
+# --- INICIO: BASE DE DATOS Y ARCHIVOS ---
+
+# Configuración de base de datos 100% desde la variable de entorno DATABASE_URL.
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://jpcarvajal:peumino2020@localhost/portal_circadiano',
-        conn_max_age=600,
-        ssl_require=not DEBUG # <-- ¡Este es el cambio clave!
-    )
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=not DEBUG)
 }
-
-# Password validation
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
-]
-
-
-# Internationalization
-LANGUAGE_CODE = 'es'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
 
 # Static & Media Files
 STATIC_URL = 'static/'
@@ -144,24 +118,23 @@ STATIC_ROOT = BASE_DIR / 'staticfiles_collected'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# CAMBIO: Configuración de almacenamiento para Whitenoise en producción.
-
 STORAGES = {
-    # Almacenamiento para archivos de media (subidas de usuarios)
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
-    # Almacenamiento para archivos estáticos (CSS, JS)
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
+# --- FIN: BASE DE DATOS Y ARCHIVOS ---
+
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- Bloque de Configuración de Autenticación y Allauth (sin cambios) ---
+# --- INICIO: ALLAUTH Y CORREO ---
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -194,5 +167,7 @@ ACCOUNT_MESSAGES_ENABLED = False
 SOCIALACCOUNT_ADAPTER = 'usuarios.adapters.CustomSocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# --- FIN: ALLAUTH Y CORREO ---
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
