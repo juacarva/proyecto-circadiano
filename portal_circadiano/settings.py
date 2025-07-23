@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url # <-- CAMBIO: Importado para la base de datos de Heroku
 from dotenv import load_dotenv
 
-# Cargar las variables de entorno del archivo .env ANTES que nada.
+# Cargar las variables de entorno del archivo .env
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,13 +25,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ykq1v#(mg*m)bc=6k28^=njr2xtk_k+_1fv1k#k@ps1g!h3n^n'
+# CAMBIO: La SECRET_KEY se lee desde las variables de entorno para mayor seguridad.
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-ykq1v#(mg*m)bc=6k28^=njr2xtk_k+_1fv1k#k@ps1g!h3n^n')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# CAMBIO: DEBUG se desactiva en producción leyendo una variable de entorno.
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['192.168.100.114', '127.0.0.1', 'localhost']
+# CAMBIO: Se añaden los hosts de Heroku y tu dominio dinámicamente.
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
+if HEROKU_APP_NAME:
+    ALLOWED_HOSTS.append(f"{HEROKU_APP_NAME}.herokuapp.com")
+    ALLOWED_HOSTS.append("circadiandos.cl")
+    ALLOWED_HOSTS.append("www.circadiandos.cl")
 
 
 # Application definition
@@ -41,16 +48,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic', # <-- CAMBIO: Añadido para Whitenoise
     'django.contrib.staticfiles',
 
-    'django.contrib.sites', # Requerido por allauth
+    'django.contrib.sites',
 
     # Apps de allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
-    # Proveedores de redes sociales
     'allauth.socialaccount.providers.google',
 
     # Mis Apps
@@ -65,6 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # <-- CAMBIO: Añadido para servir archivos estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -97,17 +104,14 @@ WSGI_APPLICATION = 'portal_circadiano.wsgi.application'
 
 
 # Database
+# CAMBIO: Configuración de base de datos flexible para Heroku y local.
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'portal_circadiano',
-        'USER': 'jpcarvajal',
-        'PASSWORD': 'peumino2020',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    'default': dj_database_url.config(
+        default='postgres://jpcarvajal:peumino2020@localhost/portal_circadiano',
+        conn_max_age=600,
+        ssl_require=not DEBUG # <-- ¡Este es el cambio clave!
+    )
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -131,20 +135,30 @@ STATIC_ROOT = BASE_DIR / 'staticfiles_collected'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# CAMBIO: Configuración de almacenamiento para Whitenoise en producción.
+
+STORAGES = {
+    # Almacenamiento para archivos de media (subidas de usuarios)
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    # Almacenamiento para archivos estáticos (CSS, JS)
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# --- INICIO: Bloque de Configuración de Autenticación y Allauth (Versión Final y Única) ---
+# --- Bloque de Configuración de Autenticación y Allauth (sin cambios) ---
 
-# Backends de Autenticación
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Email Backend (puedes cambiar a Gmail cuando quieras)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -153,33 +167,23 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER_GMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD_GMAIL')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER_GMAIL')
 
-
-# Redirecciones y URLs de Login
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'account_login'
 LOGOUT_REDIRECT_URL = '/'
 
-# Configuración del Sitio para allauth
 SITE_ID = 1
 
-# Comportamiento del Registro y Login
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USERNAME_REQUIRED = False
-
-# Formularios y Flujos
 ACCOUNT_FORMS = {'signup': 'usuarios.forms.CustomSignupForm'}
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_MESSAGES_ENABLED = False
 
-# Configuración de Cuentas Sociales (Google, etc.)
 SOCIALACCOUNT_ADAPTER = 'usuarios.adapters.CustomSocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
-# Al final de settings.py
 CKEDITOR_UPLOAD_PATH = "uploads/"
-
-# --- FIN: Bloque de Configuración ---

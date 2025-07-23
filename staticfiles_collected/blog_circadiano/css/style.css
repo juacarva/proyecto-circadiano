@@ -1,0 +1,2963 @@
+/* blog_circadiano/static/blog_circadiano/css/style.css */
+
+/* Paleta de Colores - Rojos con Fondos Cálidos */
+:root {
+    /* Nueva Paleta de Colores - Tonos Rojos */
+    --primary-color: #c81e1e;       /* Rojo principal, vibrante y moderno */
+    --primary-dark: #a41313;        /* Rojo más oscuro para hover y énfasis */
+    --secondary-color: #dc2626;      /* Un rojo secundario brillante */
+    --secondary-dark: #b91c1c;       /* Rojo secundario oscuro */
+    --text-dark: #1f2937;            /* Neutral dark for text */
+    --text-light: #f9fafb;           /* Light text for dark backgrounds */
+    --text-secondary: #5a636f;       /* Muted text for secondary info - slightly softer */
+    --text-muted: #88909c;           /* Even lighter muted text - softer */
+    --text-help: #b0b4ba;            /* Help text color - lighter */
+    --error-color: #ef4444;          /* Bright red for errors */
+    --error-light: #f87171;          /* Lighter red for dark mode */
+    
+    /* CAMBIOS DE FONDO A TONOS AMARILLOS/CÁLIDOS */
+    --background-light: #FFFBEB;     /* Tono crema muy claro para el fondo general (body) */
+    --background-white: #FFFFF0;     /* Tono marfil para los contenedores (antes blanco puro) */
+    
+    --background-light-gray: #f9fafb;/* Lighter gray for subtle sections */
+    --border-light: #e5e7eb;         /* Soft border color - subtle */
+    --border-medium: #d1d5db;        /* Medium border for inputs */
+    --border-dark: #9ca3af;          /* Darker border for emphasis */
+
+    /* Shadows should be very, very subtle, or removed */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03); /* Lighter */
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05); /* Lighter */
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08); /* Lighter */
+
+    /* White shadows for dark mode - should also be lighter */
+    --shadow-white-sm: 0 1px 2px rgba(255, 255, 255, 0.04);
+    --shadow-white-md: 0 2px 4px rgba(255, 255, 255, 0.06);
+    --shadow-white-lg: 0 4px 8px rgba(255, 255, 255, 0.1);
+
+    --comment-bg: #f9fafb;           /* Neutral for comment forms (was red tint) */
+    --comment-item-bg: #FFFFF0;      /* Neutral for comment items (was #f9fafb) */
+    --reply-bg: #f9fafb;             /* Neutral for replies (was red tint) */
+    --inbox-bg: #FFFFF0;             /* Clean inbox background */
+    --sent-message-bg: #d1fae5;      /* Light green for sent messages (se mantiene para diferenciar) */
+    --received-message-bg: #e5e7eb;  /* Neutral gray for received messages */
+    --filter-pill-bg: transparent;   /* Transparent by default for pills */
+    --filter-pill-hover: var(--background-light-gray);/* Hover state for pills */
+    --button-bg: var(--background-light-gray); /* Light gray for buttons */
+    --button-hover: #e5e7eb;         /* Slightly darker hover */
+    --instagram-color: #e1306c;      /* Instagram pink */
+    --instagram-dark: #f06292;       /* Darker Instagram pink */
+    --google-color: #4285f4;         /* Google blue for social login */
+    --google-hover: #357ae8;         /* Google hover blue */
+
+    /* New: Very subtle hover background for clickable items */
+    --hover-light-bg: rgba(0, 0, 0, 0.02); /* Almost transparent */
+    --hover-dark-bg: rgba(255, 255, 255, 0.05); /* Light hover for dark mode */
+
+    /* Dark mode colors */
+    --dark-background: #1a202c;      /* Slightly less harsh */
+    --dark-container: #2d3748;       /* Slightly less harsh */
+    --dark-element: #4a5568;         /* Dark elements like buttons */
+    --dark-element-darker: #4b5563;  /* Darker elements */
+    --dark-border: #616e7f;          /* Subtle dark border */
+    --dark-border-darker: #718096;    /* Darker border */
+    --dark-input: #4a5568;           /* Input background */
+    --dark-border-input: #718096;     /* Input border */
+    --dark-primary: #f56565;         /* Rojo claro y brillante para modo oscuro */
+    --dark-primary-hover: #e53e3e;    /* Rojo más intenso para hover en modo oscuro */
+    --dark-secondary: #fca5a5;       /* Rojo secundario claro */
+    --dark-secondary-hover: #f87171; /* Rojo secundario hover */
+    --dark-text-muted: #a0aec0;      /* Muted text */
+    --dark-text-help: #cbd5e0;       /* Help text */
+    --dark-text-status: #616e7f;     /* Status text - softer */
+    --dark-surface: #2d3748; /* Used for elements that need a slightly distinct dark background */
+    --dark-text: #f9fafb; /* Explicit light text for dark mode */
+
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 6px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    --spacing-xl: 16px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 40px;
+
+    /* Border radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 6px;
+    --border-radius-lg: 8px;
+    --border-radius-xl: 12px;
+    --border-radius-pill: 9999px;
+    --border-radius-round: 50%;
+
+    /* Font sizes */
+    --font-xs: 0.75rem; /* 12px */
+    --font-sm: 0.875rem; /* 14px */
+    --font-md: 0.9375rem; /* 15px */
+    --font-base: 1rem; /* 16px */
+    --font-lg: 1.125rem; /* 18px */
+    --font-xl: 1.25rem; /* 20px */
+    --font-2xl: 1rem; /* 24px */
+    --font-3xl: 1.875rem; /* 30px */
+    --font-4xl: 2.25rem; /* 36px */
+    --font-5xl: 3rem; /* 48px */
+    --font-6xl: 3.75rem; /* 60px */
+    --font-7xl: 4.5rem; /* 72px */
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+}
+
+
+/* Apply transitions to elements */
+html,
+body,
+.container,
+.articulo-resumen,
+.comment-form-container,
+.comment-item,
+.reply-item,
+input,
+textarea,
+.main-header,
+.site-title a,
+.main-nav span,
+.nav-link,
+.theme-toggle-btn,
+.like-button,
+.comment-toggle-button,
+.reply-to-article-button,
+.articles-header h1,
+.articles-header .clear-filters,
+.filters-section,
+.filter-group h3,
+.filter-pill,
+.category-tag a,
+.tags-list a,
+.form-container,
+.form-group label,
+.form-group input,
+.form-group .form-input,
+.submit-button,
+.errorlist,
+.helptext,
+.search-form,
+.search-input,
+.search-button,
+.messages-inbox-link,
+.inbox-filter-link,
+.archive-toggle-button,
+.send-message-btn,
+.social-login-btn,
+.message-item,
+.message-bubble {
+    transition: background-color var(--transition-normal), color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-fast);
+}
+
+/* Base styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.7;
+    margin: 0;
+    padding: 0 var(--spacing-lg);
+    padding-top: 80px;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 960px;
+    margin: auto;
+    background: var(--background-white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md); /* Subtle shadow */
+}
+
+h1 {
+    color: var(--primary-dark);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    font-size: var(--font-4xl);
+    font-weight: 400;
+}
+
+/* Header styles */
+.main-header {
+    padding: var(--spacing-md) 0;
+    background-color: var(--background-white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+}
+
+.site-title {
+    margin: 0;
+    padding: 0 var(--spacing-lg);
+    font-weight:bold ;
+}
+
+.site-title a {
+    padding: 0 var(--spacing-lg);
+    margin:0;
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: var(--font-3xl);
+    font-weight: 500;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-lg);
+    gap: var(--spacing-md);
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-pill);
+    background-color: var(--background-white);
+    flex-grow: 1;
+    max-width: 280px;
+    box-shadow: none; /* Remove initial shadow */
+}
+
+.search-form:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(200, 30, 30, 0.2); /* Subtle outline */
+}
+
+.search-input {
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-base);
+    outline: none;
+    flex-grow: 1;
+    background-color: transparent;
+    color: var(--text-dark);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-button {
+    background-color: transparent;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+}
+
+.search-button:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.main-nav span {
+    color: var(--text-secondary);
+    font-size: var(--font-sm);
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: var(--font-base);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+}
+
+.nav-link:hover {
+    background-color: var(--hover-light-bg); /* Very light background on hover */
+    color: var(--primary-color); /* Primary color text on hover */
+    transform: none; /* No translateY */
+}
+
+.theme-toggle-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    border-radius: var(--border-radius-pill);
+    border: none;
+    background-color: var(--button-bg);
+    color: var(--text-dark);
+    font-size: var(--font-sm);
+    font-weight: 400;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+}
+
+/* Page layout */
+.page-wrapper {
+    display: flex;
+    gap: var(--spacing-xl);
+    max-width: 1280px;
+    margin: var(--spacing-2xl) auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.sidebar-left {
+    flex: 0 0 280px;
+    padding-right: var(--spacing-xl);
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    align-self: flex-start;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-wrapper.no-sidebar {
+    justify-content: center;
+    max-width: 960px;
+    padding: 0;
+    margin: var(--spacing-2xl) auto;
+}
+
+.page-wrapper.no-sidebar .main-content {
+    flex: none;
+    width: 100%;
+}
+
+/* Article list */
+.articulo-resumen {
+    border-bottom: 1px dashed var(--border-light); /* Soft dashed line */
+    padding-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    background-color: transparent; /* Ensure no background */
+}
+
+.articulo-resumen:last-child {
+    border-bottom: none;
+}
+
+.articulo-resumen h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: var(--font-2xl);
+}
+
+.articulo-resumen h2 a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.articulo-resumen h2 a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.articulo-resumen p {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+}
+
+.meta {
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    margin-top: var(--spacing-sm);
+}
+
+/* Article detail and comments */
+.articulo-titulo {
+    margin-top: 0;
+    font-size: var(--font-3xl);
+}
+
+.contenido-articulo {
+    margin: var(--spacing-xl) 0 var(--spacing-2xl);
+}
+
+.contenido-articulo p {
+    text-align: justify;
+    margin-bottom: 1.2em;
+}
+
+.back-link {
+    display: block;
+    margin-top: var(--spacing-xl);
+    text-align: center;
+}
+
+.back-link a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 400;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+.articulo-imagen {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: var(--spacing-xl) auto;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md); /* Subtle shadow */
+}
+
+/* Post actions */
+.post-actions {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+}
+
+.action-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+}
+
+.like-button,
+.comment-toggle-button,
+.reply-to-article-button,
+.share-instagram-button {
+    background: transparent; /* Make them ghost buttons */
+    border: 1px solid transparent; /* Transparent border normally */
+    cursor: pointer;
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+}
+
+.like-button .icon,
+.comment-toggle-button .icon,
+.reply-to-article-button .icon,
+.share-instagram-button .icon {
+    font-size: 1.1em;
+}
+
+.like-button:hover,
+.comment-toggle-button:hover,
+.reply-to-article-button:hover,
+.share-instagram-button:hover {
+    background-color: var(--hover-light-bg); /* Very light background on hover */
+    color: var(--primary-color); /* Primary color on hover */
+    border-color: var(--border-light); /* Subtle border on hover */
+    transform: translateY(-1px);
+}
+
+.share-instagram-button:hover {
+    color: var(--instagram-color);
+}
+
+.like-button.liked {
+    color: var(--primary-color);
+    font-weight: 400;
+    background-color: var(--hover-light-bg); /* Keep subtle background when liked */
+    border-color: var(--primary-color); /* More prominent border when liked */
+}
+
+.likes-count {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.comments-container {
+    margin-top: var(--spacing-xl);
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    font-size: var(--font-sm);
+}
+
+/* Comments */
+.comment-form-container {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background-color: var(--comment-bg); /* Adjusted to neutral */
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+    border: 1px solid var(--border-light); /* Added light border */
+}
+
+.comment-form-container textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-base);
+    color: var(--text-dark);
+    resize: vertical;
+    min-height: 80px;
+}
+
+.comment-form-container textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.2);
+}
+
+.comment-form-container button {
+    background-color: var(--secondary-color);
+    color: var(--background-white);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.comment-form-container button:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-1px);
+}
+
+.comment-form-container p.login-prompt {
+    text-align: center;
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+}
+
+.comment-form-container p.login-prompt a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.comment-form-container p.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comment-item {
+    background-color: var(--comment-item-bg); /* Adjusted to neutral */
+    border: 1px solid var(--border-light); /* Light border */
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    box-shadow: none; /* Removed shadow */
+}
+
+.comment-item .author {
+    font-weight: 400;
+    color: var(--primary-color);
+}
+
+.comment-item .date {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    margin-left: var(--spacing-sm);
+}
+
+.comment-item .content {
+    margin-top: var(--spacing-sm);
+    font-size: var(--font-base);
+}
+
+.comment-item .reply-link {
+    margin-top: var(--spacing-sm);
+    font-size: var(--font-sm);
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.comment-item .reply-link:hover {
+    text-decoration: underline;
+}
+
+.comment-item .reply-form {
+    margin-top: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+    border-left: 2px solid var(--border-medium);
+}
+
+.replies {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-md) 0 0 var(--spacing-xl);
+    border-left: 3px solid var(--border-light);
+    padding-left: var(--spacing-md);
+}
+
+.reply-item {
+    background-color: var(--reply-bg); /* Adjusted to neutral */
+    border: 1px solid var(--border-light); /* Light border */
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin: var(--spacing-sm) 0;
+    box-shadow: none; /* Removed shadow */
+}
+
+.reply-item .author {
+    color: var(--secondary-color);
+}
+
+/* Forms (login/register) */
+.form-container {
+    background: var(--background-white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-md); /* Subtle shadow */
+    max-width: 420px;
+    margin: var(--spacing-3xl) auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.form-container h2 {
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-2xl);
+    font-weight: 400;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md);
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 400;
+    color: var(--text-dark);
+    font-size: var(--font-base);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group .form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-light); /* Lighter border */
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-base);
+    color: var(--text-dark);
+    box-sizing: border-box;
+    background-color: var(--background-white);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.2);
+}
+
+.form-group input::placeholder {
+    color: var(--text-muted);
+}
+
+.submit-button {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-base);
+    font-weight: 400;
+    width: 100%;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+}
+
+.submit-button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.errorlist {
+    color: var(--error-color);
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-sm) 0 0;
+    font-size: var(--font-sm);
+    font-weight: 400;
+}
+
+.errorlist li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.helptext {
+    font-size: var(--font-xs);
+    color: var(--text-help);
+    margin-top: var(--spacing-sm);
+    display: block;
+}
+
+/* Social login */
+.social-login-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.social-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-base);
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+    box-sizing: border-box;
+}
+
+.social-login-btn .fa-brands {
+    font-size: 1.2em;
+}
+
+.social-login-btn.google {
+    background-color: var(--background-white);
+    color: var(--text-dark);
+    border: 1px solid var(--border-medium);
+}
+
+.social-login-btn.google:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.social-login-btn.icon-only {
+    width: 48px;
+    height: 48px;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-round);
+    font-size: 0; /* Hide text */
+}
+
+.social-login-btn.icon-only .fa-brands {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.social-login-btn.icon-only.google {
+    border: 1px solid var(--border-medium);
+    background-color: var(--background-white);
+    color: var(--google-color);
+}
+
+.social-login-btn.icon-only.google:hover {
+    background-color: var(--button-hover);
+    color: var(--google-hover);
+    transform: translateY(-1px);
+}
+
+html.dark-mode .social-login-btn.google,
+html.dark-mode .social-login-btn.icon-only.google {
+    background-color: var(--dark-input);
+    color: var(--text-light);
+    border-color: var(--dark-border-input);
+}
+
+html.dark-mode .social-login-btn.google:hover,
+html.dark-mode .social-login-btn.icon-only.google:hover {
+    background-color: var(--dark-element);
+    color: var(--text-light);
+}
+
+.login-or {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-muted);
+    margin: var(--spacing-lg) 0;
+    font-size: var(--font-sm);
+    font-weight: 300;
+}
+
+.login-or::before,
+.login-or::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-light);
+    margin: 0 var(--spacing-sm);
+}
+
+html.dark-mode .login-or {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .login-or::before,
+html.dark-mode .login-or::after {
+    border-bottom-color: var(--dark-border);
+}
+
+/* Links below form */
+.form-links {
+    margin-top: var(--spacing-lg);
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.form-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.form-links a:hover {
+    text-decoration: underline;
+    color: var(--primary-dark);
+}
+
+html.dark-mode .form-links {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .form-links a {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .form-links a:hover {
+    color: var(--dark-primary-hover);
+}
+
+/* Filters section */
+.filters-section {
+    padding: 0;
+    background-color: transparent;
+    margin-bottom: var(--spacing-xl);
+}
+
+.filter-group {
+    width: 100%;
+    margin-bottom: var(--spacing-xl);
+}
+
+.filter-group h3 {
+    margin: 0 0 var(--spacing-md);
+    color: var(--primary-dark);
+    font-size: var(--font-base);
+    text-align: left;
+    padding-bottom: var(--spacing-sm);
+    position: relative; /* Ensure relative positioning for ::after */
+}
+
+.filter-group h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    height: 2px;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius-sm);
+}
+
+.filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.filter-pill {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-pill);
+    background-color: var(--filter-pill-bg); /* Transparent by default */
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: var(--font-sm);
+    font-weight: 400;
+    white-space: nowrap;
+    box-shadow: none; /* No shadow by default */
+    border: 1px solid var(--border-light); /* Light border */
+}
+
+.filter-pill:hover {
+    background-color: var(--filter-pill-hover); /* Light background on hover */
+    color: var(--primary-dark);
+    transform: translateY(-1px);
+    border-color: var(--primary-color); /* Primary color border on hover */
+}
+
+.filter-pill.active {
+    background-color: var(--primary-color); /* Solid primary when active */
+    color: var(--background-white);
+    box-shadow: var(--shadow-sm); /* Subtle shadow when active */
+}
+
+.filter-pill.active:hover {
+    background-color: var(--primary-dark);
+}
+
+/* ---- CSS CORREGIDO ---- */
+
+.category-tag,
+.tags-list {
+    font-size: var(--font-sm);
+    display: inline-block;
+    margin-left: 0; 
+}
+
+/* Y aplicamos el margen solo a los elementos que siguen al texto principal */
+.meta > .category-tag,
+.meta > .tags-list {
+    margin-left: var(--spacing-md);
+}
+
+.category-tag a,
+.tags-list a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 300;
+}
+
+.category-tag a:hover,
+.tags-list a:hover {
+    text-decoration: underline;
+}
+
+.clear-filters.sidebar-clear-filters {
+    display: block;
+    width: auto;
+    text-align: center;
+    margin-top: var(--spacing-md);
+    font-size: var(--font-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    background-color: var(--button-bg);
+    border: 1px solid var(--border-medium);
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+}
+
+.clear-filters.sidebar-clear-filters:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-1px);
+}
+
+.articles-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.articles-header h1 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    font-size:var(--font-3xl);
+}
+
+/* Messaging */
+.content-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.content-header h1 {
+    font-size: var(--font-3xl);
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.inbox-filters {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.inbox-filter-link {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-pill);
+    background-color: var(--button-bg);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: var(--font-sm);
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+}
+
+.inbox-filter-link:hover {
+    background-color: var(--button-hover);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.inbox-filter-link.active {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    box-shadow: var(--shadow-md);
+}
+
+.inbox-list-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--background-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md); /* Subtle shadow */
+}
+
+.conversation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.conversation-item {
+    border-bottom: 1px solid var(--border-light);
+    padding: var(--spacing-md) 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-item:last-child {
+    border-bottom: none;
+}
+
+.conversation-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius-md);
+    flex-grow: 1;
+    margin-right: var(--spacing-md);
+}
+
+.conversation-link:hover {
+    background-color: var(--button-bg);
+}
+
+.conversation-info {
+    flex-grow: 1;
+}
+
+.conversation-title {
+    margin: 0;
+    font-size: var(--font-base);
+    color: var(--primary-color);
+}
+
+.last-message-time {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+}
+
+.conversation-status {
+    text-align: right;
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+}
+
+.unread-messages {
+    font-weight: 400;
+    color: var(--error-color);
+}
+
+.message-count {
+    display: block;
+}
+
+.no-conversations {
+    text-align: center;
+    font-style: italic;
+    color: var(--text-muted);
+    padding: var(--spacing-xl);
+}
+
+.start-new-conversation {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+}
+
+.start-new-btn {
+    background-color: var(--secondary-color);
+    color: var(--background-white);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: var(--font-base);
+}
+
+.start-new-btn:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-1px);
+}
+
+.archive-toggle-button {
+    background: none;
+    border: 1px solid var(--border-medium);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.archive-toggle-button:hover {
+    background-color: var(--button-hover);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.archive-toggle-button .fa-box-archive,
+.archive-toggle-button .fa-box-open {
+    font-size: 1em;
+}
+
+.conversation-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.conversation-header h1 {
+    font-size: var(--font-2xl);
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-dark);
+}
+
+.back-to-inbox-link {
+    font-size: var(--font-sm);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.back-to-inbox-link:hover {
+    text-decoration: underline;
+}
+
+.message-list-container {
+    max-width: 800px;
+    margin: 0 auto var(--spacing-xl) auto;
+    background-color: var(--background-white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md); /* Subtle shadow */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.message-item {
+    display: flex;
+    margin-bottom: var(--spacing-md);
+}
+
+.message-item:hover .message-bubble {
+    transform: scale(1.01);
+    box-shadow: var(--shadow-md);
+}
+
+.message-bubble {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    max-width: 65%;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+    position: relative;
+    word-wrap: break-word;
+}
+
+.message-item.sent {
+    justify-content: flex-end;
+}
+
+.message-item.sent .message-bubble {
+    background-color: var(--sent-message-bg);
+    color: var(--text-dark);
+    border-bottom-right-radius: var(--border-radius-sm);
+}
+
+.message-item.received {
+    justify-content: flex-start;
+}
+
+.message-item.received .message-bubble {
+    background-color: var(--received-message-bg);
+    color: var(--text-dark);
+    border-bottom-left-radius: var(--border-radius-sm);
+}
+
+.message-meta {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.message-meta .sender-username {
+    font-weight: 400;
+    color: var(--primary-color);
+}
+
+.message-meta .timestamp {
+    color: var(--text-muted);
+}
+
+.message-meta .read-status {
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+.message-meta .read-status.unread {
+    color: var(--error-color);
+    font-weight: 400;
+}
+
+.message-content {
+    font-size: var(--font-base);
+    line-height: 1.6;
+}
+
+.message-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--background-white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md); /* Subtle shadow */
+}
+
+.message-form-container h3 {
+    margin-top: 0;
+    font-size: var(--font-xl);
+    color: var(--primary-dark);
+    margin-bottom: var(--spacing-md);
+}
+
+.message-form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.message-form-container .form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-base);
+    color: var(--text-dark);
+    resize: vertical;
+    min-height: 100px;
+    background-color: var(--background-white);
+}
+
+.message-form-container .form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.2);
+}
+
+.message-form-container .form-input::placeholder {
+    color: var(--text-muted);
+}
+
+.send-message-btn {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-base);
+    font-weight: 400;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+    align-self: flex-end;
+}
+
+.send-message-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.messages-inbox-link {
+    position: relative;
+}
+
+.unread-badge {
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    background-color: var(--error-color);
+    color: var(--background-white);
+    font-size: 0.625rem;
+    font-weight: 400;
+    border-radius: 50%;
+    padding: 2px 5px;
+    min-width: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm); /* Subtle shadow */
+}
+
+/* Dark mode */
+html.dark-mode {
+    background-color: var(--dark-background);
+    color: var(--text-light);
+}
+
+html.dark-mode body {
+    background-color: var(--dark-background);
+    color: var(--text-light);
+}
+
+html.dark-mode h1,
+html.dark-mode h2,
+html.dark-mode h2 a,
+html.dark-mode .back-link a {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .container {
+    background: var(--dark-container);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .articulo-resumen {
+    border-bottom: 1px dashed var(--dark-border); /* Soft dashed line */
+}
+
+html.dark-mode .articulo-resumen p,
+html.dark-mode .articulo-resumen .meta {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .comments-section {
+    border-top: 1px solid var(--dark-border);
+}
+
+html.dark-mode .comment-form-container {
+    background-color: var(--dark-element); /* Neutral dark background */
+    box-shadow: var(--shadow-white-sm);
+    border-color: var(--dark-border); /* Dark border */
+}
+
+html.dark-mode .comment-form-container textarea,
+html.dark-mode .form-group input,
+html.dark-mode .form-group .form-input,
+html.dark-mode .message-form-container .form-input {
+    background-color: var(--dark-input);
+    color: var(--text-light);
+    border-color: var(--dark-border-input);
+}
+
+html.dark-mode .comment-form-container textarea::placeholder,
+html.dark-mode .form-group input::placeholder,
+html.dark-mode .form-group .form-input::placeholder,
+html.dark-mode .message-form-container .form-input::placeholder {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .comment-form-container button {
+    background-color: var(--dark-secondary);
+}
+
+html.dark-mode .comment-form-container button:hover {
+    background-color: var(--dark-secondary-hover);
+    transform: translateY(-1px);
+}
+
+html.dark-mode .comment-form-container p.login-prompt {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .comment-form-container p.login-prompt a {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .comment-item {
+    background-color: var(--dark-container); /* Adjusted to neutral dark */
+    border-color: var(--dark-border); /* Dark border */
+}
+
+html.dark-mode .comment-item .author {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .comment-item .date,
+html.dark-mode .comment-item .content {
+    color: var(--text-light);
+}
+
+html.dark-mode .comment-item .reply-link {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .comment-item .reply-form {
+    border-left-color: var(--dark-border-input);
+}
+
+html.dark-mode .replies {
+    border-left-color: var(--dark-border-darker);
+}
+
+html.dark-mode .reply-item {
+    background-color: var(--dark-element); /* Adjusted to neutral dark */
+    border-color: var(--dark-border); /* Dark border */
+}
+
+html.dark-mode .reply-item .author {
+    color: var(--dark-secondary);
+}
+
+html.dark-mode .form-container {
+    background: var(--dark-container);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .form-container h2 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .form-group label {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .form-group input:focus,
+html.dark-mode .comment-form-container textarea:focus,
+html.dark-mode .message-form-container .form-input:focus {
+    border-color: var(--dark-primary);
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.2);
+}
+
+html.dark-mode .errorlist {
+    color: var(--error-light);
+}
+
+html.dark-mode .helptext {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .post-actions {
+    border-color: var(--dark-border);
+}
+
+html.dark-mode .like-button,
+html.dark-mode .comment-toggle-button,
+html.dark-mode .reply-to-article-button,
+html.dark-mode .share-instagram-button {
+    color: var(--dark-text-muted);
+    background: transparent; /* Make them ghost buttons */
+    border-color: transparent; /* Transparent border normally */
+}
+
+html.dark-mode .like-button:hover,
+html.dark-mode .comment-toggle-button:hover,
+html.dark-mode .reply-to-article-button:hover,
+html.dark-mode .share-instagram-button:hover {
+    background-color: var(--hover-dark-bg); /* Dark hover background */
+    color: var(--dark-primary);
+    border-color: var(--dark-border); /* Subtle border on hover */
+}
+
+html.dark-mode .share-instagram-button:hover {
+    color: var(--instagram-dark);
+}
+
+html.dark-mode .like-button.liked {
+    color: var(--dark-primary);
+    background-color: var(--hover-dark-bg); /* Dark subtle background when liked */
+    border-color: var(--dark-primary); /* Dark prominent border when liked */
+}
+
+html.dark-mode .likes-count {
+    color: var(--text-light);
+}
+
+html.dark-mode .comment-actions {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .articles-header {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .articles-header h1 {
+    color: var(--text-light);
+}
+
+html.dark-mode .articles-header .clear-filters {
+    color: var(--dark-primary);
+    border-color: var(--dark-border);
+}
+
+html.dark-mode .articles-header .clear-filters:hover {
+    background-color: var(--dark-element);
+    color: var(--dark-primary);
+}
+
+html.dark-mode .filters-section {
+    background-color: transparent;
+}
+
+html.dark-mode .filter-group h3 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .filter-group h3::after {
+    background-color: var(--dark-primary);
+}
+
+html.dark-mode .filter-pill {
+    background-color: transparent; /* Transparent by default for pills */
+    color: var(--text-light);
+    box-shadow: none; /* No shadow by default */
+    border-color: var(--dark-border); /* Dark border */
+}
+
+html.dark-mode .filter-pill:hover {
+    background-color: var(--hover-dark-bg); /* Dark hover background */
+    color: var(--dark-primary);
+    border-color: var(--dark-primary); /* Dark primary color border on hover */
+}
+
+html.dark-mode .filter-pill.active {
+    background-color: var(--dark-primary);
+    color: var(--background-white);
+    box-shadow: var(--shadow-white-sm); /* Dark subtle shadow when active */
+}
+
+html.dark-mode .filter-pill.active:hover {
+    background-color: var(--dark-primary-hover);
+}
+
+html.dark-mode .content-header {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .content-header h1 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .inbox-list-container {
+    background-color: var(--dark-container);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .conversation-item {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .conversation-link {
+    color: var(--text-light);
+}
+
+html.dark-mode .conversation-link:hover {
+    background-color: var(--dark-element);
+}
+
+html.dark-mode .conversation-title {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .last-message-time {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .conversation-status {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .unread-messages {
+    color: var(--error-light);
+}
+
+html.dark-mode .no-conversations {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .start-new-btn {
+    background-color: var(--dark-secondary);
+}
+
+html.dark-mode .start-new-btn:hover {
+    background-color: var(--dark-secondary-hover);
+}
+
+html.dark-mode .archive-toggle-button {
+    background-color: var(--dark-input);
+    border-color: var(--dark-border-input);
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .archive-toggle-button:hover {
+    background-color: var(--dark-element);
+    color: var(--dark-primary);
+}
+
+html.dark-mode .conversation-header {
+    border-bottom-color: var(--dark-border);
+}
+
+html.dark-mode .conversation-header h1 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .back-to-inbox-link {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .back-to-inbox-link:hover {
+    color: var(--dark-primary-hover);
+}
+
+html.dark-mode .message-list-container {
+    background-color: var(--dark-container);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .message-item.sent .message-bubble {
+    background-color: var(--dark-secondary);
+    background-color: var(--sent-message-bg);
+    color: var(--text-dark);
+}
+
+html.dark-mode .message-item.received .message-bubble {
+    background-color: var(--dark-element);
+    background-color: var(--received-message-bg);
+    color: var(--text-dark);
+}
+
+html.dark-mode .message-meta {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .message-meta .sender-username {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .message-meta .timestamp,
+html.dark-mode .message-meta .read-status {
+    color: var(--dark-text-status);
+}
+
+html.dark-mode .message-meta .read-status.unread {
+    color: var(--error-light);
+}
+
+html.dark-mode .message-content {
+    color: var(--text-dark);
+}
+
+html.dark-mode .message-form-container {
+    background-color: var(--dark-container);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .message-form-container h3 {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .send-message-btn {
+    background-color: var(--dark-primary);
+}
+
+html.dark-mode .send-message-btn:hover {
+    background-color: var(--dark-primary-hover);
+}
+
+/* Django messages */
+.messages-container {
+    max-width: 1280px;
+    margin: 0 auto var(--spacing-md) auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.message {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 400;
+    border: 1px solid transparent;
+}
+
+.message.success {
+    color: #065f46;
+    background-color: #d1fae5;
+    border-color: #a7f3d0;
+}
+
+.message.error {
+    color: #b91c1c;
+    background-color: #fee2e2;
+    border-color: #fecaca;
+}
+
+.message.warning {
+    color: #854d0e;
+    background-color: #fef3c7;
+    border-color: #fde68a;
+}
+
+.message.info {
+    color: #0e7490;
+    background-color: #e0f2fe;
+    border-color: #bae6fd;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 0 var(--spacing-md);
+        padding-top: 140px;
+    }
+
+    .main-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) 0;
+    }
+
+    .main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--spacing-sm);
+    }
+
+    .search-form {
+        max-width: 100%;
+    }
+
+    .page-wrapper {
+        flex-direction: column;
+        padding: 0 var(--spacing-md);
+    }
+
+    .sidebar-left {
+        position: static;
+        padding-right: 0;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .form-container {
+        max-width: 100%;
+        padding: var(--spacing-xl);
+        margin: var(--spacing-xl) auto;
+    }
+
+    .message-list-container,
+    .message-form-container {
+        padding: var(--spacing-xl);
+        max-width: 100%;
+    }
+
+    .message-bubble {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-title a {
+        font-size: var(--font-xl);
+    }
+
+    .nav-link,
+    .theme-toggle-btn {
+        font-size: var(--font-sm);
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .container {
+        padding: var(--spacing-md);
+    }
+
+    h1 {
+        font-size: var(--font-2xl);
+    }
+
+    .form-container {
+        padding: var(--spacing-md);
+    }
+
+    .form-container h2 {
+        font-size: var(--font-xl);
+    }
+
+    .social-login-btn,
+    .submit-button,
+    .send-message-btn {
+        font-size: var(--font-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .social-login-btn.icon-only {
+        width: 40px;
+        height: 40px;
+        padding: var(--spacing-xs);
+    }
+
+    .social-login-btn.icon-only .fa-brands {
+        font-size: 1.3em;
+    }
+
+    .message-list-container,
+    .message-form-container {
+        padding: var(--spacing-md);
+    }
+
+    .message-bubble {
+        max-width: 90%;
+    }
+
+    .message-meta {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .send-message-btn {
+        align-self: stretch;
+    }
+}
+
+/*
+=================================================================
+== ESTILOS CORREGIDOS PARA ENLACE A GUÍA (VERSIÓN LÍNEA ÚNICA)
+=================================================================
+*/
+
+.guia-link-linea {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    background-color: var(--background-white);
+    border: 1px solid var(--border-light); /* Changed to var(--border-light) */
+    padding: 0.75rem 1.25rem;
+    margin: var(--spacing-xl) 0;
+    
+    border-radius: var(--border-radius-pill);
+    text-decoration: none;
+    font-weight: 500;
+
+    /* ---- CORRECCIÓN CLAVE ---- */
+    /* Asignamos el color de texto principal directamente aquí */
+    color: var(--text-dark); 
+    
+    transition: all 0.2s ease-in-out;
+}
+
+.guia-link-linea:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* El ícono mantiene su color de acento */
+.guia-link-linea .guia-link-icono {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+/* El texto ya no necesita una regla de color específica aquí, la hereda del padre */
+.guia-link-linea .guia-link-texto {
+    flex-grow: 1; 
+}
+
+/* La flecha mantiene su color de acento */
+.guia-link-linea .guia-link-accion {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    font-weight:bold;
+    transition: transform 0.2s ease-in-out;
+}
+
+.guia-link-linea:hover .guia-link-accion {
+    transform: translateX(4px);
+}
+
+
+/*
+--- Estilos para Modo Oscuro (CORREGIDOS) ---
+*/
+html.dark-mode .guia-link-linea {
+    background-color: var(--dark-surface);
+    border-color: var(--dark-border);
+    
+    /* ---- CORRECCIÓN CLAVE ---- */
+    /* Asignamos el color de texto claro para el modo noche */
+    color: var(--dark-text);
+}
+
+html.dark-mode .guia-link-linea:hover {
+    border-color: var(--dark-primary);
+}
+
+html.dark-mode .guia-link-linea .guia-link-icono {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .guia-link-linea .guia-link-accion {
+    color: var(--dark-text-muted);
+}
+
+/*
+=================================================================
+== ESTILOS PARA CONTENEDOR DE ACCIONES (GUÍA Y DOCUMENTO)
+=================================================================
+*/
+
+.acciones-articulo-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los botones se apilen en pantallas muy pequeñas */
+    gap: var(--spacing-md); /* Espacio entre los botones */
+    justify-content: center; /* Centra los botones si solo hay uno */
+    margin: var(--spacing-xl) 0;
+}
+
+/* Hacemos que cada enlace ocupe el espacio disponible */
+.acciones-articulo-container .guia-link-linea {
+    margin: 0; /* Quitamos el margen individual que tenían antes */
+    flex: 1; /* Cada botón intentará ocupar el mismo espacio */
+    min-width: 250px; /* Ancho mínimo para que no se aplasten demasiado */
+}
+
+/*
+=================================================================
+== ESTILOS PARA LISTA DE ARTÍCULOS CON IMAGEN MINIATURA
+=================================================================
+*/
+
+.articulo-resumen .resumen-header {
+    display: flex;
+    justify-content: space-between; /* Crea espacio entre el contenido y la imagen */
+    align-items:center; /* Alinea los elementos en la parte superior */
+    gap: var(--spacing-lg); /* Espacio entre las columnas */
+}
+
+.articulo-resumen .resumen-contenido {
+    flex: 1; /* Permite que la columna de contenido ocupe el espacio disponible */
+    min-width: 0; /* Previene problemas de desbordamiento de texto */
+}
+
+.articulo-resumen .resumen-contenido h2 {
+    margin-top: 0; /* Quita el margen superior del título para una mejor alineación */
+    margin-bottom: var(--spacing-sm); /* <-- AÑADE ESTA LÍNEA para reducir el espacio inferior */
+    font-weight: 450;
+}
+
+.articulo-resumen .resumen-imagen-container {
+    flex-shrink: 0; /* Evita que la imagen se encoja */
+    width: 120px; /* Ancho fijo para la miniatura */
+}
+
+.articulo-resumen .resumen-imagen {
+    width: 100%;
+    height: 90px;
+    object-fit: cover; /* Recorta la imagen para que llene el espacio sin deformarse */
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-light); /* Changed to var(--border-light) */
+    transition: transform 0.2s ease;
+}
+
+.articulo-resumen .resumen-imagen:hover {
+    transform: scale(1.05); /* Efecto sutil al pasar el mouse */
+}
+
+
+/*
+--- Estilos para Modo Oscuro ---
+*/
+html.dark-mode .articulo-resumen .resumen-imagen {
+    border-color: var(--dark-border);
+}
+
+/* Estilos para la nueva estructura meta (opcional) */
+.meta {
+    display: flex;
+    flex-direction: column; /* Apila las líneas verticalmente */
+    gap: var(--spacing-xs); /* Espacio entre las líneas */
+    margin-top: var(--spacing-md);
+}
+
+.meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md); /* Espacio entre "Categoría" y "Etiquetas" */
+}
+
+.meta .category-tag,
+.meta .tags-list {
+    margin-left: 0; /* Aseguramos que no haya margen extra */
+}
+
+/*
+=================================================================
+== ESTILOS DEFINITIVOS PARA CONTENIDO ENRIQUECIDO (PROSE)
+=================================================================
+*/
+
+/* --- ESTILOS BASE (MODO DÍA) --- */
+.prose {
+    color: var(--text-dark); /* Color de texto base para párrafos */
+    line-height: 1.7;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: var(--text-dark); /* Color para todos los encabezados */
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+}
+
+.prose p, .prose ul, .prose ol, .prose blockquote {
+    margin-bottom: 1.2em;
+}
+
+.prose strong {
+    color: var(--text-dark); /* Asegura que la negrita sea del color correcto */
+}
+
+.prose a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    margin: 1.5em 0;
+}
+
+/* --- ESTILOS PARA MODO NOCHE --- */
+html.dark-mode .prose {
+    color: var(--dark-text-muted); /* <-- Color de texto claro para párrafos */
+}
+
+html.dark-mode .prose h1,
+html.dark-mode .prose h2,
+html.dark-mode .prose h3,
+html.dark-mode .prose h4,
+html.dark-mode .prose h5,
+html.dark-mode .prose h6 {
+    color: var(--text-light); /* <-- Color de texto más brillante para encabezados */
+}
+
+html.dark-mode .prose strong {
+    color: var(--text-light); /* <-- Asegura que la negrita sea clara */
+}
+
+html.dark-mode .prose a {
+    color: var(--dark-primary);
+}
+
+/*
+=================================================================
+== ESTILOS DEFINITIVOS PARA BOTONES DE LOGOUT (CENTRADOS E IGUALES)
+=================================================================
+*/
+
+.logout-actions {
+    display: grid; /* <-- Usaremos Grid para un control perfecto */
+    grid-template-columns: 1fr 1fr; /* Crea dos columnas de igual tamaño */
+    gap: var(--spacing-md); /* Espacio entre las columnas/botones */
+    margin-top: var(--spacing-lg);
+}
+
+/* El formulario no debe tener márgenes que afecten la alineación */
+.logout-actions form {
+    margin: 0;
+}
+
+/* Forzamos que los botones dentro del contenedor ocupen todo el ancho disponible */
+.logout-actions .submit-button {
+    width: 100%;
+    height: 100%; /* Hacemos que la altura sea consistente */
+    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño final */
+}
+
+/* Estilos para el botón de cancelar, asegurando que se vea como un botón secundario */
+.logout-actions .cancel-button {
+    background-color: var(--button-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-medium);
+    text-decoration: none;
+    
+    /* Centrado perfecto del texto dentro del enlace/botón */
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.logout-actions .cancel-button:hover {
+    background-color: var(--button-hover);
+    color: var(--text-dark);
+}
+
+/*
+--- Estilos para Modo Oscuro ---
+*/
+html.dark-mode .logout-actions .cancel-button {
+    background-color: var(--dark-element);
+    color: var(--dark-text-muted);
+    border-color: var(--dark-border);
+}
+
+html.dark-mode .logout-actions .cancel-button:hover {
+    background-color: var(--dark-element-darker);
+    color: var(--dark-text);
+}
+
+/*
+=================================================================
+== CORRECCIÓN GLOBAL PARA ENLACES EN MODO NOCHE
+=================================================================
+*/
+
+/* --- ESTA ES LA REGLA PRINCIPAL --- */
+/* Le dice al sitio: por defecto, todos los enlaces en modo noche
+   deben usar este color brillante y legible. */
+html.dark-mode a {
+    color: var(--dark-primary); /* Tu variable para azul brillante en modo noche */
+}
+
+/* Opcional: mejora el color de hover para que sea consistente */
+html.dark-mode a:hover {
+    color: var(--dark-primary-hover); /* Tu variable para un azul un poco más oscuro */
+    /* text-decoration: underline; Asegura que el subrayado aparezca al pasar el mouse */
+}
+
+/* --- AJUSTES DE ESPECIFICIDAD (si es necesario) --- */
+/* Estas reglas aseguran que los enlaces en contextos específicos
+   también se vean bien, sobreescribiendo la regla general si es necesario. */
+
+/* Por ejemplo, nos aseguramos que el título del sitio siga siendo claro */
+
+html.dark-mode .site-title a {
+    color: var(--text-dark); 
+}
+
+html.dark-mode .site-title a:hover {
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+/* Y que los enlaces en la navegación principal tengan un hover sutil */
+html.dark-mode .nav-link {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .nav-link:hover {
+    background-color: var(--dark-element);
+    color: var(--dark-primary-hover);
+}
+
+/*
+=================================================================
+== CORRECCIÓN GLOBAL PARA HEADER EN MODO NOCHE
+=================================================================
+*/
+
+/* /* --- REGLAS FALTANTES PARA EL HEADER EN MODO OSCURO --- */
+/* html.dark-mode .main-header {
+    background-color: var(--dark-container);
+    background-color: var(--background-white); 
+    border-bottom-color: var(--dark-border);  
+    box-shadow: var(--shadow-white-sm); 
+}
+
+html.dark-mode .site-title a {
+    color: var(--text-light);
+}
+
+html.dark-mode .nav-link {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .nav-link:hover {
+    background-color: var(--dark-element);
+}
+
+html.dark-mode .theme-toggle-btn {
+    background-color: var(--dark-element);
+    color: var(--dark-text-muted);
+} */ */
+
+/*
+=================================================================
+== CORRECCIÓN PARA WELCOME-MESSAGE Y SEARCH-FORM EN MODO NOCHE
+=================================================================
+*/
+
+/* Mensaje de bienvenida */
+html.dark-mode .welcome-message {
+    color: var(--dark-text-muted); /* Usa un color de texto claro pero sutil */
+}
+
+/* Contenedor del formulario de búsqueda */
+/* html.dark-mode .search-form {
+    background-color: var(--dark-input);
+    border-color: var(--dark-border-input);
+}
+
+html.dark-mode .search-form:focus-within {
+    border-color: var(--dark-primary);
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.2);
+}
+
+html.dark-mode .search-input {
+    color: var(--text-light);
+}
+
+html.dark-mode .search-input::placeholder {
+    color: var(--dark-text-help);
+}
+
+html.dark-mode .search-button {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .search-button:hover {
+    color: var(--dark-primary);
+} */
+
+/* Estilos para la lista de series */
+.series-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.serie-resumen .serie-link {
+    display: block;
+    background-color: var(--background-white);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-dark);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.serie-resumen .serie-link:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.serie-imagen-container img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.serie-contenido {
+    padding: 1rem;
+}
+
+.serie-contenido h2 {
+    margin: 0 0 0.5rem;
+    font-size: var(--font-xl);
+    color: var(--primary-color);
+}
+
+.serie-contenido p {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+}
+
+.view-series-btn {
+    font-weight: 400;
+    color: var(--primary-color);
+}
+
+html.dark-mode .serie-resumen .serie-link {
+    background-color: var(--dark-container);
+    color: var(--text-light);
+    box-shadow: var(--shadow-white-sm);
+}
+
+/* Estilos para el detalle de la serie */
+.serie-detail-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.serie-description {
+    max-width: 65ch;
+    margin: 1rem auto 0;
+    font-size: var(--font-lg);
+    color: var(--text-secondary);
+}
+
+.article-timeline {
+    list-style: none;
+    padding: 0;
+    margin: 2rem auto;
+    max-width: 700px;
+    position: relative;
+    border-left: 2px solid var(--border-light);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -9px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--background-white);
+    border: 3px solid var(--primary-color);
+    border-radius: 50%;
+}
+
+.timeline-content h4 {
+    margin: 0 0 0.25rem;
+    font-size: var(--font-lg);
+}
+.timeline-content h4 a {
+    text-decoration: none;
+    color: inherit;
+}
+.timeline-content h4 a:hover {
+    text-decoration: underline;
+}
+
+.timeline-meta {
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+}
+
+html.dark-mode .article-timeline {
+    border-left-color: var(--dark-border);
+}
+
+html.dark-mode .timeline-marker {
+    background-color: var(--dark-container);
+    border-color: var(--dark-primary);
+}
+
+/*
+==============================================
+ESTILOS PARA LA FUNCIONALIDAD DE SERIES
+==============================================
+*/
+
+/* 1. Estilos para la Tarjeta de Serie en la lista principal */
+.series-card {
+    border-left: 4px solid var(--primary-color);
+    background-color: #f8f9fa; /* Un fondo ligeramente distinto */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Etiqueta especial para identificar series */
+.series-tag {
+    background-color: var(--primary-color) !important;
+    color: var(--background-white) !important;
+    font-weight: 400;
+}
+
+/* Modo oscuro para la tarjeta de serie */
+html.dark-mode .series-card {
+    border-left-color: var(--dark-primary);
+    background-color: #252a3a;
+}
+
+/* 2. Estilos para la página de lista de todas las series */
+.series-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.serie-resumen .serie-link {
+    display: block;
+    background-color: var(--background-white);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-dark);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.serie-resumen .serie-link:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.serie-imagen-container img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.serie-contenido {
+    padding: 1.5rem;
+}
+
+.serie-contenido h2 {
+    margin: 0 0 0.5rem;
+    font-size: var(--font-xl);
+    color: var(--primary-color);
+}
+
+.serie-contenido p {
+    font-size: var(--font-base);
+    color: var(--text-secondary);
+    margin: 0 0 1rem;
+}
+
+.view-series-btn {
+    font-weight: 400;
+    color: var(--primary-color);
+}
+
+html.dark-mode .serie-resumen .serie-link {
+    background-color: var(--dark-container);
+    color: var(--text-light);
+    box-shadow: var(--shadow-white-sm);
+}
+
+
+/* 4. Estilo para el badge de la serie dentro del detalle del artículo */
+.serie-badge {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: #eef2ff;
+    border-left: 4px solid var(--primary-color);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-base);
+}
+
+.serie-badge a {
+    font-weight: 400;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.serie-badge a:hover {
+    text-decoration: underline;
+}
+
+html.dark-mode .serie-badge {
+    background-color: rgba(245, 158, 11, 0.2);
+    border-left-color: var(--dark-primary);
+}
+
+html.dark-mode .serie-badge a {
+    color: var(--dark-primary);
+}
+
+/* Estilo para el marcador de serie en la lista de artículos */
+.meta .serie-tag {
+    display: block; /* Para que aparezca en una nueva línea */
+    margin-top: 8px;
+    padding: 5px 10px;
+    background-color: #eef2ff; /* Un color de fondo suave */
+    border-left: 3px solid #f59e0b; /* El color primario de tu tema */
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.meta .serie-tag a {
+    font-weight: 400;
+    color: #f59e0b;
+    text-decoration: none;
+}
+
+.meta .serie-tag a:hover {
+    text-decoration: underline;
+}
+
+/* Modo oscuro */
+html.dark-mode .meta .serie-tag {
+    background-color: rgba(245, 158, 11, 0.2);
+    border-left-color: #d97706; /* Color primario oscuro */
+}
+
+html.dark-mode .meta .serie-tag a {
+    color: #d97706;
+}
+
+/*
+==============================================
+== ESTILOS PARA EL NUEVO MENÚ DE NAVEGACIÓN
+==============================================
+*/
+
+.site-navigation {
+    flex-grow: 1; /* Permite que el menú ocupe el espacio central */
+}
+
+.site-navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Centra los elementos del menú */
+    gap: var(--spacing-md);
+}
+
+/* Ajustes responsivos para el nuevo menú */
+@media (max-width: 768px) {
+    .site-navigation {
+        order: 3; /* Mueve el menú principal debajo del título en móviles */
+        width: 100%;
+        margin-top: var(--spacing-sm);
+    }
+    .site-navigation ul {
+        flex-wrap: wrap; /* Permite que los elementos se apilen */
+        justify-content: center;
+    }
+    .main-header {
+        padding-bottom: var(--spacing-md); /* Añade espacio inferior en móvil */
+    }
+}
+
+/*
+============================================================
+== ESTILOS PARA ETIQUETA DE CONTEO EN SERIES (NUEVA VERSIÓN)
+============================================================
+*/
+
+/* Contenedor para alinear título y etiqueta */
+.resumen-titulo-wrapper {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el título y la etiqueta */
+    gap: 8px; /* Espacio entre el título y la etiqueta */
+    margin-bottom: 0.1rem; /* <-- CAMBIO CLAVE: Reducimos el margen (antes 0.5rem) */
+    flex-wrap: wrap; /* Si no caben, se ajustan */
+}
+
+/* La etiqueta ya no se superpone a la imagen */
+.serie-article-count {
+    /* Ya NO usamos position: absolute */
+    display: inline-flex; /* Se comporta como texto pero permite Flexbox */
+    align-items: center;
+    gap: 6px;
+    
+    background-color: var(--background-light-gray); /* Un fondo sutil */
+    color: var(--text-secondary); /* Color de texto secundario */
+    
+    padding: 3px 8px; /* Más pequeño para que sea discreto */
+    border-radius: var(--border-radius-md); /* Adjusted to MD */
+    border: 1px solid var(--border-light); /* Borde consistente */
+    
+    font-size: 0.8em; /* Tamaño de fuente pequeño */
+    font-weight: 400;
+    white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+}
+
+/*
+============================================================
+== AJUSTE FINO PARA ELIMINAR ESPACIO EN TARJETAS DE SERIE
+============================================================
+*/
+
+/* Resetea el margen superior del párrafo de descripción */
+.card-excerpt {
+    margin-top: 0;
+}
+
+/*
+============================================================
+== ESTILOS MODERNOS PARA LA PÁGINA DE DETALLE DE SERIE
+============================================================
+*/
+
+/* 1. Encabezado de Héroe */
+.serie-hero-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+    background-color: var(--background-white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.serie-hero-image-container {
+    width: 100%;
+    height: 250px;
+    margin-bottom: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.serie-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.serie-hero-title {
+    font-size: var(--font-4xl);
+    margin: 0 0 var(--spacing-sm);
+}
+
+.serie-hero-description {
+    font-size: var(--font-lg);
+    color: var(--text-secondary);
+    max-width: 65ch;
+    margin: 0 auto var(--spacing-md) auto;
+}
+
+.serie-hero-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    color: var(--primary-color);
+    background-color: var(--filter-pill-bg); /* Use transparent background */
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-pill);
+    border: 1px solid var(--border-light); /* Add border */
+}
+
+/* 2. Cuadrícula de Artículos de la Serie */
+.serie-articles-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.serie-article-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    background-color: var(--background-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.serie-article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.card-part-number {
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: var(--primary-color);
+    background-color: var(--filter-pill-bg); /* Use transparent background */
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+    min-width: 70px;
+    border: 1px solid var(--border-light); /* Add border */
+}
+
+.card-content {
+    flex-grow: 1;
+}
+
+.card-title {
+    margin: 0 0 4px;
+    font-size: var(--font-lg);
+}
+
+.card-title a {
+    text-decoration: none;
+    color: var(--text-dark);
+}
+
+.card-title a:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
+
+.card-meta {
+    margin: 0;
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+}
+
+.card-action .card-link {
+    text-decoration: none;
+    font-weight: 400;
+    color: var(--primary-color);
+    white-space: nowrap; /* Evita que el enlace se rompa */
+}
+
+.card-action .card-link i {
+    transition: transform 0.2s ease;
+}
+
+.card-action .card-link:hover i {
+    transform: translateX(4px);
+}
+
+/* 3. Estilos para Modo Noche */
+html.dark-mode .serie-hero-header {
+    background-color: var(--dark-container);
+    box-shadow: var(--shadow-white-md);
+}
+
+html.dark-mode .serie-hero-meta {
+    color: var(--dark-primary);
+    background-color: var(--dark-element); /* Use a darker background for pills in dark mode */
+    border-color: var(--dark-border); /* Add border */
+}
+
+html.dark-mode .serie-article-card {
+    background-color: var(--dark-container);
+    border-color: var(--dark-border);
+    box-shadow: var(--shadow-white-sm);
+}
+
+html.dark-mode .serie-article-card:hover {
+    border-color: var(--dark-primary);
+}
+
+html.dark-mode .card-part-number {
+    color: var(--dark-primary);
+    background-color: var(--dark-element); /* Use a darker background for number */
+    border-color: var(--dark-border); /* Add border */
+}
+
+html.dark-mode .card-title a {
+    color: var(--text-light);
+}
+
+html.dark-mode .card-title a:hover {
+    color: var(--dark-primary);
+}
+
+html.dark-mode .card-meta {
+    color: var(--dark-text-muted);
+}
+
+html.dark-mode .card-action .card-link {
+    color: var(--dark-primary);
+}
+
+
+/*
+============================================================
+== ESTILOS MODERNOS PARA LA PÁGINA DE DETALLE DE SERIE
+============================================================
+*/
+.social-icons-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: var(--primary-color);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 20px;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.15);
+  color: white;
+}
+
+.social-icon.instagram:hover {
+  background-color: var(--instagram-color);
+}
+
+.social-icon.facebook:hover {
+  background-color: #3b5998;
+}
+
+.social-icon.youtube:hover {
+  background-color: #ff0000;
+}
+
+.social-icon.email:hover {
+  background-color: #6c757d;
+}
+
+/* --- Home Page Specific Styles --- */
+
+/* Estilo para el texto degradado del título principal en el Hero */
+.hero-gradient-text {
+    background-clip: text;
+    -webkit-background-clip: text; /* Para compatibilidad con Safari/Chrome */
+    color: transparent;
+    background-image: linear-gradient(to right, #fbbf24, #f97316); /* Colores equivalentes a amber-500 y orange-600 */
+}
+
+/* Contenedor común para listas de elementos horizontales (artículos y series) */
+.horizontal-list-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px; /* Espacio entre los elementos */
+    justify-content: flex-start;
+    padding-bottom: 10px;
+}
+
+/* Estilo común para cada "tarjeta" de elemento en las listas horizontales */
+.list-item-card {
+    display: flex;
+    flex-direction: column;
+    /* Usamos flex para un control más preciso del tamaño en flexbox */
+    flex: 0 0 calc(33.33% - 20px); /* Intenta ocupar 1/3 del espacio menos el gap */
+    min-width: 280px; /* Mantiene un ancho mínimo en pantallas grandes y medianas */
+    max-width: 100%; /* Asegura que la tarjeta no sea más ancha que su contenedor padre */
+    box-sizing: border-box; /* Asegura que el padding/border se incluya en el ancho */
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden; /* Muy importante para que las imágenes redondeadas no se desborden */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding-bottom: 15px; /* Espacio interno al final de la tarjeta */
+}
+
+/* Contenedor de la imagen dentro de la tarjeta */
+.list-item-image-container {
+    margin-bottom: 10px;
+}
+
+/* Estilo de la imagen dentro de la tarjeta */
+.list-item-image {
+    width: 100%;
+    height: 200px; /* Altura fija para consistencia visual */
+    display: block;
+    object-fit: cover; /* Recorta la imagen para cubrir el espacio sin distorsionarla */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Contenido de texto dentro de la tarjeta */
+.list-item-content {
+    padding: 0 15px; /* Espacio interno a los lados del contenido */
+}
+
+.list-item-content h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.list-item-content h2 a {
+    text-decoration: none;
+    color: inherit; /* Hereda el color del padre para evitar subrayado azul */
+}
+
+/* Botones del home*/
+html.dark-mode .submit-button-home {
+    background-color: var(--background-light);
+}
+
+html.dark-mode .submit-button-home:hover {
+    background-color: var(--background-light-gray);
+    transform: translateY(-1px);
+}
+
+
+/* Específico para el título y contador de artículos en las series */
+.serie-title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.serie-title-wrapper h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.serie-article-count {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Estilo para el extracto de la descripción de la serie */
+.card-excerpt {
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Ajustes responsivos para pantallas medianas */
+@media (max-width: 992px) {
+    .list-item-card {
+        flex-basis: calc(50% - 20px); /* 2 columnas en pantallas medianas */
+        min-width: 250px; /* Ligeramente más pequeño para mejor ajuste */
+    }
+}
+
+/* Ajustes responsivos para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+    .list-item-card {
+        flex-basis: 100%; /* Ocupa todo el ancho disponible */
+        min-width: unset; /* Elimina la restricción de min-width para evitar desbordes */
+    }
+}
