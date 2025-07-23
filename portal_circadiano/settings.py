@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'cloudinary_storage', # <-- AÑADIR AQUÍ
+    'cloudinary',       # <-- AÑADIR AQUÍ
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -112,6 +114,16 @@ DATABASES = {
     'default': dj_database_url.config(conn_max_age=600, ssl_require=not DEBUG)
 }
 
+# portal_circadiano/settings.py
+
+# --- INICIO: CONFIGURACIÓN DE CLOUDINARY ---
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+# --- FIN: CONFIGURACIÓN DE CLOUDINARY ---
+
 # Static & Media Files
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles_collected'
@@ -127,7 +139,9 @@ STORAGES = {
     },
 }
 
-# --- FIN: BASE DE DATOS Y ARCHIVOS ---
+if not DEBUG:
+    # Sobrescribe el almacenamiento "default" para usar Cloudinary en producción
+    STORAGES['default']['BACKEND'] = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Default primary key field type
