@@ -1,7 +1,18 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block extra_css %}
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ritmos Circadianos y Salud Vascular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Calming Blues -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA temática con scroll vertical. La estructura no refleja el informe, sino un viaje lógico para el usuario: 1) Introducción impactante. 2) Explicación de los dos conceptos clave (Ritmo Circadiano y Endotelio). 3) Una sección central interactiva ("La Cascada del Daño") donde el usuario explora los mecanismos moleculares, los cuales actualizan dinámicamente un gráfico de radar que visualiza la salud endotelial. 4) Pestañas con la evidencia científica. 5) Una línea de tiempo visual de las consecuencias. 6) Consejos prácticos. Esta estructura facilita el aprendizaje progresivo y la interacción, transformando un texto denso en una experiencia explorable y memorable. -->
+    <!-- Visualization & Content Choices: Se eligió una estructura que combina texto explicativo con visualizaciones interactivas. El elemento central es un gráfico de radar de Chart.js (Goal: Compare) para mostrar el equilibrio/desequilibrio de la función endotelial. Este se actualiza al interactuar con un diagrama de flujo (Goal: Organize/Relationships) construido con HTML/CSS/JS, que representa los mecanismos de daño. Se usan pestañas (Goal: Organize) para la evidencia y una línea de tiempo (Goal: Change) para las consecuencias. Esta combinación permite al usuario conectar conceptos abstractos (mecanismos) con resultados visuales (gráfico) y consecuencias reales (línea de tiempo). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -81,17 +92,12 @@
             -webkit-text-fill-color: transparent;
         }
     </style>
-{% endblock %}
-
-{% block content %}
+</head>
 <body class="bg-[#F8F9FA]">
 
     <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
-                <div class="text-xl font-bold text-[#1D3557]">
-                    <span class="text-[#3498db]">Crono</span>Salud<span class="text-[#3498db]">.</span>
-                </div>
                 <div class="hidden md:flex space-x-6">
                     <a href="#home" class="nav-link text-gray-600 hover:text-gray-900 active">Inicio</a>
                     <a href="#problema" class="nav-link text-gray-600 hover:text-gray-900">El Problema</a>
@@ -262,10 +268,7 @@
             <p class="text-sm mt-2">Creado con fines educativos para facilitar la comprensión de conceptos científicos complejos.</p>
         </div>
     </footer>
-
-    {% endblock %}
     
-    {% block extra_js %}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
@@ -485,26 +488,6 @@
                 observer.observe(section);
             });
         });
-
-        // Este script se ejecuta DENTRO del iframe
-        function sendHeight() {
-            // Obtenemos la altura total del contenido de la guía
-            const height = document.documentElement.scrollHeight;
-            // Enviamos un mensaje a la ventana padre (la que contiene el iframe)
-            window.parent.postMessage({ type: 'resize', height: height }, '*');
-        }
-
-        // Enviamos la altura cuando la página carga
-        window.addEventListener('load', sendHeight);
-
-        // Opcional: Si el contenido cambia dinámicamente, volvemos a enviar la altura
-        const box = document.getElementById('interactive-element');
-        box.addEventListener('click', () => {
-            // ... tu código de click ...
-            // Le damos un pequeño respiro para que el DOM se actualice y recalculamos
-            setTimeout(sendHeight, 50); 
-        });
     </script>
-    {% endblock %}
 </body>
 </html>
