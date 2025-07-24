@@ -319,7 +319,7 @@
         // Este script se ejecuta DENTRO del iframe
         function sendHeight() {
             // Obtenemos la altura total del contenido de la guía
-            const height = document.documentElement.scrollHeight;
+            const height = document.documentElement.scrollHeight+200;
             // Enviamos un mensaje a la ventana padre (la que contiene el iframe)
             window.parent.postMessage({ type: 'resize', height: height }, '*');
         }
