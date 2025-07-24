@@ -488,6 +488,26 @@
                 observer.observe(section);
             });
         });
+
+        // Este script se ejecuta DENTRO del iframe
+        function sendHeight() {
+            // Obtenemos la altura total del contenido de la guía
+            const height = document.documentElement.scrollHeight;
+            // Enviamos un mensaje a la ventana padre (la que contiene el iframe)
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+
+        // Enviamos la altura cuando la página carga
+        window.addEventListener('load', sendHeight);
+
+        // Opcional: Si el contenido cambia dinámicamente, volvemos a enviar la altura
+        const box = document.getElementById('interactive-element');
+        box.addEventListener('click', () => {
+            // ... tu código de click ...
+            // Le damos un pequeño respiro para que el DOM se actualice y recalculamos
+            setTimeout(sendHeight, 50); 
+        });
+
     </script>
 </body>
 </html>
