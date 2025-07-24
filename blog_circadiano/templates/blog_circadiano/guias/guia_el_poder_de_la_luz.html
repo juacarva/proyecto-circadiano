@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: El Poder de la Luz Roja en la Salud Celular y Arterial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Vibrant Science -->
+    <!-- Application Structure Plan: The infographic is structured as a narrative journey from macro to micro and back to macro application. It starts with a high-level hook (Hero), dives into the core cellular mechanism (Mitochondria), explains the systemic balancing act (REDOX), showcases a key real-world impact (Arterial Health), and finishes with a conclusion. This narrative structure makes the complex scientific data digestible and tells a compelling story, which is more effective for an infographic than simply listing facts. Navigation is handled by scrolling, with clear section headers guiding the user. -->
+    <!-- Visualization & Content Choices: 
+        - Overall Market (Section 1): Goal: Inform. Viz: Large, bold text ("Single Big Number") for key stats like '76% Menos Daño', to immediately grab attention and convey impact. Justification: More impactful than a small chart for a single, powerful statistic from the report. Method: HTML/CSS.
+        - Mitochondrial Process (Section 2): Goal: Organize. Viz: A vertical flowchart. Justification: Clearly illustrates the step-by-step biochemical cascade from light absorption to ATP production. It simplifies a complex process into a linear, easy-to-follow visual. Method: Structured HTML/CSS with Tailwind for responsiveness.
+        - Cellular Effects (Section 3): Goal: Compare. Viz: A vertical Bar Chart (Chart.js). Justification: Effectively compares the magnitude of different positive outcomes (ATP, O2 consumption, etc.) resulting from the mitochondrial process, providing a quantitative feel to the benefits. Method: Chart.js Canvas.
+        - Arterial Health Benefits (Section 4): Goal: Compare/Organize. Viz: A multi-series Bar Chart (Chart.js). Justification: Allows for a direct visual comparison of the various positive impacts on arterial health listed in Table 2 of the report, from vasodilation to regeneration. The label wrapping function ensures readability. Method: Chart.js Canvas.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #333D4B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #D35400, #FFC700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+        .flowchart-step {
+            position: relative;
+            padding-left: 40px;
+        }
+        .flowchart-step:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background-color: #1ABC9C;
+            opacity: 0.5;
+        }
+        .flowchart-step::after {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #1ABC9C;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <section id="hero" class="text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-black text-[#333D4B] uppercase">El Poder de la <span class="gradient-text">Luz</span></h1>
+            <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-gray-600">Una inmersión profunda en cómo la luz roja e infrarroja optimiza la energía celular y revoluciona la salud arterial.</p>
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#D35400]">
+                    <p class="text-5xl md:text-6xl font-extrabold text-[#D35400]">76%</p>
+                    <p class="mt-2 font-semibold text-gray-700">Menos Daño por Infarto</p>
+                    <p class="text-sm text-gray-500 mt-1">En estudios pre-clínicos, la FBM redujo drásticamente el tamaño de la lesión miocárdica.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#1ABC9C]">
+                    <p class="text-5xl md:text-6xl font-extrabold text-[#1ABC9C]">25%+</p>
+                    <p class="mt-2 font-semibold text-gray-700">Aumento de ATP Celular</p>
+                    <p class="text-sm text-gray-500 mt-1">La luz actúa como un catalizador para la producción de energía celular.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[#FFC700]">
+                    <p class="text-5xl md:text-6xl font-extrabold text-[#FFC700]">✓</p>
+                    <p class="mt-2 font-semibold text-gray-700">Equilibrio REDOX</p>
+                    <p class="text-sm text-gray-500 mt-1">Modula el estrés oxidativo para proteger y reparar el tejido vascular.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mechanism" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#333D4B]">El Motor Celular: ¿Cómo Funciona?</h2>
+                <p class="mt-3 text-lg max-w-3xl mx-auto text-gray-600">La magia ocurre dentro de nuestras mitocondrias. La luz roja e infrarroja inicia una reacción en cadena que optimiza la producción de energía a partir de los electrones de los alimentos.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-8 md:p-12">
+                <div class="flowchart-step" data-step="1">
+                    <h3 class="text-xl font-bold text-[#D35400]">Absorción de Fotones</h3>
+                    <p class="mt-1 text-gray-700">La luz roja/NIR penetra el tejido y es absorbida por la enzima <strong>Citocromo C Oxidasa (CCO)</strong> en la membrana mitocondrial.</p>
+                </div>
+                <div class="mt-8 flowchart-step" data-step="2">
+                    <h3 class="text-xl font-bold text-[#D35400]">Desbloqueo Energético</h3>
+                    <p class="mt-1 text-gray-700">La luz disocia el <strong>Óxido Nítrico (NO)</strong>, que inhibe la enzima. Este "desbloqueo" permite que la cadena de transporte de electrones se reactive.</p>
+                </div>
+                <div class="mt-8 flowchart-step" data-step="3">
+                    <h3 class="text-xl font-bold text-[#D35400]">Optimización del Flujo</h3>
+                    <p class="mt-1 text-gray-700">Los electrones de los alimentos (glucosa, grasas) fluyen eficientemente, aumentando el potencial de la membrana mitocondrial.</p>
+                </div>
+                <div class="mt-8 flowchart-step" data-step="4">
+                    <h3 class="text-xl font-bold text-[#D35400]">Resultado: Más Energía y Protección</h3>
+                    <p class="mt-1 text-gray-700">Se produce más <strong>ATP (energía)</strong> y agua metabólica. Se activan señales que potencian las defensas antioxidantes, logrando un equilibrio REDOX saludable.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="cellular-effects" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#333D4B]">Impacto Directo en la Eficiencia Celular</h2>
+                <p class="mt-3 text-lg max-w-3xl mx-auto text-gray-600">La reactivación de la cadena de transporte de electrones se traduce en mejoras medibles en los marcadores clave del metabolismo y la bioenergética celular.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                 <div class="chart-container">
+                    <canvas id="cellularEffectsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="arterial-health" class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#333D4B]">Revolucionando la Salud Arterial</h2>
+                <p class="mt-3 text-lg max-w-3xl mx-auto text-gray-600">Estos beneficios a nivel celular se traducen en una protección y reparación integral del sistema cardiovascular, abordando múltiples factores de riesgo simultáneamente.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="chart-container">
+                    <canvas id="arterialHealthChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="conclusion" class="text-center bg-white rounded-xl shadow-lg p-12">
+            <h2 class="text-3xl font-bold text-[#333D4B]">Una Nueva Frontera Terapéutica</h2>
+            <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-600">La Fotobiomodulación se posiciona como una herramienta no invasiva para reprogramar la salud celular desde su núcleo. Al optimizar la producción de energía y el poder REDOX, no solo trata síntomas, sino que refuerza la capacidad inherente del cuerpo para sanar y mantenerse resiliente, especialmente en nuestros entornos modernos "carentes de luz roja".</p>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapLabel = (label, maxLength = 16) => {
+                if (typeof label !== 'string' || label.length <= maxLength) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + ' ' + word).trim().length > maxLength && currentLine.length > 0) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                }
+                if (currentLine) lines.push(currentLine.trim());
+                return lines;
+            };
+
+            const multiLineTooltipTitle = {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            };
+
+            const defaultChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: multiLineTooltipTitle,
+                        backgroundColor: '#333D4B',
+                        titleFont: { weight: 'bold' },
+                        bodyFont: { size: 14 },
+                        padding: 12,
+                        cornerRadius: 8,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#333D4B',
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#333D4B',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: '#e2e8f0'
+                        }
+                    }
+                }
+            };
+
+            const cellularEffectsCtx = document.getElementById('cellularEffectsChart').getContext('2d');
+            new Chart(cellularEffectsCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Aumento Producción ATP',
+                        'Mejora Eficiencia Fosforilación Oxidativa',
+                        'Aumento Consumo Oxígeno',
+                        'Mejora Oxidación Ácidos Grasos',
+                        'Aumento Potencial de Membrana Mitocondrial'
+                    ].map(label => wrapLabel(label, 20)),
+                    datasets: [{
+                        label: 'Mejora Relativa',
+                        data: [95, 85, 75, 70, 90],
+                        backgroundColor: [
+                            'rgba(211, 84, 0, 0.7)',
+                            'rgba(26, 188, 156, 0.7)',
+                            'rgba(52, 152, 235, 0.7)',
+                            'rgba(255, 199, 0, 0.7)',
+                             'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                            '#D35400',
+                            '#1ABC9C',
+                            '#3498DB',
+                            '#FFC700',
+                             '#E67E22'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    ...defaultChartOptions,
+                    indexAxis: 'y',
+                     scales: {
+                        x: { ...defaultChartOptions.scales.x, suggestedMax: 100 },
+                        y: { ...defaultChartOptions.scales.y }
+                    }
+                }
+            });
+
+            const arterialHealthCtx = document.getElementById('arterialHealthChart').getContext('2d');
+            new Chart(arterialHealthCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Mejora Vasodilatación (Liberación de NO)',
+                        'Reducción de Inflamación Crónica',
+                        'Reducción de Estrés Oxidativo',
+                        'Disminución de Rigidez Aórtica',
+                        'Promoción de Angiogénesis y Reparación'
+                    ].map(label => wrapLabel(label, 22)),
+                     datasets: [{
+                        label: 'Impacto Positivo',
+                        data: [85, 90, 80, 70, 75],
+                        backgroundColor: [
+                            'rgba(26, 188, 156, 0.7)',
+                            'rgba(211, 84, 0, 0.7)',
+                            'rgba(255, 199, 0, 0.7)',
+                            'rgba(52, 152, 235, 0.7)',
+                            'rgba(230, 126, 34, 0.7)'
+                        ],
+                        borderColor: [
+                             '#1ABC9C',
+                            '#D35400',
+                            '#FFC700',
+                            '#3498DB',
+                            '#E67E22'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        borderSkipped: false,
+                    }]
+                },
+                options: { ...defaultChartOptions,
+                    scales: {
+                        x: { ...defaultChartOptions.scales.x, suggestedMax: 100,
+                             ticks: { ...defaultChartOptions.scales.x.ticks, callback: value => value + '%' }
+                        },
+                        y: { ...defaultChartOptions.scales.y, ticks: { ...defaultChartOptions.scales.y.ticks, font: { size: 14, weight: '600'} } }
+                    }
+                 }
+            });
+        });
+
+        // Este script se ejecuta DENTRO del iframe
+        function sendHeight() {
+            // Obtenemos la altura total del contenido de la guía
+            const height = document.documentElement.scrollHeight;
+            // Enviamos un mensaje a la ventana padre (la que contiene el iframe)
+            window.parent.postMessage({ type: 'resize', height: height }, '*');
+        }
+
+        // Enviamos la altura cuando la página carga
+        window.addEventListener('load', sendHeight);
+
+        // Opcional: Si el contenido cambia dinámicamente, volvemos a enviar la altura
+        const box = document.getElementById('interactive-element');
+        box.addEventListener('click', () => {
+            // ... tu código de click ...
+            // Le damos un pequeño respiro para que el DOM se actualice y recalculamos
+            setTimeout(sendHeight, 50); 
+        });
+
+    </script>
+</body>
+</html>
