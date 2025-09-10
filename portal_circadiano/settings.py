@@ -30,9 +30,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 # Configuración de hosts permitidos
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','www.circadianos.cl', 'circadianos.cl', 'proyecto-circadiano.onrender.com']
 
-if not DEBUG:
+""" if not DEBUG:
     HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
     if HEROKU_APP_NAME:
         ALLOWED_HOSTS.extend([
@@ -43,7 +43,7 @@ if not DEBUG:
             "www.circadiandos.cl",
         ])
     # Permite CUALQUIER subdominio de herokuapp.com de forma segura
-    ALLOWED_HOSTS.append('.herokuapp.com')
+    ALLOWED_HOSTS.append('.herokuapp.com') """
 
 # --- FIN: CONFIGURACIÓN DE SEGURIDAD Y ENTORNO ---
 
