@@ -30,22 +30,20 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 # Configuración de hosts permitidos
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','www.circadianos.cl', 'circadianos.cl', 'proyecto-circadiano.onrender.com']
+# Configuración de hosts permitidos (limpia y automática para Render)
+ALLOWED_HOSTS = []
 
-""" if not DEBUG:
-    HEROKU_APP_NAME = os.environ.get('HEROKU_APP_NAME')
-    if HEROKU_APP_NAME:
-        ALLOWED_HOSTS.extend([
-            f"{HEROKU_APP_NAME}.herokuapp.com",
-            # Añadimos la URL específica de tu app por si acaso
-            f"{HEROKU_APP_NAME}-c1ec05eba808.herokuapp.com", 
-            "circadiandos.cl",
-            "www.circadiandos.cl",
-        ])
-    # Permite CUALQUIER subdominio de herokuapp.com de forma segura
-    ALLOWED_HOSTS.append('.herokuapp.com') """
+# Agrega la URL de Render automáticamente si la variable de entorno existe.
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# --- FIN: CONFIGURACIÓN DE SEGURIDAD Y ENTORNO ---
+# Si estás en desarrollo local (DEBUG=True), permite localhost.
+if DEBUG:
+    ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
+
+# Agrega tus dominios personalizados aquí si los tienes
+ALLOWED_HOSTS.extend(['www.circadianos.cl', 'circadianos.cl'])
 
 
 # Application definition
