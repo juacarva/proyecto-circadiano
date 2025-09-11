@@ -138,29 +138,37 @@ def post_comentario(request, pk):
     # Si no es POST o el formulario no es válido, redirigir de nuevo a la página del artículo
     return redirect('blog_circadiano:detalle_articulo', pk=articulo.pk)
 
-@login_required # Esto redirige a /usuarios/login/?next=... si no está logueado
+# blog_circadiano/views.py
+
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse, Http404
+# Asegúrate de tener los otros imports necesarios...
+
+# Eliminamos @login_required de aquí
 @require_POST
 def toggle_like(request):
+    # Primero, verificamos si el usuario está logueado.
+    if not request.user.is_authenticated:
+        # Si no lo está, enviamos un error JSON con estado 401.
+        return JsonResponse({'status': 'error', 'message': 'Debes iniciar sesión para dar me gusta.'}, status=401)
+
+    # El resto del código funciona como ya lo tenías.
     try:
         user = request.user
         item_type = request.POST.get('item_type')
         item_id = request.POST.get('item_id')
 
-        # Validaciones de entrada
         if not item_type or not item_id:
-            return JsonResponse({'status': 'error', 'message': 'Faltan parámetros: item_type o item_id.'}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Faltan parámetros.'}, status=400)
         
-        if item_type not in ['articulo', 'comentario']:
-            return JsonResponse({'status': 'error', 'message': 'Tipo de ítem inválido. Debe ser "articulo" o "comentario".'}, status=400)
-
-        # Determinar el modelo y obtener el objeto
         item = None
         if item_type == 'articulo':
-            item = get_object_or_404(Articulo, id=item_id) # get_object_or_404 lanza Http404 que convertiremos a JsonResponse
+            item = get_object_or_404(Articulo, id=item_id)
         elif item_type == 'comentario':
-            item = get_object_or_404(Comentario, id=item_id) # get_object_or_404 lanza Http404
+            item = get_object_or_404(Comentario, id=item_id)
+        else:
+             return JsonResponse({'status': 'error', 'message': 'Tipo de ítem inválido.'}, status=400)
 
-        # Lógica de toggle
         if user in item.likes.all():
             item.likes.remove(user)
             liked = False
@@ -170,14 +178,10 @@ def toggle_like(request):
         
         return JsonResponse({'status': 'success', 'liked': liked, 'total_likes': item.total_likes})
 
-    except Http404: # Captura si get_object_or_404 no encuentra el objeto
+    except Http404:
         return JsonResponse({'status': 'error', 'message': 'Ítem no encontrado.'}, status=404)
     except Exception as e:
-        # Captura cualquier otra excepción inesperada
-        print(f"Error inesperado en toggle_like: {e}") # Para ver en la consola del servidor
-        # Si DEBUG es True, podrías considerar devolver un mensaje más detallado
-        # en producción, un mensaje genérico de error interno.
-        return JsonResponse({'status': 'error', 'message': 'Ocurrió un error interno del servidor.'}, status=500)
+        return JsonResponse({'status': 'error', 'message': 'Ocurrió un error interno.'}, status=500)
     
 
 # 1. La vista que muestra el marco y el iframe (la que el usuario visita)

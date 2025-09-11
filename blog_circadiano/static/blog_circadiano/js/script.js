@@ -76,17 +76,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.like-button').forEach(button => {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
-            const itemType = this.dataset.itemType; // Esto será 'articulo' o 'comentario'
+            const itemType = this.dataset.itemType;
             const itemId = this.dataset.itemId;
-            const url = this.dataset.url;
-            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
-
-            if (!itemType || !itemId) {
-                console.error('Tipo o ID de ítem no definido para el like.');
-                return;
-            }
+            const url = this.dataset.url; // Leemos la URL desde el HTML
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
             try {
+                // Usamos la variable 'url' que leímos del atributo data-url
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -96,32 +92,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: `item_type=${itemType}&item_id=${itemId}`
                 });
 
+                // Si la respuesta no es "ok" (ej: 401, 404, 500)
                 if (!response.ok) {
-                    const errorText = await response.text(); 
-                    console.error('Error HTTP:', response.status, response.statusText, 'Respuesta:', errorText);
-                    alert(`Error al dar Me gusta: ${response.status} ${response.statusText}. Por favor, inténtalo de nuevo.`);
-                    return;
+                    // Si es un error 401 (No Autorizado), mostramos el mensaje para iniciar sesión.
+                    if (response.status === 401) {
+                        if (confirm("Debes iniciar sesión para dar me gusta. ¿Quieres ir a la página de login?")) {
+                            // Redirigimos al usuario, añadiendo "?next=" para que vuelva al artículo.
+                            window.location.href = '/accounts/login/?next=' + window.location.pathname;
+                        }
+                    } else {
+                        // Para otros errores, mostramos un mensaje genérico.
+                        alert('Ocurrió un error. Por favor, inténtalo de nuevo.');
+                    }
+                    return; // Detenemos la función aquí.
                 }
 
-                const data = await response.json(); 
+                const data = await response.json();
 
+                // Lógica para actualizar el botón y el contador (sin cambios)
                 if (data.status === 'success') {
-                    // MODIFICACIÓN CRÍTICA AQUÍ: Ajustar el prefijo del ID
-                    let idPrefix = '';
-                    if (itemType === 'articulo') {
-                        idPrefix = 'article';
-                    } else if (itemType === 'comentario') {
-                        idPrefix = 'comment';
-                    }
-                    
+                    const idPrefix = itemType === 'articulo' ? 'article' : 'comment';
                     const likesCountSpan = document.getElementById(`${idPrefix}-likes-count-${itemId}`);
-                    
-                    if (likesCountSpan) { // <--- Añadimos una comprobación por si acaso
+                    if (likesCountSpan) {
                         likesCountSpan.textContent = data.total_likes;
-                    } else {
-                        console.error(`Elemento con ID ${idPrefix}-likes-count-${itemId} no encontrado.`);
                     }
-                    
                     if (data.liked) {
                         this.classList.add('liked');
                         this.innerHTML = '<span class="icon">&#x2764;</span> Ya no me gusta';
@@ -129,13 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         this.classList.remove('liked');
                         this.innerHTML = '<span class="icon">&#x2764;</span> Me gusta';
                     }
-                } else {
-                    console.error('Error al procesar like (respuesta del servidor):', data.message);
-                    alert('Error al dar Me gusta: ' + data.message);
                 }
             } catch (error) {
-                console.error('Error de red o parsing JSON:', error);
-                alert('Hubo un error de conexión o el servidor envió una respuesta inesperada.');
+                console.error('Error de red:', error);
+                alert('Hubo un error de conexión. Por favor, inténtalo de nuevo.');
             }
         });
     });
