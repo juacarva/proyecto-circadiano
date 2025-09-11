@@ -10,6 +10,7 @@ venv/
 
 # Archivos de base de datos
 *.sqlite3
+copia_local.sql
 
 # Archivos de configuración sensibles (ej. claves secretas de Django)
 *.log

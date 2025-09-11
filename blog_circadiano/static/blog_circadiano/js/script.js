@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const itemType = this.dataset.itemType; // Esto será 'articulo' o 'comentario'
             const itemId = this.dataset.itemId;
+            const url = this.dataset.url;
             const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
 
             if (!itemType || !itemId) {
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const response = await fetch('/toggle_like/', {
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

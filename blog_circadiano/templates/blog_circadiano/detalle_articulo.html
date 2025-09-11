@@ -81,7 +81,7 @@
 
     <div class="post-actions">
         <div class="action-bar">
-            <button class="like-button {% if user_liked_article %}liked{% endif %}" data-item-type="articulo" data-item-id="{{ articulo.pk }}">
+            <button class="like-button {% if user_liked_article %}liked{% endif %}" data-item-type="articulo" data-item-id="{{ articulo.pk }}" data-url="{% url 'blog_circadiano:toggle_like' %}">
                 {% if user_liked_article %}
                     <span class="icon">&#x2764;</span> Ya no me gusta
                 {% else %}

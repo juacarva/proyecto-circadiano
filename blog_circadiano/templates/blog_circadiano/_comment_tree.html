@@ -10,7 +10,7 @@
         
         <div class="comment-actions"> {# Nueva sección para acciones del comentario #}
             {% if user.is_authenticated %}
-                <button class="like-button {% if user in comment.likes.all %}liked{% endif %}" data-item-type="comentario" data-item-id="{{ comment.pk }}">
+                <button class="like-button {% if user in comment.likes.all %}liked{% endif %}" data-item-type="comentario" data-item-id="{{ comment.pk }}" data-url="{% url 'blog_circadiano:toggle_like' %}">
                     {% if user in comment.likes.all %}
                         <span class="icon">&#x2764;</span> Ya no me gusta
                     {% else %}
